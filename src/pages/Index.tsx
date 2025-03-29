@@ -38,9 +38,6 @@ const Index: React.FC = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="md:w-1/2 animate-fade-in">
-              <div className="mb-8 transform hover:scale-105 transition-all duration-500">
-                <AnimatedLogo size="large" animated={true} className="mb-4" />
-              </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-blue-900 leading-tight">
                 Sistema de Gestão Tributária para <span className="text-blue-600">Escritórios de Advocacia</span>
               </h1>
