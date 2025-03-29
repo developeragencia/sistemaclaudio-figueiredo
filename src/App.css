@@ -56,6 +56,43 @@
   }
 }
 
+/* Cloned logo styles */
+.cloned-logo {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  transition: all 0.5s ease;
+}
+
+.cloned-logo:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+  animation: logo-pulse 1.5s infinite;
+}
+
+.logo-triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 24px solid transparent;
+  border-right: 24px solid transparent;
+  border-bottom: 36px solid #C8C8C9;
+  animation: triangle-float 3s ease-in-out infinite;
+}
+
+.logo-circle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #222222;
+  top: 20px;
+  animation: logo-pulse 2s infinite alternate;
+}
+
 .logo {
   filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
   transition: all 0.5s ease;

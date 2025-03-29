@@ -34,11 +34,10 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
     >
       <div className="flex flex-col items-center p-4 border-b border-sidebar-border">
         <div className="logo-container mb-2">
-          <img 
-            src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" 
-            alt="Sistemas Claudio Figueiredo" 
-            className="logo w-12 h-12 animate-logo"
-          />
+          <div className="cloned-logo animate-logo">
+            <div className="logo-triangle"></div>
+            <div className="logo-circle"></div>
+          </div>
         </div>
         {!collapsed && (
           <div className="text-center">
