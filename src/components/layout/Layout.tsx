@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
@@ -9,7 +9,7 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
   
@@ -17,13 +17,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
 
-  // Verifica se estamos na página de administração
+  // Check if we are on the admin page
   const isAdminPage = location.pathname === '/admin';
+  
+  // Optimize the background style to avoid recomputation
+  const bgStyle = isAdminPage 
+    ? 'bg-slate-50' 
+    : 'bg-gradient-to-br from-blue-50 to-white';
 
   return (
     <ClientProvider>
-      <div className={`flex h-screen ${isAdminPage ? 'bg-slate-50' : 'bg-gradient-to-br from-blue-50 to-white'} overflow-hidden`}>
-        <div className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} shadow-lg`}>
+      <div className={`flex h-screen ${bgStyle} overflow-hidden`}>
+        <div 
+          className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} shadow-lg`}
+        >
           <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
         </div>
         
@@ -39,6 +46,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
     </ClientProvider>
   );
-};
+});
+
+Layout.displayName = 'Layout';
 
 export default Layout;

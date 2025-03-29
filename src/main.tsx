@@ -4,19 +4,22 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Add logo as preload resource
-const logoPreload = document.createElement('link');
-logoPreload.rel = 'preload';
-logoPreload.href = '/logo-advogados.svg';
-logoPreload.as = 'image';
-document.head.appendChild(logoPreload);
+// Add critical resources as preload
+const preloadResources = [
+  { href: '/logo-advogados.svg', as: 'image' },
+  { href: '/favicon.svg', as: 'image' },
+  // Add commonly used fonts or styles
+  { href: '/index.css', as: 'style' }
+];
 
-// Add favicon as preload resource
-const faviconPreload = document.createElement('link');
-faviconPreload.rel = 'preload';
-faviconPreload.href = '/favicon.svg';
-faviconPreload.as = 'image';
-document.head.appendChild(faviconPreload);
+// Add preload links for critical resources
+preloadResources.forEach(resource => {
+  const link = document.createElement('link');
+  link.rel = 'preload';
+  link.href = resource.href;
+  link.as = resource.as;
+  document.head.appendChild(link);
+});
 
 const rootElement = document.getElementById('root');
 
