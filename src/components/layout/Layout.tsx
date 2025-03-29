@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <ClientProvider>
-      <div className="flex h-screen bg-gray-50 overflow-hidden">
+      <div className="flex h-screen bg-background overflow-hidden">
         <div className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'}`}>
           <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
         </div>

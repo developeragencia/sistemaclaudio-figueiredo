@@ -35,9 +35,9 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
           <DropdownMenuTrigger asChild>
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 bg-white hover:bg-gray-50 transition-all duration-200 border-taxBlue-200 text-taxBlue-800"
+              className="flex items-center gap-2 bg-white hover:bg-gray-50 transition-all duration-200 border-accent text-accent"
             >
-              <Building2 className="w-5 h-5 text-taxBlue-800" />
+              <Building2 className="w-5 h-5" />
               <span className="font-medium">
                 {activeClient ? activeClient.name : 'Selecionar Cliente'}
               </span>
@@ -45,13 +45,13 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="bg-white w-72 z-50 animate-in fade-in-80 slide-in-from-top-5">
-            <DropdownMenuItem className="cursor-pointer hover:bg-taxBlue-50 focus:bg-taxBlue-50 transition-colors">
+            <DropdownMenuItem className="cursor-pointer hover:bg-muted focus:bg-muted transition-colors">
               Prefeitura de São Paulo
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer hover:bg-taxBlue-50 focus:bg-taxBlue-50 transition-colors">
+            <DropdownMenuItem className="cursor-pointer hover:bg-muted focus:bg-muted transition-colors">
               Governo do Estado de Minas Gerais
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer hover:bg-taxBlue-50 focus:bg-taxBlue-50 transition-colors">
+            <DropdownMenuItem className="cursor-pointer hover:bg-muted focus:bg-muted transition-colors">
               Universidade Federal do Rio de Janeiro
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -73,12 +73,12 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 hover:bg-gray-100 transition-colors">
-              <div className="w-8 h-8 rounded-full bg-taxBlue-100 flex items-center justify-center">
-                <User className="w-5 h-5 text-taxBlue-800" />
+              <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
+                <User className="w-5 h-5 text-accent" />
               </div>
               <div className="hidden md:block text-left">
                 <p className="text-sm font-medium">Admin User</p>
-                <p className="text-xs text-gray-500">admin@taxcredit.com</p>
+                <p className="text-xs text-gray-500">admin@claudiofigueiredo.com</p>
               </div>
               <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
             </Button>

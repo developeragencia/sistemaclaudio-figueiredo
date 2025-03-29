@@ -32,15 +32,27 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         collapsed ? "w-16" : "w-64"
       )}
     >
-      <div className="flex items-center p-4 border-b border-sidebar-border">
+      <div className="flex flex-col items-center p-4 border-b border-sidebar-border">
+        <div className="logo-container mb-2">
+          <img 
+            src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" 
+            alt="Sistemas Claudio Figueiredo" 
+            className="logo w-12 h-12 animate-logo"
+          />
+        </div>
         {!collapsed && (
-          <span className="text-xl font-bold text-sidebar-foreground">
-            Tax<span className="text-sidebar-primary">Credit</span>
-          </span>
+          <div className="text-center">
+            <span className="text-lg font-bold text-sidebar-foreground block">
+              Sistemas
+            </span>
+            <span className="text-md font-medium text-sidebar-primary">
+              Claudio Figueiredo
+            </span>
+          </div>
         )}
         {collapsed && (
-          <span className="text-xl font-bold mx-auto">
-            TC
+          <span className="text-xl font-bold mx-auto mt-2">
+            CF
           </span>
         )}
       </div>
