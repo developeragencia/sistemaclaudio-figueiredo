@@ -55,7 +55,7 @@ const Index: React.FC = () => {
               <div className="relative bg-white rounded-xl shadow-2xl p-8 transform rotate-2 hover:rotate-0 transition-all duration-500">
                 <img src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" alt="Dashboard Preview" className="rounded-lg w-full object-cover" />
                 <div className="absolute -bottom-4 -left-4 bg-lawyer-800 text-white px-6 py-3 rounded-lg shadow-lg">
-                  Interface Intuitiva
+                  Recuperação de Impostos
                 </div>
               </div>
             </div>
@@ -63,15 +63,15 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Carrossel CTA Section */}
+      {/* Simplified Carousel CTA Section */}
       <section className="py-20 bg-gradient-to-r from-lawyer-900 to-lawyer-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white animate-fade-in">
-              Pronto para Otimizar sua Gestão Tributária?
+              Sistema Completo para Gestão Tributária
             </h2>
             <p className="text-lawyer-100 md:text-lg max-w-2xl mx-auto animate-fade-in delay-100">
-              Agende uma demonstração com nossa equipe e descubra como podemos ajudar seu escritório a maximizar resultados.
+              Ferramenta especializada para escritórios que buscam excelência em consultoria fiscal
             </p>
           </div>
           
@@ -84,57 +84,19 @@ const Index: React.FC = () => {
               className="w-full"
             >
               <CarouselContent>
-                {/* Primeiro Card */}
+                {/* Single Carousel Item with Logo */}
                 <CarouselItem className="md:basis-1/1">
                   <div className="p-1 h-full">
-                    <div className="rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 p-6 h-full flex flex-col">
-                      <div className="text-center mb-4">
-                        <h3 className="text-xl font-semibold text-white mb-2">Dashboard Interativo</h3>
-                        <p className="text-lawyer-200 text-sm">Visualize todos os seus processos em um só lugar</p>
+                    <div className="rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 p-12 h-full flex flex-col items-center justify-center">
+                      <div className="mb-8 transform transition-all duration-700 hover:scale-110">
+                        <AnimatedLogo size="large" showText={false} className="mx-auto" />
                       </div>
-                      <div className="flex-grow rounded-lg overflow-hidden relative shadow-xl">
-                        <div className="absolute inset-0 bg-gradient-to-t from-lawyer-900/60 to-transparent z-10"></div>
-                        <img 
-                          src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" 
-                          alt="Dashboard" 
-                          className="w-full h-full object-cover transform transition-transform duration-700 hover:scale-110"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-                
-                {/* Segundo Card */}
-                <CarouselItem className="md:basis-1/1">
-                  <div className="p-1 h-full">
-                    <div className="rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 p-6 h-full flex flex-col">
-                      <div className="text-center mb-4">
-                        <h3 className="text-xl font-semibold text-white mb-2">Gestão de Processos</h3>
-                        <p className="text-lawyer-200 text-sm">Acompanhe seus processos tributários de forma eficiente</p>
-                      </div>
-                      <div className="flex-grow rounded-lg overflow-hidden relative shadow-xl">
-                        <div className="absolute inset-0 bg-gradient-to-t from-lawyer-900/60 to-transparent z-10"></div>
-                        <img 
-                          src="/lovable-uploads/521c5609-a97d-478f-8a71-63e68cf8d9d8.png" 
-                          alt="Gestão de Processos" 
-                          className="w-full h-full object-cover transform transition-transform duration-700 hover:scale-110"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-                
-                {/* Terceiro Card - CTA */}
-                <CarouselItem className="md:basis-1/1">
-                  <div className="p-1 h-full">
-                    <div className="rounded-xl overflow-hidden bg-gradient-to-tr from-lawyer-700 to-lawyer-800 p-6 h-full flex flex-col">
-                      <div className="text-center mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">Comece Agora</h3>
-                        <p className="text-lawyer-100 mb-8">Acesse o sistema e transforme a gestão tributária do seu escritório</p>
-                      </div>
-                      <div className="flex-grow flex items-center justify-center">
+                      <div className="text-center">
+                        <h3 className="text-2xl font-bold text-white mb-4">Sistema Integrado de Gestão</h3>
+                        <p className="text-lawyer-100 mb-8">Uma plataforma completa para recuperação de impostos e gestão tributária</p>
+                        
                         <Link to="/login" className="w-full">
-                          <Button size="lg" className="w-full relative overflow-hidden group bg-white text-lawyer-800 hover:bg-lawyer-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl animate-fade-in">
+                          <Button size="lg" className="relative overflow-hidden group bg-white text-lawyer-800 hover:bg-lawyer-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl animate-fade-in">
                             <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
                             <span className="relative flex items-center justify-center text-lg font-semibold">
                               Acessar Sistema
@@ -147,17 +109,6 @@ const Index: React.FC = () => {
                   </div>
                 </CarouselItem>
               </CarouselContent>
-              <div className="mt-8">
-                <div className="flex justify-center items-center gap-4">
-                  <CarouselPrevious className="static transform-none mx-0 bg-white/20 hover:bg-white/30 border-white/40" />
-                  <div className="carousel-dots flex gap-2">
-                    {[0, 1, 2].map((index) => (
-                      <div key={index} className="w-2 h-2 rounded-full bg-white/40" />
-                    ))}
-                  </div>
-                  <CarouselNext className="static transform-none mx-0 bg-white/20 hover:bg-white/30 border-white/40" />
-                </div>
-              </div>
             </Carousel>
           </div>
         </div>
