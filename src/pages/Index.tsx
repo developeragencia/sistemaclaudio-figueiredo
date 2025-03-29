@@ -32,12 +32,15 @@ const Index: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section - Redesigned */}
+      {/* Hero Section - Enhanced Logo */}
       <section className="py-20 md:py-28 bg-gradient-to-br from-blue-50 via-white to-blue-50 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-grid-blue-100/30 z-0"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="md:w-1/2 animate-fade-in">
+              <div className="mb-8 transform hover:scale-105 transition-transform duration-500">
+                <AnimatedLogo size="large" className="mb-6" />
+              </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-blue-900 leading-tight">
                 Sistema de Gestão Tributária para <span className="text-blue-600">Escritórios de Advocacia</span>
               </h1>
