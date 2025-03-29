@@ -16,15 +16,15 @@ import Favicon from "./components/ui/Favicon";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import SiteEditor from "./components/admin/SiteEditor";
-import { ToastProvider } from "@/hooks/use-toast";
+import { ToastProvider } from "./hooks/use-toast";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <ToastProvider>
+      <ToastProvider>
+        <TooltipProvider>
           <AuthProvider>
             <BrowserRouter>
               <Favicon />
@@ -315,8 +315,8 @@ const App = () => {
               </Routes>
             </BrowserRouter>
           </AuthProvider>
-        </ToastProvider>
-      </TooltipProvider>
+        </TooltipProvider>
+      </ToastProvider>
     </QueryClientProvider>
   );
 };
