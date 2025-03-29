@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
+import { useLocation } from 'react-router-dom';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,14 +11,18 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const location = useLocation();
   
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
 
+  // Verifica se estamos na página de administração
+  const isAdminPage = location.pathname === '/admin';
+
   return (
     <ClientProvider>
-      <div className="flex h-screen bg-gradient-to-br from-slate-50 to-blue-50 overflow-hidden">
+      <div className={`flex h-screen ${isAdminPage ? 'bg-slate-50' : 'bg-gradient-to-br from-slate-50 to-blue-50'} overflow-hidden`}>
         <div className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} shadow-lg`}>
           <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
         </div>

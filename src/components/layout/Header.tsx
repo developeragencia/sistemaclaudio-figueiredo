@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
-import { Bell, Menu, X, LogOut } from 'lucide-react';
+import { Bell, Menu, X, LogOut, Search } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import AnimatedLogo from '@/components/ui/AnimatedLogo';
 
 interface HeaderProps {
@@ -34,10 +35,18 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
     <header className="h-16 px-4 border-b flex items-center justify-between bg-white">
       {/* Left section - Logo and Menu toggle */}
       <div className="flex items-center">
-        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="lg:hidden mr-2" aria-label="Menu">
+        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="mr-2" aria-label="Menu">
           <Menu className="h-6 w-6" />
         </Button>
         <AnimatedLogo size="small" showText={true} className="hidden sm:flex" />
+        
+        <div className="ml-6 hidden md:flex relative">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+          <Input 
+            placeholder="Pesquisar..." 
+            className="pl-10 w-64 bg-gray-50 border-0 focus-visible:ring-1"
+          />
+        </div>
       </div>
 
       {/* Right section - notifications and user menu */}
@@ -63,10 +72,11 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         {/* User Avatar */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Avatar>
-                <AvatarFallback>{userInitials}</AvatarFallback>
+            <Button variant="ghost" className="flex items-center space-x-2 rounded-full">
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-blue-100 text-blue-800">{userInitials}</AvatarFallback>
               </Avatar>
+              <span className="font-medium text-sm hidden md:inline">Administrador</span>
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-60 mt-2" align="end">

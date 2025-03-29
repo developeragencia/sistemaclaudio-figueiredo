@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import AuditTax from "./pages/AuditTax";
 import Login from "./pages/Login";
+import Admin from "./pages/Admin";
 import { useState } from "react";
 import Favicon from "./components/ui/Favicon";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -38,6 +39,14 @@ const App = () => {
                   <ProtectedRoute>
                     <Layout>
                       <Dashboard />
+                    </Layout>
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/admin" element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Admin />
                     </Layout>
                   </ProtectedRoute>
                 } />

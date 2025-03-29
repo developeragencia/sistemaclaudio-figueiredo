@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -21,7 +20,8 @@ import {
   Clock,
   Shield,
   ShieldX,
-  UserCheck
+  UserCheck,
+  LayoutDashboard
 } from 'lucide-react';
 import AnimatedLogo from '../ui/AnimatedLogo';
 import { cn } from '@/lib/utils';
@@ -219,6 +219,15 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           label="Dashboard" 
           to="/dashboard" 
           isActive={location.pathname === "/dashboard"}
+          collapsed={collapsed} 
+        />
+
+        {/* Admin */}
+        <SidebarItem 
+          icon={<LayoutDashboard />} 
+          label="Painel Administrativo" 
+          to="/admin" 
+          isActive={location.pathname === "/admin"}
           collapsed={collapsed} 
         />
         
