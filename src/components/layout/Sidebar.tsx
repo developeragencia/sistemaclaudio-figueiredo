@@ -8,6 +8,7 @@ import {
   Briefcase, FileSearch, CreditCard
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import AnimatedLogo from '@/components/ui/AnimatedLogo';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -96,7 +97,6 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
               >
                 <item.icon className={cn(
                   "w-5 h-5 transition-transform duration-200", 
-                  !collapsed && "group-hover:translate-x-1",
                   isActive && "text-sidebar-primary"
                 )} />
                 {!collapsed && (
@@ -123,14 +123,14 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       )}
     >
       <div className="flex flex-col items-center p-4 border-b border-sidebar-border">
-        <div className="logo-container mb-2">
-          <div className="cloned-logo animate-logo">
-            <div className="logo-triangle"></div>
-            <div className="logo-circle"></div>
-          </div>
-        </div>
+        {!collapsed ? (
+          <AnimatedLogo size="medium" showText={false} />
+        ) : (
+          <AnimatedLogo size="small" showText={false} />
+        )}
+        
         {!collapsed && (
-          <div className="text-center">
+          <div className="text-center mt-2">
             <span className="text-md font-medium text-white block">
               ADVOGADOS
             </span>
@@ -138,11 +138,6 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
               ASSOCIADOS
             </span>
           </div>
-        )}
-        {collapsed && (
-          <span className="text-xl font-bold mx-auto mt-2 text-white">
-            AA
-          </span>
         )}
       </div>
       

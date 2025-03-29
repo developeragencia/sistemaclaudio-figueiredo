@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import AnimatedLogo from '@/components/ui/AnimatedLogo';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -31,11 +32,12 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
 
   return (
     <header className="h-16 px-4 border-b flex items-center justify-between bg-white">
-      {/* Left section - Menu toggle */}
-      <div>
-        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="lg:hidden" aria-label="Menu">
+      {/* Left section - Logo and Menu toggle */}
+      <div className="flex items-center">
+        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="lg:hidden mr-2" aria-label="Menu">
           <Menu className="h-6 w-6" />
         </Button>
+        <AnimatedLogo size="small" showText={true} className="hidden sm:flex" />
       </div>
 
       {/* Right section - notifications and user menu */}
