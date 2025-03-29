@@ -1,163 +1,319 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  BarChart4, Users, FileText, ClipboardCheck, 
-  Settings, LogOut, Home, FileInput, 
-  Calculator, Globe, Shield, MessageSquare, 
-  Briefcase, FileSearch, CreditCard
+  Home, 
+  Users, 
+  Calculator, 
+  FileText, 
+  BarChart3,
+  Receipt, 
+  CreditCard, 
+  ShieldAlert,
+  Cog,
+  LifeBuoy,
+  Import,
+  Globe,
+  ChevronDown, 
+  ChevronRight,
+  ShieldCheck
 } from 'lucide-react';
+import AnimatedLogo from '../ui/AnimatedLogo';
 import { cn } from '@/lib/utils';
-import AnimatedLogo from '@/components/ui/AnimatedLogo';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface SidebarProps {
   collapsed: boolean;
   toggleCollapse: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
-  const location = useLocation();
+interface SidebarItemProps {
+  icon: React.ReactNode;
+  label: string;
+  to: string;
+  isActive?: boolean;
+  collapsed?: boolean;
+  hasSubmenu?: boolean;
+  isSubmenuOpen?: boolean;
+  toggleSubmenu?: () => void;
+}
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ 
+  icon, 
+  label, 
+  to, 
+  isActive = false, 
+  collapsed = false,
+  hasSubmenu = false,
+  isSubmenuOpen = false,
+  toggleSubmenu
+}) => {
+  if (collapsed) {
+    return (
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <Link 
+            to={to} 
+            className={cn(
+              "flex items-center p-3 rounded-md hover:bg-lawyer-50 transition-colors",
+              isActive && "bg-lawyer-50 text-lawyer-800"
+            )}
+            onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
+          >
+            <div className="w-full flex justify-center">
+              {React.cloneElement(icon as React.ReactElement, { 
+                className: cn("h-5 w-5", isActive && "text-lawyer-800") 
+              })}
+            </div>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          {label}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
   
-  // Main navigation items
-  const mainNavItems = [
-    { name: 'Principal', icon: Home, path: '/' },
-  ];
-
-  // Group modules by category
-  const moduleGroups = [
-    {
-      title: 'Módulos Principais',
-      items: [
-        { name: 'Gestão de Clientes', icon: Users, path: '/clients-management' },
-        { name: 'Créditos Tributários', icon: CreditCard, path: '/tax-credits' },
-        { name: 'Calculadora Avançada', icon: Calculator, path: '/advanced-calculator' },
-      ]
-    },
-    {
-      title: 'Cálculos e Recuperação',
-      items: [
-        { name: 'Cálculos IRRF', icon: Calculator, path: '/irrf-calculations' },
-        { name: 'Recuperação IRRF/PJ', icon: CreditCard, path: '/irrf-recovery' },
-        { name: 'Identificação de Créditos', icon: FileSearch, path: '/credits-identification' },
-      ]
-    },
-    {
-      title: 'Relatórios',
-      items: [
-        { name: 'Relatórios Detalhados', icon: FileText, path: '/detailed-reports' },
-        { name: 'Comprovantes de Retenção', icon: FileText, path: '/retention-receipts' },
-        { name: 'Relatórios Fiscais', icon: FileText, path: '/fiscal-reports' },
-        { name: 'Dashboard Interativo', icon: BarChart4, path: '/interactive-dashboard' },
-      ]
-    },
-    {
-      title: 'Gestão',
-      items: [
-        { name: 'Propostas Comerciais', icon: FileText, path: '/commercial-proposals' },
-        { name: 'Compensação Tributária', icon: CreditCard, path: '/tax-compensation' },
-        { name: 'Gestão de Auditorias', icon: ClipboardCheck, path: '/audit-management' },
-      ]
-    },
-    {
-      title: 'Sistema',
-      items: [
-        { name: 'Segurança & Auditoria', icon: Shield, path: '/security-audit' },
-        { name: 'Operacional', icon: Briefcase, path: '/operational' },
-        { name: 'Site e Conteúdo', icon: Globe, path: '/site-content' },
-        { name: 'Importação', icon: FileInput, path: '/import' },
-        { name: 'Suporte', icon: MessageSquare, path: '/support' },
-        { name: 'Configurações', icon: Settings, path: '/settings' },
-      ]
-    }
-  ];
-
-  // Render a navigation section
-  const renderNavSection = (title: string, items: typeof mainNavItems, isMainNav = false) => (
-    <div className={cn("px-2 py-2", !isMainNav && !collapsed && "mt-2")}>
-      {!collapsed && !isMainNav && (
-        <h3 className="text-xs font-semibold text-sidebar-muted uppercase tracking-wider px-2 mb-2">
-          {title}
-        </h3>
-      )}
-      <ul className="space-y-1">
-        {items.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <li key={item.name} className="group">
-              <Link
-                to={item.path}
-                className={cn(
-                  "flex items-center p-2 rounded-md transition-all duration-200",
-                  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                  "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
-                  isActive 
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                    : "text-sidebar-foreground"
-                )}
-              >
-                <item.icon className={cn(
-                  "w-5 h-5 transition-transform duration-200", 
-                  isActive && "text-sidebar-primary"
-                )} />
-                {!collapsed && (
-                  <span className={cn(
-                    "ml-3 transition-all duration-200 text-sm",
-                    isActive && "font-medium text-sidebar-primary"
-                  )}>
-                    {item.name}
-                  </span>
-                )}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-
   return (
-    <aside 
+    <Link
+      to={hasSubmenu ? "#" : to}
+      onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
       className={cn(
-        "bg-lawyer-800 text-sidebar-foreground h-screen transition-all duration-300 flex flex-col",
-        collapsed ? "w-16" : "w-64"
+        "flex items-center px-3 py-2 rounded-md hover:bg-lawyer-50 transition-colors",
+        isActive && "bg-lawyer-50 text-lawyer-800"
       )}
     >
-      <div className="flex flex-col items-center p-4 border-b border-sidebar-border">
+      {React.cloneElement(icon as React.ReactElement, { 
+        className: cn("h-5 w-5 mr-3", isActive && "text-lawyer-800") 
+      })}
+      <span className="font-medium text-sm flex-1">{label}</span>
+      {hasSubmenu && (
+        isSubmenuOpen ? 
+          <ChevronDown className="h-4 w-4" /> : 
+          <ChevronRight className="h-4 w-4" />
+      )}
+    </Link>
+  );
+};
+
+interface SidebarSubmenuProps {
+  items: {
+    label: string;
+    to: string;
+  }[];
+  isOpen: boolean;
+  collapsed: boolean;
+}
+
+const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapsed }) => {
+  const location = useLocation();
+  
+  if (!isOpen || collapsed) return null;
+  
+  return (
+    <div className="ml-8 mt-1 space-y-1 border-l border-lawyer-100 pl-3">
+      {items.map((item, index) => (
+        <Link
+          key={index}
+          to={item.to}
+          className={cn(
+            "block py-1.5 text-sm text-lawyer-600 transition-colors hover:text-lawyer-900",
+            location.pathname === item.to && "font-medium text-lawyer-800"
+          )}
+        >
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+};
+
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
+  const location = useLocation();
+  const [openMenus, setOpenMenus] = useState<{[key: string]: boolean}>({
+    calculations: false,
+    reports: false,
+    management: false,
+    system: false
+  });
+  
+  const toggleSubmenu = (menu: string) => {
+    if (collapsed) return;
+    setOpenMenus(prev => ({
+      ...prev,
+      [menu]: !prev[menu]
+    }));
+  };
+  
+  const calculationItems = [
+    { label: "Cálculos IRRF", to: "/irrf-calculations" },
+    { label: "Recuperação IRRF/PJ", to: "/irrf-recovery" },
+    { label: "Identificação de Créditos", to: "/credits-identification" },
+  ];
+  
+  const reportItems = [
+    { label: "Relatórios Detalhados", to: "/detailed-reports" },
+    { label: "Comprovantes de Retenção", to: "/retention-receipts" },
+    { label: "Relatórios Fiscais", to: "/fiscal-reports" },
+    { label: "Dashboard Interativo", to: "/interactive-dashboard" },
+  ];
+  
+  const managementItems = [
+    { label: "Propostas Comerciais", to: "/commercial-proposals" },
+    { label: "Compensação Tributária", to: "/tax-compensation" },
+    { label: "Gestão de Auditorias", to: "/audit-management" },
+  ];
+  
+  const systemItems = [
+    { label: "Segurança & Auditoria", to: "/security-audit" },
+    { label: "Operacional", to: "/operational" },
+    { label: "Site e Conteúdo", to: "/site-editor" },
+    { label: "Importação", to: "/import" },
+  ];
+
+  return (
+    <aside className={cn(
+      "h-screen fixed z-30 bg-white border-r transition-all duration-300 flex flex-col shadow-sm",
+      collapsed ? "w-16" : "w-64"
+    )}>
+      <div className="flex items-center h-16 border-b px-3">
         {!collapsed ? (
-          <AnimatedLogo size="medium" showText={false} />
+          <div className="w-full flex items-center justify-between">
+            <AnimatedLogo size="small" />
+            <button 
+              onClick={toggleCollapse} 
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-lawyer-50 transition-colors"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         ) : (
-          <AnimatedLogo size="small" showText={false} />
-        )}
-        
-        {!collapsed && (
-          <div className="text-center mt-2">
-            <span className="text-md font-medium text-white block">
-              ADVOGADOS
-            </span>
-            <span className="text-sm font-medium text-gray-300">
-              ASSOCIADOS
-            </span>
+          <div className="w-full flex justify-center">
+            <button 
+              onClick={toggleCollapse} 
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-lawyer-50 transition-colors"
+            >
+              <AnimatedLogo size="small" showText={false} />
+            </button>
           </div>
         )}
       </div>
       
-      <nav className="flex-grow py-2 overflow-y-auto scrollbar-none">
-        {/* Main Navigation */}
-        {renderNavSection('', mainNavItems, true)}
+      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        {/* Dashboard */}
+        <SidebarItem 
+          icon={<Home />} 
+          label="Dashboard" 
+          to="/dashboard" 
+          isActive={location.pathname === "/dashboard"}
+          collapsed={collapsed} 
+        />
         
-        {/* Module Groups */}
-        {moduleGroups.map((group) => (
-          renderNavSection(group.title, group.items)
-        ))}
-      </nav>
-      
-      <div className="p-4 border-t border-sidebar-border">
-        <button
-          className="flex items-center w-full p-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-200"
-        >
-          <LogOut className="w-5 h-5" />
-          {!collapsed && <span className="ml-3">Sair</span>}
-        </button>
+        {/* Módulos Principais */}
+        <div className={cn("pt-4 pb-2", !collapsed && "px-3")}>
+          {!collapsed && <p className="text-xs text-lawyer-500 font-medium uppercase">Módulos Principais</p>}
+        </div>
+        
+        <SidebarItem 
+          icon={<Users />} 
+          label="Gestão de Clientes" 
+          to="/clients-management"
+          isActive={location.pathname === "/clients-management"} 
+          collapsed={collapsed}
+        />
+        
+        <SidebarItem 
+          icon={<Calculator />} 
+          label="Cálculos e Recuperação" 
+          to="#" 
+          hasSubmenu={true}
+          isSubmenuOpen={openMenus.calculations}
+          toggleSubmenu={() => toggleSubmenu('calculations')}
+          collapsed={collapsed}
+        />
+        
+        <SidebarSubmenu 
+          items={calculationItems} 
+          isOpen={openMenus.calculations} 
+          collapsed={collapsed} 
+        />
+        
+        <SidebarItem 
+          icon={<ShieldCheck />} 
+          label="Auditoria Tributária" 
+          to="/tax-audit"
+          isActive={location.pathname === "/tax-audit"} 
+          collapsed={collapsed}
+        />
+        
+        <SidebarItem 
+          icon={<FileText />} 
+          label="Relatórios" 
+          to="#" 
+          hasSubmenu={true}
+          isSubmenuOpen={openMenus.reports}
+          toggleSubmenu={() => toggleSubmenu('reports')}
+          collapsed={collapsed}
+        />
+        
+        <SidebarSubmenu 
+          items={reportItems} 
+          isOpen={openMenus.reports} 
+          collapsed={collapsed} 
+        />
+        
+        <SidebarItem 
+          icon={<BarChart3 />} 
+          label="Gestão" 
+          to="#" 
+          hasSubmenu={true}
+          isSubmenuOpen={openMenus.management}
+          toggleSubmenu={() => toggleSubmenu('management')}
+          collapsed={collapsed}
+        />
+        
+        <SidebarSubmenu 
+          items={managementItems} 
+          isOpen={openMenus.management} 
+          collapsed={collapsed} 
+        />
+        
+        {/* Sistema */}
+        <div className={cn("pt-4 pb-2", !collapsed && "px-3")}>
+          {!collapsed && <p className="text-xs text-lawyer-500 font-medium uppercase">Sistema</p>}
+        </div>
+        
+        <SidebarItem 
+          icon={<Globe />} 
+          label="Sistema" 
+          to="#" 
+          hasSubmenu={true}
+          isSubmenuOpen={openMenus.system}
+          toggleSubmenu={() => toggleSubmenu('system')}
+          collapsed={collapsed}
+        />
+        
+        <SidebarSubmenu 
+          items={systemItems} 
+          isOpen={openMenus.system} 
+          collapsed={collapsed} 
+        />
+        
+        <SidebarItem 
+          icon={<LifeBuoy />} 
+          label="Suporte" 
+          to="/support" 
+          isActive={location.pathname === "/support"}
+          collapsed={collapsed}
+        />
+        
+        <SidebarItem 
+          icon={<Cog />} 
+          label="Configurações" 
+          to="/settings" 
+          isActive={location.pathname === "/settings"}
+          collapsed={collapsed}
+        />
       </div>
     </aside>
   );

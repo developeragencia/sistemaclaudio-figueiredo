@@ -36,7 +36,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
   return (
     <div className={`flex items-center ${className}`}>
-      <div className={`${selected.logoContainer} relative hover-scale`}>
+      <div className={`${selected.logoContainer} relative hover-scale transition-transform duration-300 hover:rotate-12`}>
         {/* Logo triangular pattern */}
         <div className="absolute inset-0">
           {/* First row of triangles */}

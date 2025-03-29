@@ -14,6 +14,7 @@ import { useState } from "react";
 import Favicon from "./components/ui/Favicon";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import SiteEditor from "./components/admin/SiteEditor";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -44,6 +45,15 @@ const App = () => {
                 <ProtectedRoute>
                   <Layout>
                     <AuditTax />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Site Editor Route */}
+              <Route path="/site-editor" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SiteEditor />
                   </Layout>
                 </ProtectedRoute>
               } />
