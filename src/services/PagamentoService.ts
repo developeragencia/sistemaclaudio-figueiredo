@@ -1,190 +1,321 @@
 import { supabase } from '../config/supabase';
+import { SelicService } from './SelicService';
 
-interface Retencao {
-  tipo: string;
-  aliquota: number;
-  valor: number;
+export interface Pagamento {
+  id: string;
+  cliente_id: string;
+  fornecedor_id: string;
+  valor_bruto: number;
+  valor_liquido: number;
+  data_pagamento: string;
+  data_vencimento: string;
+  status: 'pendente' | 'pago' | 'atrasado' | 'cancelado';
+  tipo_retencao: string[];
+  valor_retencao: number;
+  comprovante_url?: string;
+  observacoes?: string;
+  data_criacao: string;
+  ultima_atualizacao: string;
 }
 
-interface Pagamento {
-  id: string;
-  fornecedorId: string;
-  valor: number;
-  dataPagamento: Date;
-  retencoes: Retencao[];
-  status: 'PENDENTE' | 'PROCESSADO' | 'AUDITADO';
+export interface PagamentoFiltros {
+  cliente_id?: string;
+  fornecedor_id?: string;
+  status?: string;
+  data_inicio?: string;
+  data_fim?: string;
 }
 
 export class PagamentoService {
-  async processarPagamento(pagamento: Pagamento): Promise<Pagamento> {
-    try {
-      // Buscar informações do fornecedor
-      const { data: fornecedor } = await supabase
-        .from('fornecedores')
-        .select('*')
-        .eq('id', pagamento.fornecedorId)
-        .single();
+  private readonly table = 'pagamentos';
+  private readonly selicService = new SelicService();
 
-      if (!fornecedor) {
-        throw new Error('Fornecedor não encontrado');
+  async listarPagamentos(filtros: PagamentoFiltros = {}) {
+    try {
+      let query = supabase
+        .from(this.table)
+        .select(`
+          *,
+          cliente:clientes(razao_social),
+          fornecedor:fornecedores(razao_social)
+        `)
+        .order('data_vencimento', { ascending: false });
+
+      if (filtros.cliente_id) {
+        query = query.eq('cliente_id', filtros.cliente_id);
       }
 
-      // Aplicar retenções baseadas no CNAE
-      const retencoes = await this.calcularRetencoes(pagamento.valor, fornecedor.cnae);
-      
-      // Atualizar pagamento com retenções
-      const { data: pagamentoAtualizado, error } = await supabase
-        .from('pagamentos')
-        .update({
-          retencoes,
-          status: 'PROCESSADO',
-          valor_liquido: pagamento.valor - retencoes.reduce((total, ret) => total + ret.valor, 0)
-        })
-        .eq('id', pagamento.id)
+      if (filtros.fornecedor_id) {
+        query = query.eq('fornecedor_id', filtros.fornecedor_id);
+      }
+
+      if (filtros.status) {
+        query = query.eq('status', filtros.status);
+      }
+
+      if (filtros.data_inicio) {
+        query = query.gte('data_vencimento', filtros.data_inicio);
+      }
+
+      if (filtros.data_fim) {
+        query = query.lte('data_vencimento', filtros.data_fim);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      console.error('Erro ao listar pagamentos:', error);
+      throw error;
+    }
+  }
+
+  async getPagamento(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from(this.table)
+        .select(`
+          *,
+          cliente:clientes(razao_social),
+          fornecedor:fornecedores(razao_social)
+        `)
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      console.error('Erro ao buscar pagamento:', error);
+      throw error;
+    }
+  }
+
+  async criarPagamento(pagamento: Omit<Pagamento, 'id' | 'data_criacao' | 'ultima_atualizacao'>) {
+    try {
+      const { data, error } = await supabase
+        .from(this.table)
+        .insert([{
+          ...pagamento,
+          data_criacao: new Date().toISOString(),
+          ultima_atualizacao: new Date().toISOString()
+        }])
         .select()
         .single();
 
       if (error) throw error;
 
-      return pagamentoAtualizado;
+      return data;
     } catch (error) {
-      console.error('Erro ao processar pagamento:', error);
+      console.error('Erro ao criar pagamento:', error);
       throw error;
     }
   }
 
-  private async calcularRetencoes(valor: number, cnae: string): Promise<Retencao[]> {
-    const retencoes: Retencao[] = [];
-
-    // Buscar regras de retenção baseadas no CNAE
-    const { data: regras } = await supabase
-      .from('regras_retencao')
-      .select('*')
-      .eq('cnae', cnae);
-
-    if (!regras?.length) {
-      return retencoes;
-    }
-
-    // Aplicar cada regra de retenção
-    regras.forEach(regra => {
-      if (valor >= regra.valor_minimo) {
-        retencoes.push({
-          tipo: regra.tipo,
-          aliquota: regra.aliquota,
-          valor: (valor * regra.aliquota) / 100
-        });
-      }
-    });
-
-    return retencoes;
-  }
-
-  async auditarPagamento(pagamentoId: string): Promise<void> {
+  async atualizarPagamento(id: string, pagamento: Partial<Pagamento>) {
     try {
-      const { data: pagamento } = await supabase
-        .from('pagamentos')
-        .select('*')
-        .eq('id', pagamentoId)
-        .single();
-
-      if (!pagamento) {
-        throw new Error('Pagamento não encontrado');
-      }
-
-      // Recalcular retenções para auditoria
-      const retencoesAuditoria = await this.calcularRetencoes(pagamento.valor, pagamento.fornecedor_cnae);
-      
-      // Comparar retenções aplicadas com calculadas
-      const diferencas = this.compararRetencoes(pagamento.retencoes, retencoesAuditoria);
-
-      // Registrar resultado da auditoria
-      await supabase.from('auditorias').insert([{
-        pagamento_id: pagamentoId,
-        diferencas,
-        data_auditoria: new Date(),
-        status: diferencas.length > 0 ? 'DIVERGENTE' : 'OK'
-      }]);
-
-      // Atualizar status do pagamento
-      await supabase
-        .from('pagamentos')
-        .update({ status: 'AUDITADO' })
-        .eq('id', pagamentoId);
-
-    } catch (error) {
-      console.error('Erro ao auditar pagamento:', error);
-      throw error;
-    }
-  }
-
-  private compararRetencoes(aplicadas: Retencao[], calculadas: Retencao[]): any[] {
-    const diferencas = [];
-
-    calculadas.forEach(retCalc => {
-      const retAplicada = aplicadas.find(ret => ret.tipo === retCalc.tipo);
-      
-      if (!retAplicada) {
-        diferencas.push({
-          tipo: retCalc.tipo,
-          status: 'NAO_APLICADA',
-          valor_esperado: retCalc.valor
-        });
-      } else if (retAplicada.valor !== retCalc.valor) {
-        diferencas.push({
-          tipo: retCalc.tipo,
-          status: 'VALOR_DIVERGENTE',
-          valor_aplicado: retAplicada.valor,
-          valor_esperado: retCalc.valor
-        });
-      }
-    });
-
-    return diferencas;
-  }
-
-  async atualizarSelic(pagamentoId: string): Promise<void> {
-    try {
-      const { data: pagamento } = await supabase
-        .from('pagamentos')
-        .select('*')
-        .eq('id', pagamentoId)
-        .single();
-
-      if (!pagamento) {
-        throw new Error('Pagamento não encontrado');
-      }
-
-      // Buscar taxa Selic atual
-      const taxaSelic = await this.obterTaxaSelic();
-
-      // Calcular correção
-      const diasAtraso = this.calcularDiasAtraso(new Date(pagamento.data_pagamento));
-      const correcao = (pagamento.valor * taxaSelic * diasAtraso) / 365;
-
-      // Atualizar pagamento com correção
-      await supabase
-        .from('pagamentos')
+      const { data, error } = await supabase
+        .from(this.table)
         .update({
-          correcao_selic: correcao,
-          taxa_selic_aplicada: taxaSelic
+          ...pagamento,
+          ultima_atualizacao: new Date().toISOString()
         })
-        .eq('id', pagamentoId);
+        .eq('id', id)
+        .select()
+        .single();
 
+      if (error) throw error;
+
+      return data;
     } catch (error) {
-      console.error('Erro ao atualizar Selic:', error);
+      console.error('Erro ao atualizar pagamento:', error);
       throw error;
     }
   }
 
-  private async obterTaxaSelic(): Promise<number> {
-    // Implementar chamada à API do Banco Central
-    return 13.75; // Taxa exemplo
+  async confirmarPagamento(id: string, comprovante_url?: string) {
+    try {
+      const { data, error } = await supabase
+        .from(this.table)
+        .update({
+          status: 'pago',
+          data_pagamento: new Date().toISOString(),
+          comprovante_url,
+          ultima_atualizacao: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      console.error('Erro ao confirmar pagamento:', error);
+      throw error;
+    }
   }
 
-  private calcularDiasAtraso(dataPagamento: Date): number {
-    const hoje = new Date();
-    const diffTime = Math.abs(hoje.getTime() - dataPagamento.getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  async cancelarPagamento(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from(this.table)
+        .update({
+          status: 'cancelado',
+          ultima_atualizacao: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      console.error('Erro ao cancelar pagamento:', error);
+      throw error;
+    }
   }
-} 
+
+  async calcularRetencoes(valor: number, cnae: string) {
+    try {
+      // Buscar regras de retenção baseadas no CNAE
+      const { data: regras, error } = await supabase
+        .from('regras_retencao')
+        .select('*')
+        .eq('cnae', cnae)
+        .single();
+
+      if (error) throw error;
+
+      if (!regras) {
+        return {
+          tipos: [],
+          valor: 0
+        };
+      }
+
+      const tipos: string[] = [];
+      let valorTotal = 0;
+
+      // Calcular retenções conforme regras
+      if (regras.irrf && valor >= regras.irrf_valor_minimo) {
+        tipos.push('IRRF');
+        valorTotal += valor * (regras.irrf_aliquota / 100);
+      }
+
+      if (regras.pis) {
+        tipos.push('PIS');
+        valorTotal += valor * (regras.pis_aliquota / 100);
+      }
+
+      if (regras.cofins) {
+        tipos.push('COFINS');
+        valorTotal += valor * (regras.cofins_aliquota / 100);
+      }
+
+      if (regras.csll) {
+        tipos.push('CSLL');
+        valorTotal += valor * (regras.csll_aliquota / 100);
+      }
+
+      if (regras.inss && valor >= regras.inss_valor_minimo) {
+        tipos.push('INSS');
+        valorTotal += valor * (regras.inss_aliquota / 100);
+      }
+
+      if (regras.iss) {
+        tipos.push('ISS');
+        valorTotal += valor * (regras.iss_aliquota / 100);
+      }
+
+      return {
+        tipos,
+        valor: Number(valorTotal.toFixed(2))
+      };
+    } catch (error) {
+      console.error('Erro ao calcular retenções:', error);
+      throw error;
+    }
+  }
+
+  async atualizarStatusAtrasados() {
+    try {
+      const hoje = new Date().toISOString().split('T')[0];
+
+      const { data, error } = await supabase
+        .from(this.table)
+        .update({ status: 'atrasado' })
+        .eq('status', 'pendente')
+        .lt('data_vencimento', hoje);
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      console.error('Erro ao atualizar status de pagamentos atrasados:', error);
+      throw error;
+    }
+  }
+
+  async calcularCorrecaoMonetaria(id: string) {
+    try {
+      const pagamento = await this.getPagamento(id);
+      if (!pagamento || pagamento.status !== 'atrasado') {
+        throw new Error('Pagamento não encontrado ou não está atrasado');
+      }
+
+      const dataVencimento = new Date(pagamento.data_vencimento);
+      const valorCorrigido = await this.selicService.calcularCorrecaoMonetaria(
+        pagamento.valor_liquido,
+        dataVencimento
+      );
+
+      return {
+        valor_original: pagamento.valor_liquido,
+        valor_corrigido: valorCorrigido,
+        diferenca: valorCorrigido - pagamento.valor_liquido
+      };
+    } catch (error) {
+      console.error('Erro ao calcular correção monetária:', error);
+      throw error;
+    }
+  }
+
+  async gerarRelatorioRetencoes(filtros: PagamentoFiltros = {}) {
+    try {
+      const pagamentos = await this.listarPagamentos(filtros);
+      
+      const relatorio = {
+        total_pagamentos: pagamentos.length,
+        valor_total_bruto: 0,
+        valor_total_liquido: 0,
+        valor_total_retencoes: 0,
+        retencoes_por_tipo: {} as Record<string, number>,
+        pagamentos_por_status: {} as Record<string, number>
+      };
+
+      pagamentos.forEach(pagamento => {
+        relatorio.valor_total_bruto += pagamento.valor_bruto;
+        relatorio.valor_total_liquido += pagamento.valor_liquido;
+        relatorio.valor_total_retencoes += pagamento.valor_retencao;
+
+        // Contabilizar retenções por tipo
+        pagamento.tipo_retencao.forEach(tipo => {
+          relatorio.retencoes_por_tipo[tipo] = (relatorio.retencoes_por_tipo[tipo] || 0) + 1;
+        });
+
+        // Contabilizar pagamentos por status
+        relatorio.pagamentos_por_status[pagamento.status] = 
+          (relatorio.pagamentos_por_status[pagamento.status] || 0) + 1;
+      });
+
+      return relatorio;
+    } catch (error) {
+      console.error('Erro ao gerar relatório de retenções:', error);
+      throw error;
+    }
+  }
+}

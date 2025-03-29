@@ -1,4 +1,3 @@
-
 import { CNPJAPIResponse } from '../types';
 import { toast } from '@/hooks/use-toast';
 
@@ -100,4 +99,43 @@ export const mapCNPJResponseToSupplier = (apiResponse: CNPJAPIResponse) => {
     createdAt: new Date(),
     updatedAt: new Date()
   };
+};
+
+interface CNPJResponse {
+  razao_social: string;
+  nome_fantasia: string;
+  logradouro: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  municipio: string;
+  uf: string;
+  cep: string;
+}
+
+export const consultarCNPJ = async (cnpj: string): Promise<CNPJResponse> => {
+  try {
+    const response = await fetch(`https://publica.cnpj.ws/cnpj/${cnpj}`);
+    
+    if (!response.ok) {
+      throw new Error('Erro ao consultar CNPJ');
+    }
+
+    const data = await response.json();
+
+    return {
+      razao_social: data.razao_social,
+      nome_fantasia: data.estabelecimento.nome_fantasia,
+      logradouro: data.estabelecimento.logradouro,
+      numero: data.estabelecimento.numero,
+      complemento: data.estabelecimento.complemento,
+      bairro: data.estabelecimento.bairro,
+      municipio: data.estabelecimento.cidade.nome,
+      uf: data.estabelecimento.estado.sigla,
+      cep: data.estabelecimento.cep
+    };
+  } catch (error) {
+    console.error('Erro ao consultar CNPJ:', error);
+    throw new Error('Não foi possível consultar o CNPJ. Tente novamente.');
+  }
 };
