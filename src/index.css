@@ -92,7 +92,39 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg;
+  }
+  
+  .card-transition {
+    @apply transition-all duration-200 hover:shadow-lg;
+  }
+  
+  .nav-link {
+    @apply relative flex items-center gap-2 py-2 px-3 rounded-md transition-all duration-200;
+  }
+  
+  .nav-link::after {
+    @apply content-[""] absolute bottom-0 left-0 h-0.5 w-0 bg-current transition-all duration-300;
+  }
+  
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }

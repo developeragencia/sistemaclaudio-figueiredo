@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   BarChart4, Users, FileText, ClipboardCheck, 
   Settings, LogOut, Home, FileInput 
@@ -13,6 +13,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
+  const location = useLocation();
+  
   const navItems = [
     { name: 'Dashboard', icon: Home, path: '/' },
     { name: 'Clientes', icon: Users, path: '/clients' },
@@ -43,30 +45,46 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         )}
       </div>
       
-      <nav className="flex-grow py-4">
+      <nav className="flex-grow py-4 overflow-y-auto scrollbar-none">
         <ul className="space-y-1 px-2">
-          {navItems.map((item) => (
-            <li key={item.name}>
-              <Link
-                to={item.path}
-                className={cn(
-                  "flex items-center p-2 rounded-md transition-colors",
-                  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                  "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
-                  "active:bg-sidebar-accent active:text-sidebar-accent-foreground"
-                )}
-              >
-                <item.icon className="w-5 h-5" />
-                {!collapsed && <span className="ml-3">{item.name}</span>}
-              </Link>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <li key={item.name} className="group">
+                <Link
+                  to={item.path}
+                  className={cn(
+                    "flex items-center p-2 rounded-md transition-all duration-200",
+                    "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
+                    isActive 
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                      : "text-sidebar-foreground"
+                  )}
+                >
+                  <item.icon className={cn(
+                    "w-5 h-5 transition-transform duration-200", 
+                    !collapsed && "group-hover:translate-x-1",
+                    isActive && "text-sidebar-primary"
+                  )} />
+                  {!collapsed && (
+                    <span className={cn(
+                      "ml-3 transition-all duration-200",
+                      isActive && "font-medium text-sidebar-primary"
+                    )}>
+                      {item.name}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">
         <button
-          className="flex items-center w-full p-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          className="flex items-center w-full p-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-200"
         >
           <LogOut className="w-5 h-5" />
           {!collapsed && <span className="ml-3">Sair</span>}
