@@ -28,9 +28,11 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   return (
     <ClientProvider>
       <div className={`flex h-screen ${bgStyle} overflow-hidden`}>
+        <div className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'}`} />
+        
         <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
         
-        <div className="flex flex-col flex-grow overflow-hidden">
+        <div className={`flex flex-col flex-grow overflow-hidden ml-${sidebarCollapsed ? '16' : '64'}`}>
           <Header toggleSidebar={toggleSidebar} />
           
           <main className="flex-grow overflow-auto p-6 animate-fade-in">

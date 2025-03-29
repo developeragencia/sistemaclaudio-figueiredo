@@ -62,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
 
   return (
     <aside className={cn(
-      "h-screen fixed z-30 bg-white border-r transition-all duration-300 flex flex-col",
+      "h-screen fixed left-0 top-0 z-30 bg-white border-r transition-all duration-300 flex flex-col shadow-sm",
       collapsed ? "w-16" : "w-64"
     )}>
       <SidebarHeader collapsed={collapsed} toggleCollapse={toggleCollapse} />
