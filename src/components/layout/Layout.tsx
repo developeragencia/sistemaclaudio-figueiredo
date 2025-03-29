@@ -23,7 +23,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   // Optimize the background style to avoid recomputation
   const bgStyle = isAdminPage 
     ? 'bg-slate-50' 
-    : 'bg-gradient-to-br from-blue-50 to-white';
+    : 'bg-gradient-to-br from-blue-50 via-blue-100/30 to-white';
 
   return (
     <ClientProvider>
