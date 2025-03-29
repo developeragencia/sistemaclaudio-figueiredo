@@ -9,7 +9,7 @@ const Favicon: React.FC = () => {
     const ctx = canvas.getContext('2d');
 
     if (ctx) {
-      // Função para desenhar um triângulo
+      // Function to draw a triangle
       const drawTriangle = (x: number, y: number, size: number, fill: string, stroke?: string) => {
         ctx.beginPath();
         ctx.moveTo(x, y - size/2);
@@ -27,29 +27,29 @@ const Favicon: React.FC = () => {
         ctx.fill();
       };
 
-      // Limpar canvas
+      // Clear canvas
       ctx.clearRect(0, 0, 32, 32);
       
-      // Desenhar triângulos sem animação
-      // Primeira linha
+      // Draw triangles in static pattern matching the logo
+      // First row
       drawTriangle(8, 8, 8, '#222222');
       drawTriangle(16, 8, 8, '#FFFFFF', '#222222');
       drawTriangle(24, 8, 8, '#FFFFFF', '#222222');
       
-      // Segunda linha
+      // Second row
       drawTriangle(8, 16, 8, '#222222');
       drawTriangle(16, 16, 8, '#222222');
       drawTriangle(24, 16, 8, '#FFFFFF', '#222222');
       
-      // Terceira linha
+      // Third row
       drawTriangle(8, 24, 8, '#222222');
       drawTriangle(16, 24, 8, '#FFFFFF', '#222222');
       drawTriangle(24, 24, 8, '#FFFFFF', '#222222');
 
-      // Converter para URL de dados e atualizar favicon
+      // Convert to data URL and update favicon
       const dataUrl = canvas.toDataURL('image/png');
       
-      // Encontrar favicon existente ou criar um novo
+      // Find existing favicon or create a new one
       let favicon: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
       if (!favicon) {
         favicon = document.createElement('link');
@@ -57,12 +57,12 @@ const Favicon: React.FC = () => {
         document.head.appendChild(favicon);
       }
       
-      // Atualizar href com o nosso ícone
+      // Update href with our icon
       favicon.href = dataUrl;
     }
   }, []);
 
-  return null; // Este componente não renderiza nada visível
+  return null; // This component doesn't render anything visible
 };
 
 export default Favicon;
