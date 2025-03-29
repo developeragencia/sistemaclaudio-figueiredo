@@ -6,6 +6,13 @@ import AnimatedLogo from "@/components/ui/AnimatedLogo";
 import { 
   ArrowRight
 } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Index: React.FC = () => {
   return (
@@ -56,44 +63,102 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Redesigned CTA Section */}
-      <section className="py-20 bg-white">
+      {/* Carrossel CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-lawyer-900 to-lawyer-800">
         <div className="container mx-auto px-4">
-          <div className="relative overflow-hidden rounded-3xl">
-            {/* Background elements */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-lawyer-900 via-lawyer-800 to-lawyer-700"></div>
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/20 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-lawyer-500/20 rounded-full blur-3xl"></div>
-            </div>
-            
-            {/* Content container */}
-            <div className="relative py-16 px-8 md:px-16 flex flex-col md:flex-row items-center">
-              {/* Left content */}
-              <div className="md:w-2/3 mb-10 md:mb-0 text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white animate-fade-in">
-                  Pronto para Otimizar sua Gestão Tributária?
-                </h2>
-                <p className="text-lawyer-100 md:text-lg max-w-2xl animate-fade-in delay-100">
-                  Agende uma demonstração com nossa equipe e descubra como podemos ajudar seu escritório a maximizar resultados.
-                </p>
-              </div>
-              
-              {/* Right content - button */}
-              <div className="md:w-1/3 flex justify-center md:justify-end">
-                <div className="transform hover:scale-105 transition-all duration-300">
-                  <Link to="/login">
-                    <Button size="lg" className="relative overflow-hidden group bg-white text-lawyer-800 hover:bg-lawyer-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl animate-fade-in delay-200">
-                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-                      <span className="relative flex items-center text-lg font-semibold">
-                        Acessar Sistema
-                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                      </span>
-                    </Button>
-                  </Link>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white animate-fade-in">
+              Pronto para Otimizar sua Gestão Tributária?
+            </h2>
+            <p className="text-lawyer-100 md:text-lg max-w-2xl mx-auto animate-fade-in delay-100">
+              Agende uma demonstração com nossa equipe e descubra como podemos ajudar seu escritório a maximizar resultados.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto px-8">
+            <Carousel
+              opts={{
+                align: "center",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent>
+                {/* Primeiro Card */}
+                <CarouselItem className="md:basis-1/1">
+                  <div className="p-1 h-full">
+                    <div className="rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 p-6 h-full flex flex-col">
+                      <div className="text-center mb-4">
+                        <h3 className="text-xl font-semibold text-white mb-2">Dashboard Interativo</h3>
+                        <p className="text-lawyer-200 text-sm">Visualize todos os seus processos em um só lugar</p>
+                      </div>
+                      <div className="flex-grow rounded-lg overflow-hidden relative shadow-xl">
+                        <div className="absolute inset-0 bg-gradient-to-t from-lawyer-900/60 to-transparent z-10"></div>
+                        <img 
+                          src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" 
+                          alt="Dashboard" 
+                          className="w-full h-full object-cover transform transition-transform duration-700 hover:scale-110"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+                
+                {/* Segundo Card */}
+                <CarouselItem className="md:basis-1/1">
+                  <div className="p-1 h-full">
+                    <div className="rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 p-6 h-full flex flex-col">
+                      <div className="text-center mb-4">
+                        <h3 className="text-xl font-semibold text-white mb-2">Gestão de Processos</h3>
+                        <p className="text-lawyer-200 text-sm">Acompanhe seus processos tributários de forma eficiente</p>
+                      </div>
+                      <div className="flex-grow rounded-lg overflow-hidden relative shadow-xl">
+                        <div className="absolute inset-0 bg-gradient-to-t from-lawyer-900/60 to-transparent z-10"></div>
+                        <img 
+                          src="/lovable-uploads/521c5609-a97d-478f-8a71-63e68cf8d9d8.png" 
+                          alt="Gestão de Processos" 
+                          className="w-full h-full object-cover transform transition-transform duration-700 hover:scale-110"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+                
+                {/* Terceiro Card - CTA */}
+                <CarouselItem className="md:basis-1/1">
+                  <div className="p-1 h-full">
+                    <div className="rounded-xl overflow-hidden bg-gradient-to-tr from-lawyer-700 to-lawyer-800 p-6 h-full flex flex-col">
+                      <div className="text-center mb-6">
+                        <h3 className="text-2xl font-bold text-white mb-2">Comece Agora</h3>
+                        <p className="text-lawyer-100 mb-8">Acesse o sistema e transforme a gestão tributária do seu escritório</p>
+                      </div>
+                      <div className="flex-grow flex items-center justify-center">
+                        <Link to="/login" className="w-full">
+                          <Button size="lg" className="w-full relative overflow-hidden group bg-white text-lawyer-800 hover:bg-lawyer-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl animate-fade-in">
+                            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                            <span className="relative flex items-center justify-center text-lg font-semibold">
+                              Acessar Sistema
+                              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              </CarouselContent>
+              <div className="mt-8">
+                <div className="flex justify-center items-center gap-4">
+                  <CarouselPrevious className="static transform-none mx-0 bg-white/20 hover:bg-white/30 border-white/40" />
+                  <div className="carousel-dots flex gap-2">
+                    {[0, 1, 2].map((index) => (
+                      <div key={index} className="w-2 h-2 rounded-full bg-white/40" />
+                    ))}
+                  </div>
+                  <CarouselNext className="static transform-none mx-0 bg-white/20 hover:bg-white/30 border-white/40" />
                 </div>
               </div>
-            </div>
+            </Carousel>
           </div>
         </div>
       </section>
