@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import AuditTax from "./pages/AuditTax";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+import Calendar from "./pages/Calendar";
 import { useState } from "react";
 import Favicon from "./components/ui/Favicon";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -48,6 +48,14 @@ const App = () => {
                   <ProtectedRoute>
                     <Layout>
                       <Admin />
+                    </Layout>
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/calendar" element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Calendar />
                     </Layout>
                   </ProtectedRoute>
                 } />

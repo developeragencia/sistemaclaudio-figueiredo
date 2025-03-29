@@ -23,13 +23,13 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   // Optimize the background style to avoid recomputation
   const bgStyle = isAdminPage 
     ? 'bg-slate-50' 
-    : 'bg-gradient-to-br from-blue-50 to-white';
+    : 'bg-gradient-to-br from-blue-50 via-white to-white';
 
   return (
     <ClientProvider>
       <div className={`flex h-screen ${bgStyle} overflow-hidden`}>
         <div 
-          className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} shadow-lg`}
+          className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} shadow-md z-20`}
         >
           <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
         </div>
