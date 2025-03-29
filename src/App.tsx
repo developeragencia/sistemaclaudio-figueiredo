@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import AuditTax from "./pages/AuditTax";
 import { useState } from "react";
+import Favicon from "./components/ui/Favicon";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -17,6 +18,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <Favicon />
         <Toaster />
         <Sonner />
         <BrowserRouter>
