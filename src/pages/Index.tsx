@@ -56,33 +56,42 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-white relative overflow-hidden">
+      {/* Redesigned CTA Section */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-lawyer-800 to-lawyer-700 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="p-12 md:p-16 flex flex-col justify-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+          <div className="relative overflow-hidden rounded-3xl">
+            {/* Background elements */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-lawyer-900 via-lawyer-800 to-lawyer-700"></div>
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/20 rounded-full blur-3xl"></div>
+              <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-lawyer-500/20 rounded-full blur-3xl"></div>
+            </div>
+            
+            {/* Content container */}
+            <div className="relative py-16 px-8 md:px-16 flex flex-col md:flex-row items-center">
+              {/* Left content */}
+              <div className="md:w-2/3 mb-10 md:mb-0 text-center md:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white animate-fade-in">
                   Pronto para Otimizar sua Gestão Tributária?
                 </h2>
-                <p className="text-lawyer-100 mb-8 text-lg">
+                <p className="text-lawyer-100 md:text-lg max-w-2xl animate-fade-in delay-100">
                   Agende uma demonstração com nossa equipe e descubra como podemos ajudar seu escritório a maximizar resultados.
                 </p>
-                <div>
+              </div>
+              
+              {/* Right content - button */}
+              <div className="md:w-1/3 flex justify-center md:justify-end">
+                <div className="transform hover:scale-105 transition-all duration-300">
                   <Link to="/login">
-                    <Button size="lg" className="bg-white text-lawyer-800 hover:bg-lawyer-100 transition-all duration-300 shadow-lg">
-                      Comece Agora <ArrowRight className="ml-2 h-5 w-5" />
+                    <Button size="lg" className="relative overflow-hidden group bg-white text-lawyer-800 hover:bg-lawyer-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl animate-fade-in delay-200">
+                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                      <span className="relative flex items-center text-lg font-semibold">
+                        Acessar Sistema
+                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      </span>
                     </Button>
                   </Link>
                 </div>
-              </div>
-              <div className="hidden md:block relative">
-                <div className="absolute inset-0 bg-lawyer-900 opacity-20"></div>
-                <img 
-                  src="/lovable-uploads/521c5609-a97d-478f-8a71-63e68cf8d9d8.png" 
-                  alt="Gestão Tributária" 
-                  className="w-full h-full object-cover"
-                />
               </div>
             </div>
           </div>
