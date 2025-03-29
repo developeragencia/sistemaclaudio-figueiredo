@@ -188,12 +188,12 @@ export function ToastProvider({
 
       return id
     },
-    [dispatchState]
+    []
   )
 
   const dismiss = React.useCallback((toastId?: string) => {
     dispatchState({ type: "DISMISS_TOAST", toastId })
-  }, [dispatchState])
+  }, [])
 
   return (
     <ToastContext.Provider

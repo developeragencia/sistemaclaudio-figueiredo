@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
-import { Toaster } from "@/components/ui/toaster";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,7 +32,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </main>
         </div>
       </div>
-      <Toaster />
     </ClientProvider>
   );
 };
