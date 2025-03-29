@@ -4,19 +4,16 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Use passive event listeners to improve scrolling performance
-document.addEventListener('touchstart', () => {}, { passive: true });
-document.addEventListener('wheel', () => {}, { passive: true });
-
-// Optimize critical resource loading
+// Add critical resources as preload
 const preloadResources = [
   { href: '/logo-advogados.svg', as: 'image' },
+  { href: '/favicon.svg', as: 'image' },
+  // Add commonly used fonts or styles
+  { href: '/index.css', as: 'style' }
 ];
 
 // Add preload links for critical resources
 preloadResources.forEach(resource => {
-  if (document.head.querySelector(`link[rel="preload"][href="${resource.href}"]`)) return;
-  
   const link = document.createElement('link');
   link.rel = 'preload';
   link.href = resource.href;
@@ -30,11 +27,8 @@ if (!rootElement) {
   throw new Error('Failed to find the root element');
 }
 
-// Use a microtask to defer non-critical initialization
-queueMicrotask(() => {
-  createRoot(rootElement).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-});
+createRoot(rootElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

@@ -18,12 +18,12 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = memo(({
   const [isLoaded, setIsLoaded] = useState(false);
   
   useEffect(() => {
-    // Use requestAnimationFrame for better performance
-    const frame = requestAnimationFrame(() => {
+    // Add a small delay to trigger the entrance animation
+    const timer = setTimeout(() => {
       setIsLoaded(true);
-    });
+    }, 200);
     
-    return () => cancelAnimationFrame(frame);
+    return () => clearTimeout(timer);
   }, []);
 
   // Define sizes based on the size prop
@@ -47,27 +47,29 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = memo(({
 
   const selected = dimensions[size];
 
-  // Performance optimized animation classes
+  // Animation classes based on state
   const animationClasses = animated ? 
-    `transition-transform duration-500 ${isLoaded ? 'translate-y-0' : 'translate-y-4'}` : '';
+    `transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}` : '';
+
+  const hoverEffectClasses = animated ? 
+    `transition-all duration-300 ${isHovered ? 'scale-105' : ''}` : '';
 
   return (
     <div 
-      className={`flex flex-col items-center ${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-      onMouseEnter={() => animated && setIsHovered(true)}
-      onMouseLeave={() => animated && setIsHovered(false)}
+      className={`flex flex-col items-center ${className} ${animationClasses}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className={`${selected.width} ${selected.height} ${isHovered ? 'scale-105' : ''} transition-transform duration-200`}>
+      <div className={`${selected.width} ${selected.height} ${hoverEffectClasses}`}>
         <img 
           src="/logo-advogados.svg" 
           alt="Advogados Associados Logo" 
-          className="w-full h-full object-contain" 
-          loading="eager"
+          className={`w-full h-full object-contain ${animated && isHovered ? 'animate-pulse' : ''}`} 
         />
       </div>
       
       {showText && (
-        <div className={`mt-2 font-bold tracking-wide ${selected.text} text-blue-800`}>
+        <div className={`mt-2 font-bold tracking-wide ${selected.text} bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 bg-clip-text text-transparent ${animated ? 'animate-gradient-x' : ''}`}>
           ADVOGADOS ASSOCIADOS
         </div>
       )}
@@ -75,6 +77,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = memo(({
   );
 });
 
+// Add display name for better debugging
 AnimatedLogo.displayName = 'AnimatedLogo';
 
 export default AnimatedLogo;
