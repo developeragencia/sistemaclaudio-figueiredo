@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   BarChart4, Users, FileText, ClipboardCheck, 
-  Settings, LogOut, Home, FileImport 
+  Settings, LogOut, Home, FileInput 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
     { name: 'Dashboard', icon: Home, path: '/' },
     { name: 'Clientes', icon: Users, path: '/clients' },
     { name: 'Propostas', icon: FileText, path: '/proposals' },
-    { name: 'Importação', icon: FileImport, path: '/import' },
+    { name: 'Importação', icon: FileInput, path: '/import' },
     { name: 'Auditoria', icon: ClipboardCheck, path: '/audit' },
     { name: 'Relatórios', icon: BarChart4, path: '/reports' },
     { name: 'Configurações', icon: Settings, path: '/settings' },
