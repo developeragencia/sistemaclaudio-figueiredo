@@ -118,7 +118,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   return (
     <aside 
       className={cn(
-        "bg-sidebar text-sidebar-foreground h-screen transition-all duration-300 flex flex-col",
+        "bg-lawyer-800 text-sidebar-foreground h-screen transition-all duration-300 flex flex-col",
         collapsed ? "w-16" : "w-64"
       )}
     >
@@ -131,17 +131,17 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         </div>
         {!collapsed && (
           <div className="text-center">
-            <span className="text-lg font-bold text-sidebar-foreground block">
-              Sistemas
+            <span className="text-md font-medium text-white block">
+              ADVOGADOS
             </span>
-            <span className="text-md font-medium text-sidebar-primary">
-              Claudio Figueiredo
+            <span className="text-sm font-medium text-gray-300">
+              ASSOCIADOS
             </span>
           </div>
         )}
         {collapsed && (
-          <span className="text-xl font-bold mx-auto mt-2">
-            CF
+          <span className="text-xl font-bold mx-auto mt-2 text-white">
+            AA
           </span>
         )}
       </div>

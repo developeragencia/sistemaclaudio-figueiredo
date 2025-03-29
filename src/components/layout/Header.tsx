@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import AnimatedLogo from '../ui/AnimatedLogo';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -29,13 +30,17 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
           <Menu className="w-5 h-5" />
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
+
+        <div className="hidden md:block">
+          <AnimatedLogo size="small" showText={true} />
+        </div>
         
         {/* Active Client Selector */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 bg-white hover:bg-gray-50 transition-all duration-200 border-accent text-accent"
+              className="flex items-center gap-2 bg-white hover:bg-gray-50 transition-all duration-200 border-lawyer-600 text-lawyer-800 ml-4"
             >
               <Building2 className="w-5 h-5" />
               <span className="font-medium">
@@ -73,12 +78,12 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 hover:bg-gray-100 transition-colors">
-              <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
-                <User className="w-5 h-5 text-accent" />
+              <div className="w-8 h-8 rounded-full bg-lawyer-200 flex items-center justify-center">
+                <User className="w-5 h-5 text-lawyer-800" />
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-sm font-medium">Admin User</p>
-                <p className="text-xs text-gray-500">admin@claudiofigueiredo.com</p>
+                <p className="text-sm font-medium">Advogado</p>
+                <p className="text-xs text-gray-500">admin@advogadosassociados.com</p>
               </div>
               <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
             </Button>

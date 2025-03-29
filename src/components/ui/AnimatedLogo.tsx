@@ -42,7 +42,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className={`${selected.logoContainer} relative perspective-1000`}>
-        {/* Triângulos animados */}
+        {/* Logo triangular baseada na imagem enviada */}
         <div 
           className={`absolute inset-0 transition-transform duration-500 ${isHovered ? 'rotate-12 scale-110' : ''}`}
         >
@@ -70,7 +70,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       
       {showText && (
         <div 
-          className={`${selected.text} font-medium text-gray-700 tracking-wide transition-all duration-300 ${isHovered ? 'text-black font-semibold' : ''}`}
+          className={`${selected.text} font-medium text-gray-800 tracking-wide transition-all duration-300 ${isHovered ? 'text-black font-semibold' : ''}`}
         >
           ADVOGADOS ASSOCIADOS
         </div>
