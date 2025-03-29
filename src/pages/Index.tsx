@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -33,13 +32,14 @@ const Index: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section - Updated with system focus */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50 to-white relative overflow-hidden">
+      {/* Hero Section - Redesigned */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-blue-50 via-white to-blue-50 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full bg-grid-blue-100/30 z-0"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="md:w-1/2 animate-fade-in">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-lawyer-800 leading-tight">
-                Sistema Completo para <span className="text-blue-600">Gestão Tributária</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-blue-900 leading-tight">
+                Sistema de Gestão Tributária para <span className="text-blue-600">Escritórios de Advocacia</span>
               </h1>
               <p className="text-xl text-lawyer-600 max-w-xl mb-8 leading-relaxed">
                 Plataforma especializada para escritórios que buscam excelência em consultoria fiscal e recuperação de impostos.
@@ -59,15 +59,15 @@ const Index: React.FC = () => {
                 </div>
               </div>
               <Link to="/login">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-xl">
-                  Acessar Sistema <ArrowRight className="ml-2 h-4 w-4" />
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl px-8 py-6">
+                  <span className="text-lg">Acessar Sistema</span> <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </div>
             <div className="md:w-1/2 animate-fade-in delay-100">
-              <div className="relative bg-white rounded-xl shadow-2xl overflow-hidden">
-                <img src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" alt="Dashboard Preview" className="rounded-lg w-full object-cover border border-blue-100" />
-                <div className="absolute -bottom-4 -right-4 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg">
+              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-blue-100/50">
+                <img src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" alt="Dashboard Preview" className="rounded-lg w-full object-cover" />
+                <div className="absolute -bottom-4 -right-4 bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg font-semibold">
                   Sistema Integrado de Gestão
                 </div>
               </div>
@@ -230,7 +230,7 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* System Benefits Section */}
+      {/* Benefits Section */}
       <section className="py-16 bg-gradient-to-r from-blue-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">

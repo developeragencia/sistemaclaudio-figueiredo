@@ -37,28 +37,28 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   return (
     <div className={`flex items-center ${className}`}>
       <div className={`${selected.logoContainer} relative hover-scale transition-transform duration-300 hover:rotate-12`}>
-        {/* Logo triangular pattern */}
+        {/* Logo triangular pattern with blue colors */}
         <div className="absolute inset-0">
           {/* First row of triangles */}
-          <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-0 left-1/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
-          <div className="absolute top-0 left-2/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
+          <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-blue-700 transform rotate-45"></div>
+          <div className="absolute top-0 left-1/3 w-1/3 h-1/3 bg-white border border-blue-200 transform rotate-45"></div>
+          <div className="absolute top-0 left-2/3 w-1/3 h-1/3 bg-white border border-blue-200 transform rotate-45"></div>
           
           {/* Second row of triangles */}
-          <div className="absolute top-1/3 left-0 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-1/3 left-2/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
+          <div className="absolute top-1/3 left-0 w-1/3 h-1/3 bg-blue-700 transform rotate-45"></div>
+          <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 bg-blue-600 transform rotate-45"></div>
+          <div className="absolute top-1/3 left-2/3 w-1/3 h-1/3 bg-white border border-blue-200 transform rotate-45"></div>
           
           {/* Third row of triangles */}
-          <div className="absolute top-2/3 left-0 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-2/3 left-1/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
-          <div className="absolute top-2/3 left-2/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
+          <div className="absolute top-2/3 left-0 w-1/3 h-1/3 bg-blue-700 transform rotate-45"></div>
+          <div className="absolute top-2/3 left-1/3 w-1/3 h-1/3 bg-white border border-blue-200 transform rotate-45"></div>
+          <div className="absolute top-2/3 left-2/3 w-1/3 h-1/3 bg-white border border-blue-200 transform rotate-45"></div>
         </div>
       </div>
       
       {showText && (
         <div className="font-medium tracking-wide">
-          <span className={`${selected.text} text-lawyer-800`}>ADVOGADOS ASSOCIADOS</span>
+          <span className={`${selected.text} text-blue-800 font-semibold`}>ADVOGADOS ASSOCIADOS</span>
         </div>
       )}
     </div>

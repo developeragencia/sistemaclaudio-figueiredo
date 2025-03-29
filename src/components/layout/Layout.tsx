@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <ClientProvider>
-      <div className={`flex h-screen ${isAdminPage ? 'bg-slate-50' : 'bg-gradient-to-br from-slate-50 to-blue-50'} overflow-hidden`}>
+      <div className={`flex h-screen ${isAdminPage ? 'bg-slate-50' : 'bg-gradient-to-br from-blue-50 to-white'} overflow-hidden`}>
         <div className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} shadow-lg`}>
           <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
         </div>
