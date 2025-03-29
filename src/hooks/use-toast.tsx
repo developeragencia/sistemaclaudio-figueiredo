@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { type ToastActionElement, ToastProps } from "@/components/ui/toast"
 
@@ -48,6 +49,12 @@ type Action =
 interface State {
   toasts: ToasterToast[]
 }
+
+// Create a dispatch function type
+type DispatchType = (action: Action) => void
+
+// Initialize dispatch with an empty function, will be set properly later
+let dispatch: DispatchType = () => {}
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
@@ -150,9 +157,12 @@ export function ToastProvider({
 }: {
   children: React.ReactNode
 }) {
-  const [state, dispatch] = React.useReducer(reducer, initialState)
+  const [state, dispatchState] = React.useReducer(reducer, initialState)
 
+  // Set the dispatch function to be used globally
   React.useEffect(() => {
+    dispatch = dispatchState
+    
     return () => {
       toastTimeouts.forEach((timeout) => {
         clearTimeout(timeout)
@@ -164,26 +174,26 @@ export function ToastProvider({
     ({ ...props }: Omit<ToasterToast, "id">) => {
       const id = genId()
 
-      dispatch({
+      dispatchState({
         type: "ADD_TOAST",
         toast: {
           ...props,
           id,
           open: true,
           onOpenChange: (open) => {
-            if (!open) dispatch({ type: "DISMISS_TOAST", toastId: id })
+            if (!open) dispatchState({ type: "DISMISS_TOAST", toastId: id })
           },
         },
       })
 
       return id
     },
-    [dispatch]
+    [dispatchState]
   )
 
   const dismiss = React.useCallback((toastId?: string) => {
-    dispatch({ type: "DISMISS_TOAST", toastId })
-  }, [])
+    dispatchState({ type: "DISMISS_TOAST", toastId })
+  }, [dispatchState])
 
   return (
     <ToastContext.Provider
