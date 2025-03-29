@@ -33,16 +33,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           <Link 
             to={to} 
             className={cn(
-              "flex items-center p-3 rounded-md hover:bg-blue-50 transition-colors",
+              "flex items-center justify-center p-2 rounded-md hover:bg-blue-50 transition-colors w-10 h-10 mx-auto",
               isActive && "bg-blue-50 text-blue-700"
             )}
             onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
           >
-            <div className="w-full flex justify-center">
-              {React.cloneElement(icon as React.ReactElement, { 
-                className: cn("h-5 w-5", isActive && "text-blue-700") 
-              })}
-            </div>
+            {React.cloneElement(icon as React.ReactElement, { 
+              className: cn("h-5 w-5", isActive && "text-blue-700") 
+            })}
           </Link>
         </TooltipTrigger>
         <TooltipContent side="right">

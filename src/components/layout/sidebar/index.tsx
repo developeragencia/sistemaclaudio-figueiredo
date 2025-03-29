@@ -67,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
     )}>
       <SidebarHeader collapsed={collapsed} toggleCollapse={toggleCollapse} />
       
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      <div className="flex-1 overflow-y-auto py-4 px-2 space-y-1">
         {/* Dashboard */}
         <SidebarItem 
           icon={<Home />} 
