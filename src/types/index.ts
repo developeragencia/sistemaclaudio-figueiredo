@@ -62,3 +62,99 @@ export interface DashboardStats {
   totalCredits: number;
   recentActivities: Activity[];
 }
+
+// Supplier Types
+export interface Supplier {
+  id: string;
+  cnpj: string;
+  name: string;
+  tradeName?: string;
+  activityCode?: string;
+  activityDescription?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  phone?: string;
+  email?: string;
+  taxRegime?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Payment Types
+export interface Payment {
+  id: string;
+  clientId: string;
+  supplierId: string;
+  invoiceNumber?: string;
+  amount: number;
+  date: Date;
+  description?: string;
+  taxWithheld?: number;
+  taxWithheldCalculated?: number;
+  hasAudit: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Tax Rate Types
+export interface TaxRate {
+  id: string;
+  activityCode: string;
+  description: string;
+  irpjRate: number;
+  csllRate: number;
+  cofinsRate: number;
+  pisRate: number;
+  issRate: number;
+  inssRate: number;
+  totalRate: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// CNPJ API Response Type
+export interface CNPJAPIResponse {
+  cnpj: string;
+  nome: string;
+  fantasia?: string;
+  atividade_principal: {
+    code: string;
+    text: string;
+  }[];
+  atividades_secundarias?: {
+    code: string;
+    text: string;
+  }[];
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  municipio?: string;
+  uf?: string;
+  cep?: string;
+  telefone?: string;
+  email?: string;
+  situacao?: string;
+  data_situacao?: string;
+  capital_social?: string;
+  regime_tributario?: string;
+  erro?: boolean;
+  message?: string;
+}
+
+// Audit Report Type
+export interface AuditReport {
+  id: string;
+  clientId: string;
+  supplierId: string;
+  paymentId: string;
+  originalAmount: number;
+  calculatedTaxAmount: number;
+  actualTaxAmount: number;
+  difference: number;
+  status: 'correct' | 'discrepancy' | 'pending';
+  createdAt: Date;
+  updatedAt: Date;
+}

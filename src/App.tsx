@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +7,7 @@ import Layout from "./components/layout/Layout";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import AuditTax from "./pages/AuditTax";
 
 const queryClient = new QueryClient();
 
@@ -28,27 +28,18 @@ const App = () => (
             </Layout>
           } />
           
+          {/* Auditoria Fiscal */}
+          <Route path="/tax-audit" element={
+            <Layout>
+              <AuditTax />
+            </Layout>
+          } />
+          
           {/* Módulos Principais */}
           <Route path="/clients-management" element={
             <Layout>
               <div className="p-6">
                 <h1 className="text-2xl font-bold">Gestão de Clientes</h1>
-                <p className="text-gray-500">Página em desenvolvimento</p>
-              </div>
-            </Layout>
-          } />
-          <Route path="/tax-credits" element={
-            <Layout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Créditos Tributários</h1>
-                <p className="text-gray-500">Página em desenvolvimento</p>
-              </div>
-            </Layout>
-          } />
-          <Route path="/advanced-calculator" element={
-            <Layout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Calculadora Avançada</h1>
                 <p className="text-gray-500">Página em desenvolvimento</p>
               </div>
             </Layout>
