@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AnimatedLogo from "@/components/ui/AnimatedLogo";
 import { 
-  ArrowRight
+  ArrowRight,
+  CheckCircle,
+  Shield,
+  BarChart3,
+  FileText
 } from "lucide-react";
 import {
   Carousel,
@@ -33,19 +37,19 @@ const Index: React.FC = () => {
 
       {/* Hero Section */}
       <section className="py-20 md:py-32 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-lawyer-50/30 to-white pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-50/40 to-white pointer-events-none"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/2 md:pr-12 mb-10 md:mb-0 animate-slide-in-left">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-lawyer-900 leading-tight">
-                Sistema de <span className="text-lawyer-700">Gestão Tributária</span> para Escritórios de Advocacia
+                Sistema de <span className="text-sky-600">Gestão Tributária</span> para Escritórios de Advocacia
               </h1>
               <p className="text-xl text-lawyer-600 max-w-xl mb-10 leading-relaxed">
                 Soluções completas para empresas que precisam de excelência em consultoria fiscal e recuperação de impostos.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/login">
-                  <Button size="lg" className="bg-lawyer-800 hover:bg-lawyer-700 transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105">
+                  <Button size="lg" className="bg-sky-600 hover:bg-sky-700 transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105">
                     Acessar Sistema <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
@@ -54,7 +58,7 @@ const Index: React.FC = () => {
             <div className="md:w-1/2 animate-slide-in-right">
               <div className="relative bg-white rounded-xl shadow-2xl p-8 transform rotate-2 hover:rotate-0 transition-all duration-500">
                 <img src="/lovable-uploads/d5d79599-0ca0-43c9-a921-360cebf9b230.png" alt="Dashboard Preview" className="rounded-lg w-full object-cover" />
-                <div className="absolute -bottom-4 -left-4 bg-lawyer-800 text-white px-6 py-3 rounded-lg shadow-lg">
+                <div className="absolute -bottom-4 -left-4 bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg">
                   Recuperação de Impostos
                 </div>
               </div>
@@ -63,53 +67,149 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Simplified Carousel CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-lawyer-900 to-lawyer-800">
+      {/* Reimagined Feature Carousel Section */}
+      <section className="py-16 bg-gradient-to-r from-sky-100 to-sky-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white animate-fade-in">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-lawyer-800 animate-fade-in">
               Sistema Completo para Gestão Tributária
             </h2>
-            <p className="text-lawyer-100 md:text-lg max-w-2xl mx-auto animate-fade-in delay-100">
+            <p className="text-lawyer-600 md:text-lg max-w-2xl mx-auto animate-fade-in delay-100">
               Ferramenta especializada para escritórios que buscam excelência em consultoria fiscal
             </p>
           </div>
           
-          <div className="max-w-4xl mx-auto px-8">
+          <div className="max-w-5xl mx-auto">
             <Carousel
               opts={{
-                align: "center",
+                align: "start",
                 loop: true,
               }}
               className="w-full"
             >
               <CarouselContent>
-                {/* Single Carousel Item with Logo */}
-                <CarouselItem className="md:basis-1/1">
-                  <div className="p-1 h-full">
-                    <div className="rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 p-12 h-full flex flex-col items-center justify-center">
-                      <div className="mb-8 transform transition-all duration-700 hover:scale-110">
-                        <AnimatedLogo size="large" showText={false} className="mx-auto" />
+                {/* Sistema Integrado de Gestão */}
+                <CarouselItem className="md:basis-1/2 lg:basis-1/3 p-2">
+                  <div className="h-full rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-sky-500">
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="rounded-full bg-sky-100 p-3 w-12 h-12 flex items-center justify-center mb-4">
+                        <BarChart3 className="w-6 h-6 text-sky-600" />
                       </div>
-                      <div className="text-center">
-                        <h3 className="text-2xl font-bold text-white mb-4">Sistema Integrado de Gestão</h3>
-                        <p className="text-lawyer-100 mb-8">Uma plataforma completa para recuperação de impostos e gestão tributária</p>
-                        
-                        <Link to="/login" className="w-full">
-                          <Button size="lg" className="relative overflow-hidden group bg-white text-lawyer-800 hover:bg-lawyer-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl animate-fade-in">
-                            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/30 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-                            <span className="relative flex items-center justify-center text-lg font-semibold">
-                              Acessar Sistema
-                              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                            </span>
-                          </Button>
-                        </Link>
+                      <h3 className="text-xl font-bold text-lawyer-800 mb-2">Sistema Integrado de Gestão</h3>
+                      <p className="text-lawyer-600 mb-4 flex-grow">Uma plataforma completa para recuperação de impostos e gestão tributária</p>
+                      <Link to="/login" className="mt-auto">
+                        <Button variant="outline" className="border-sky-200 hover:border-sky-400 text-sky-700 hover:text-sky-800 hover:bg-sky-50 w-full">
+                          Acessar Sistema
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </CarouselItem>
+
+                {/* Recuperação de Créditos */}
+                <CarouselItem className="md:basis-1/2 lg:basis-1/3 p-2">
+                  <div className="h-full rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-sky-500">
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="rounded-full bg-sky-100 p-3 w-12 h-12 flex items-center justify-center mb-4">
+                        <CheckCircle className="w-6 h-6 text-sky-600" />
                       </div>
+                      <h3 className="text-xl font-bold text-lawyer-800 mb-2">Recuperação de Créditos</h3>
+                      <p className="text-lawyer-600 mb-4 flex-grow">Identifique e recupere créditos tributários com eficiência e segurança</p>
+                      <Link to="/tax-audit" className="mt-auto">
+                        <Button variant="outline" className="border-sky-200 hover:border-sky-400 text-sky-700 hover:text-sky-800 hover:bg-sky-50 w-full">
+                          Saiba Mais
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </CarouselItem>
+
+                {/* Relatórios Detalhados */}
+                <CarouselItem className="md:basis-1/2 lg:basis-1/3 p-2">
+                  <div className="h-full rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-sky-500">
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="rounded-full bg-sky-100 p-3 w-12 h-12 flex items-center justify-center mb-4">
+                        <FileText className="w-6 h-6 text-sky-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-lawyer-800 mb-2">Relatórios Detalhados</h3>
+                      <p className="text-lawyer-600 mb-4 flex-grow">Visualize dados completos e tome decisões estratégicas baseadas em informações precisas</p>
+                      <Link to="/detailed-reports" className="mt-auto">
+                        <Button variant="outline" className="border-sky-200 hover:border-sky-400 text-sky-700 hover:text-sky-800 hover:bg-sky-50 w-full">
+                          Ver Relatórios
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </CarouselItem>
+
+                {/* Segurança de Dados */}
+                <CarouselItem className="md:basis-1/2 lg:basis-1/3 p-2">
+                  <div className="h-full rounded-xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-sky-500">
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="rounded-full bg-sky-100 p-3 w-12 h-12 flex items-center justify-center mb-4">
+                        <Shield className="w-6 h-6 text-sky-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-lawyer-800 mb-2">Segurança de Dados</h3>
+                      <p className="text-lawyer-600 mb-4 flex-grow">Protocolos avançados de segurança para manter seus dados sempre protegidos</p>
+                      <Link to="/security-audit" className="mt-auto">
+                        <Button variant="outline" className="border-sky-200 hover:border-sky-400 text-sky-700 hover:text-sky-800 hover:bg-sky-50 w-full">
+                          Verificar Segurança
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </CarouselItem>
               </CarouselContent>
+              <div className="flex items-center justify-center mt-8 gap-4">
+                <CarouselPrevious className="static transform-none bg-sky-600 hover:bg-sky-700 text-white border-none" />
+                <CarouselNext className="static transform-none bg-sky-600 hover:bg-sky-700 text-white border-none" />
+              </div>
             </Carousel>
+          </div>
+        </div>
+      </section>
+
+      {/* Call To Action Section */}
+      <section className="py-20 bg-gradient-to-r from-sky-700 to-sky-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-opacity-20 bg-grid-white/5"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-12">
+              <AnimatedLogo size="large" className="mx-auto mb-6" showText={false} />
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+                Pronto para otimizar sua gestão tributária?
+              </h2>
+              <p className="text-sky-100 text-lg mb-8 max-w-2xl mx-auto">
+                Agende uma demonstração com nossa equipe e descubra como podemos ajudar seu escritório a maximizar resultados.
+              </p>
+              <Link to="/login">
+                <Button size="lg" className="bg-white text-sky-800 hover:bg-sky-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl">
+                  <span className="flex items-center justify-center text-lg font-semibold">
+                    Acessar Sistema
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </span>
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-6 mt-16">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
+                <h3 className="text-xl font-bold text-white mb-2">Fácil Integração</h3>
+                <p className="text-sky-100">Conecte-se rapidamente com seus sistemas existentes</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
+                <h3 className="text-xl font-bold text-white mb-2">Suporte Dedicado</h3>
+                <p className="text-sky-100">Equipe especializada pronta para ajudar quando necessário</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
+                <h3 className="text-xl font-bold text-white mb-2">Resultados Comprovados</h3>
+                <p className="text-sky-100">Maximize a recuperação de créditos com métodos eficientes</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
