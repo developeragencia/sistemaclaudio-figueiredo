@@ -1,26 +1,69 @@
 
 <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Triangular logo pattern with gradient effect -->
   <defs>
-    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af" />
+      <stop offset="100%" stop-color="#3b82f6" />
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="4" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    <linearGradient id="whiteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.3"/>
     </filter>
   </defs>
   
-  <!-- Main text with gradient -->
-  <text x="200" y="100" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="36" fill="url(#textGradient)" filter="url(#glow)">
-    ADVOGADOS
-  </text>
-  <text x="200" y="140" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="32" fill="url(#textGradient)">
-    ASSOCIADOS
-  </text>
+  <g>
+    <!-- First column -->
+    <polygon points="20,40 60,40 40,80" fill="url(#blueGradient)">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" repeatCount="indefinite" />
+    </polygon>
+    <polygon points="20,80 60,80 40,120" fill="url(#blueGradient)">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="0.3s" repeatCount="indefinite" />
+    </polygon>
+    <polygon points="20,120 60,120 40,160" fill="url(#blueGradient)">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="0.6s" repeatCount="indefinite" />
+    </polygon>
+    
+    <!-- Second column -->
+    <polygon points="60,40 100,40 80,80" fill="url(#whiteGradient)" stroke="#3b82f6" stroke-width="1">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="0.9s" repeatCount="indefinite" />
+    </polygon>
+    <polygon points="60,80 100,80 80,120" fill="url(#blueGradient)">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="1.2s" repeatCount="indefinite" />
+    </polygon>
+    <polygon points="60,120 100,120 80,160" fill="url(#whiteGradient)" stroke="#3b82f6" stroke-width="1">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="1.5s" repeatCount="indefinite" />
+    </polygon>
+    
+    <!-- Third column -->
+    <polygon points="100,40 140,40 120,80" fill="url(#whiteGradient)" stroke="#3b82f6" stroke-width="1">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="1.8s" repeatCount="indefinite" />
+    </polygon>
+    <polygon points="100,80 140,80 120,120" fill="url(#whiteGradient)" stroke="#3b82f6" stroke-width="1">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="2.1s" repeatCount="indefinite" />
+    </polygon>
+    <polygon points="100,120 140,120 120,160" fill="url(#whiteGradient)" stroke="#3b82f6" stroke-width="1">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="2.4s" repeatCount="indefinite" />
+    </polygon>
+  </g>
   
-  <!-- Scale -->
-  <path d="M160,40 L240,40 L230,60 L170,60 Z" fill="#3b82f6" />
-  <circle cx="200" cy="70" r="16" fill="#1e40af" />
+  <!-- Advogados Associados Text with gradient and animation -->
+  <defs>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e40af">
+        <animate attributeName="stop-color" values="#1e40af;#3b82f6;#1e40af" dur="5s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#3b82f6">
+        <animate attributeName="stop-color" values="#3b82f6;#1e40af;#3b82f6" dur="5s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+    <filter id="textShadow">
+      <feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <text x="160" y="110" font-family="Arial" font-weight="bold" font-size="28" fill="url(#textGradient)" filter="url(#textShadow)">ADVOGADOS ASSOCIADOS</text>
 </svg>
