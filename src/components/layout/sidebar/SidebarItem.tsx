@@ -30,20 +30,22 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     return (
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
-          <Link 
-            to={to} 
-            className={cn(
-              "flex items-center justify-center p-2 rounded-md hover:bg-blue-50 transition-colors w-10 h-10 mx-auto",
-              isActive && "bg-blue-50 text-blue-700"
-            )}
-            onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
-          >
-            {React.cloneElement(icon as React.ReactElement, { 
-              className: cn("h-5 w-5", isActive && "text-blue-700") 
-            })}
-          </Link>
+          <div className="relative">
+            <Link 
+              to={to} 
+              className={cn(
+                "flex items-center justify-center p-2 rounded-md hover:bg-blue-50 transition-colors w-10 h-10 mx-auto",
+                isActive && "bg-blue-50 text-blue-700"
+              )}
+              onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
+            >
+              {React.cloneElement(icon as React.ReactElement, { 
+                className: cn("h-5 w-5", isActive && "text-blue-700") 
+              })}
+            </Link>
+          </div>
         </TooltipTrigger>
-        <TooltipContent side="right">
+        <TooltipContent side="right" sideOffset={5}>
           {label}
         </TooltipContent>
       </Tooltip>
