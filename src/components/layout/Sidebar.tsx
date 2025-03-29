@@ -16,7 +16,12 @@ import {
   Globe,
   ChevronDown, 
   ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  Lock,
+  Clock,
+  Shield,
+  ShieldX,
+  UserCheck
 } from 'lucide-react';
 import AnimatedLogo from '../ui/AnimatedLogo';
 import { cn } from '@/lib/utils';
@@ -55,14 +60,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           <Link 
             to={to} 
             className={cn(
-              "flex items-center p-3 rounded-md hover:bg-lawyer-50 transition-colors",
-              isActive && "bg-lawyer-50 text-lawyer-800"
+              "flex items-center p-3 rounded-md hover:bg-blue-50 transition-colors",
+              isActive && "bg-blue-50 text-blue-700"
             )}
             onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
           >
             <div className="w-full flex justify-center">
               {React.cloneElement(icon as React.ReactElement, { 
-                className: cn("h-5 w-5", isActive && "text-lawyer-800") 
+                className: cn("h-5 w-5", isActive && "text-blue-700") 
               })}
             </div>
           </Link>
@@ -79,12 +84,12 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       to={hasSubmenu ? "#" : to}
       onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
       className={cn(
-        "flex items-center px-3 py-2 rounded-md hover:bg-lawyer-50 transition-colors",
-        isActive && "bg-lawyer-50 text-lawyer-800"
+        "flex items-center px-3 py-2 rounded-md hover:bg-blue-50 transition-colors",
+        isActive && "bg-blue-50 text-blue-700"
       )}
     >
       {React.cloneElement(icon as React.ReactElement, { 
-        className: cn("h-5 w-5 mr-3", isActive && "text-lawyer-800") 
+        className: cn("h-5 w-5 mr-3", isActive && "text-blue-700") 
       })}
       <span className="font-medium text-sm flex-1">{label}</span>
       {hasSubmenu && (
@@ -111,14 +116,14 @@ const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapse
   if (!isOpen || collapsed) return null;
   
   return (
-    <div className="ml-8 mt-1 space-y-1 border-l border-lawyer-100 pl-3">
+    <div className="ml-8 mt-1 space-y-1 border-l border-blue-100 pl-3">
       {items.map((item, index) => (
         <Link
           key={index}
           to={item.to}
           className={cn(
-            "block py-1.5 text-sm text-lawyer-600 transition-colors hover:text-lawyer-900",
-            location.pathname === item.to && "font-medium text-lawyer-800"
+            "block py-1.5 text-sm text-lawyer-600 transition-colors hover:text-blue-700",
+            location.pathname === item.to && "font-medium text-blue-700"
           )}
         >
           {item.label}
@@ -134,7 +139,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
     calculations: false,
     reports: false,
     management: false,
-    system: false
+    system: false,
+    security: false
   });
   
   const toggleSubmenu = (menu: string) => {
@@ -165,10 +171,17 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   ];
   
   const systemItems = [
-    { label: "Segurança & Auditoria", to: "/security-audit" },
     { label: "Operacional", to: "/operational" },
     { label: "Site e Conteúdo", to: "/site-editor" },
     { label: "Importação", to: "/import" },
+  ];
+
+  const securityItems = [
+    { label: "Autenticação em Dois Fatores", to: "/two-factor-auth" },
+    { label: "Expiração de Sessão", to: "/session-expiration" },
+    { label: "Proteção de Acesso", to: "/access-protection" },
+    { label: "Trilhas de Auditoria", to: "/audit-trails" },
+    { label: "Usuários e Permissões", to: "/users-permissions" },
   ];
 
   return (
@@ -182,7 +195,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
             <AnimatedLogo size="small" />
             <button 
               onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-lawyer-50 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -191,7 +204,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           <div className="w-full flex justify-center">
             <button 
               onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-lawyer-50 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors"
             >
               <AnimatedLogo size="small" showText={false} />
             </button>
@@ -211,7 +224,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         
         {/* Módulos Principais */}
         <div className={cn("pt-4 pb-2", !collapsed && "px-3")}>
-          {!collapsed && <p className="text-xs text-lawyer-500 font-medium uppercase">Módulos Principais</p>}
+          {!collapsed && <p className="text-xs text-blue-500 font-medium uppercase">Módulos Principais</p>}
         </div>
         
         <SidebarItem 
@@ -280,7 +293,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         
         {/* Sistema */}
         <div className={cn("pt-4 pb-2", !collapsed && "px-3")}>
-          {!collapsed && <p className="text-xs text-lawyer-500 font-medium uppercase">Sistema</p>}
+          {!collapsed && <p className="text-xs text-blue-500 font-medium uppercase">Sistema</p>}
         </div>
         
         <SidebarItem 
@@ -296,6 +309,23 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         <SidebarSubmenu 
           items={systemItems} 
           isOpen={openMenus.system} 
+          collapsed={collapsed} 
+        />
+
+        {/* Segurança & Auditoria - New section */}
+        <SidebarItem 
+          icon={<ShieldAlert />} 
+          label="Segurança & Auditoria" 
+          to="#" 
+          hasSubmenu={true}
+          isSubmenuOpen={openMenus.security}
+          toggleSubmenu={() => toggleSubmenu('security')}
+          collapsed={collapsed}
+        />
+        
+        <SidebarSubmenu 
+          items={securityItems} 
+          isOpen={openMenus.security} 
           collapsed={collapsed} 
         />
         

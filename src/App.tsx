@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -223,6 +222,62 @@ const App = () => {
                     <div className="p-6">
                       <h1 className="text-2xl font-bold">Importação</h1>
                       <p className="text-gray-500">Página em desenvolvimento</p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Segurança & Auditoria - New Routes */}
+              <Route path="/two-factor-auth" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold text-blue-800">Autenticação em Dois Fatores</h1>
+                      <p className="text-blue-600">Configure a autenticação em dois fatores para aumentar a segurança das contas.</p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/session-expiration" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold text-blue-800">Expiração de Sessão</h1>
+                      <p className="text-blue-600">Configure o tempo de expiração das sessões dos usuários no sistema.</p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/access-protection" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold text-blue-800">Proteção de Acesso</h1>
+                      <p className="text-blue-600">Configure as políticas de proteção de acesso ao sistema.</p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/audit-trails" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold text-blue-800">Trilhas de Auditoria</h1>
+                      <p className="text-blue-600">Visualize os registros de atividades no sistema para fins de auditoria.</p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/users-permissions" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold text-blue-800">Usuários e Permissões</h1>
+                      <p className="text-blue-600">Gerencie usuários e suas permissões de acesso ao sistema.</p>
                     </div>
                   </Layout>
                 </ProtectedRoute>
