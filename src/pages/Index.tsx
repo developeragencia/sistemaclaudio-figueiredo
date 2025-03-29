@@ -1,68 +1,13 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import AnimatedLogo from "@/components/ui/AnimatedLogo";
 import { 
-  ArrowRight, 
-  ShieldCheck, 
-  BarChart3, 
-  FileText, 
-  Calculator, 
-  Users, 
-  Settings,
-  CheckCircle2,
-  TrendingUp,
-  Clock
+  ArrowRight
 } from "lucide-react";
-import { 
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from "@/components/ui/carousel";
 
 const Index: React.FC = () => {
-  const testimonials = [
-    {
-      name: "Maria Silva",
-      company: "Tech Solutions Ltda",
-      content: "O sistema de gestão tributária transformou completamente nossa maneira de gerenciar impostos. Economizamos tempo e recursos significativos.",
-      role: "Diretora Financeira"
-    },
-    {
-      name: "João Pereira",
-      company: "Construtora Horizonte",
-      content: "Recuperamos créditos tributários que nem sabíamos que existiam. A plataforma é intuitiva e o suporte é excepcional.",
-      role: "Controller"
-    },
-    {
-      name: "Ana Costa",
-      company: "Indústrias Progresso",
-      content: "A auditoria fiscal automatizada nos permitiu identificar e corrigir irregularidades antes que se tornassem problemas maiores.",
-      role: "CFO"
-    }
-  ];
-  
-  const benefits = [
-    {
-      icon: <TrendingUp className="h-16 w-16 text-lawyer-800" />,
-      title: "Aumento de Produtividade",
-      description: "Processos automatizados que economizam tempo e reduzem erros operacionais."
-    },
-    {
-      icon: <CheckCircle2 className="h-16 w-16 text-lawyer-800" />,
-      title: "Conformidade Fiscal",
-      description: "Garanta que sua empresa esteja sempre em dia com as obrigações fiscais."
-    },
-    {
-      icon: <Clock className="h-16 w-16 text-lawyer-800" />,
-      title: "Economia de Tempo",
-      description: "Reduza drasticamente o tempo gasto em tarefas manuais e repetitivas."
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -70,17 +15,6 @@ const Index: React.FC = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <AnimatedLogo size="medium" />
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            <Link to="#features" className="text-lawyer-700 hover:text-lawyer-900 font-medium animated-link">
-              Funcionalidades
-            </Link>
-            <Link to="#benefits" className="text-lawyer-700 hover:text-lawyer-900 font-medium animated-link">
-              Benefícios
-            </Link>
-            <Link to="#testimonials" className="text-lawyer-700 hover:text-lawyer-900 font-medium animated-link">
-              Depoimentos
-            </Link>
           </div>
           <Link to="/login">
             <Button variant="default" className="bg-lawyer-800 hover:bg-lawyer-700 transition-all duration-300 transform hover:scale-105">
@@ -122,129 +56,6 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section id="benefits" className="py-20 bg-lawyer-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-lawyer-900 mb-4">Benefícios Principais</h2>
-            <p className="text-lawyer-600 max-w-2xl mx-auto">Nossa plataforma foi desenvolvida para otimizar processos e maximizar resultados.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="flex flex-col items-center text-center">
-                  <div className="mb-6">
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-lawyer-800 mb-4">{benefit.title}</h3>
-                  <p className="text-lawyer-600">{benefit.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-lawyer-900">
-              Funcionalidades Principais
-            </h2>
-            <p className="text-lawyer-600 max-w-2xl mx-auto">
-              Conheça as ferramentas que irão transformar a gestão tributária da sua empresa.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={<ShieldCheck className="text-lawyer-700" size={32} />}
-              title="Auditoria Tributária"
-              description="Análise completa da situação fiscal da sua empresa para identificar oportunidades de economia."
-            />
-            <FeatureCard 
-              icon={<Calculator className="text-lawyer-700" size={32} />}
-              title="Cálculos Fiscais"
-              description="Ferramentas precisas para calcular impostos e identificar créditos tributários."
-            />
-            <FeatureCard 
-              icon={<FileText className="text-lawyer-700" size={32} />}
-              title="Relatórios Detalhados"
-              description="Documentação completa e relatórios personalizados para tomada de decisão."
-            />
-            <FeatureCard 
-              icon={<BarChart3 className="text-lawyer-700" size={32} />}
-              title="Dashboard Interativo"
-              description="Visualize dados importantes da sua empresa em tempo real."
-            />
-            <FeatureCard 
-              icon={<Users className="text-lawyer-700" size={32} />}
-              title="Gestão de Clientes"
-              description="Organize informações e histórico de todos os clientes em um só lugar."
-            />
-            <FeatureCard 
-              icon={<Settings className="text-lawyer-700" size={32} />}
-              title="Configuração Avançada"
-              description="Personalize o sistema de acordo com as necessidades específicas da sua empresa."
-            />
-          </div>
-        </div>
-      </section>
-      
-      {/* Testimonials Carousel */}
-      <section id="testimonials" className="py-20 bg-lawyer-100">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-lawyer-900">
-              O Que Dizem Nossos Clientes
-            </h2>
-            <p className="text-lawyer-600 max-w-2xl mx-auto">
-              Depoimentos de quem já experimentou nossa solução e transformou sua gestão tributária.
-            </p>
-          </div>
-          
-          <div className="max-w-5xl mx-auto px-12">
-            <Carousel 
-              opts={{
-                align: "center",
-                loop: true,
-              }}
-              className="w-full"
-            >
-              <CarouselContent>
-                {testimonials.map((testimonial, index) => (
-                  <CarouselItem key={index} className="md:basis-4/5 lg:basis-3/4">
-                    <div className="p-6">
-                      <Card className="border-lawyer-200 hover:shadow-xl transition-all duration-300 h-full">
-                        <CardContent className="p-8 flex flex-col h-full">
-                          <div className="mb-6 text-lawyer-800">
-                            <svg width="45" height="36" viewBox="0 0 45 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="fill-lawyer-300">
-                              <path d="M13.515 0.75C5.985 5.86 0 14.155 0 22.06C0 29.23 5.15 36 12.0675 36C18.5625 36 23.205 30.4 23.205 24.145C23.205 18.305 18.78 13.325 12.495 13.325C11.7225 13.325 10.5675 13.535 10.08 13.655C11.52 10.22 17.0775 5.48 20.9325 3.475L13.515 0.75ZM35.31 0.75C27.7575 5.86 21.7725 14.155 21.7725 22.06C21.7725 29.23 26.9225 36 33.84 36C40.335 36 45 30.4 45 24.145C45 18.305 40.5525 13.325 34.2675 13.325C33.495 13.325 32.3625 13.535 31.875 13.655C33.315 10.22 38.8725 5.48 42.7275 3.475L35.31 0.75Z" />
-                            </svg>
-                          </div>
-                          <p className="text-lg text-lawyer-700 mb-6 flex-grow">"{testimonial.content}"</p>
-                          <div className="mt-6">
-                            <p className="font-bold text-lawyer-800">{testimonial.name}</p>
-                            <p className="text-lawyer-600">{testimonial.role}</p>
-                            <p className="text-lawyer-500 text-sm">{testimonial.company}</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <div className="hidden sm:block">
-                <CarouselPrevious className="-left-12" />
-                <CarouselNext className="-right-12" />
-              </div>
-            </Carousel>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
@@ -282,7 +93,7 @@ const Index: React.FC = () => {
       <footer className="bg-lawyer-800 text-white py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-lawyer-200 mb-4 md:mb-0">
+            <p className="text-lawyer-200">
               © {new Date().getFullYear()} Advogados Associados. Todos os direitos reservados.
             </p>
             <div className="flex items-center">
@@ -316,22 +127,6 @@ const Index: React.FC = () => {
         </div>
       </footer>
     </div>
-  );
-};
-
-const FeatureCard: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}> = ({ icon, title, description }) => {
-  return (
-    <Card className="border-lawyer-200 hover-card transition-all duration-300 transform hover:scale-105">
-      <CardContent className="p-8">
-        <div className="mb-6 bg-lawyer-50 w-16 h-16 rounded-lg flex items-center justify-center">{icon}</div>
-        <h3 className="text-xl font-semibold mb-3 text-lawyer-800">{title}</h3>
-        <p className="text-lawyer-600">{description}</p>
-      </CardContent>
-    </Card>
   );
 };
 
