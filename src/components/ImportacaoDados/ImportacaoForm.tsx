@@ -21,68 +21,75 @@ import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../config/supabase';
 
 interface PreviewData {
-  tipo: string;
-  registros: number;
+  tipo: 'csv' | 'json';
+  totalRegistros: number;
   campos: string[];
   amostra: any[];
 }
 
 const steps = ['Selecionar Arquivo', 'Validar Dados', 'Processar Importação'];
 
-export const ImportacaoForm = () => {
+export const ImportacaoForm: React.FC = () => {
   const { user } = useAuth();
   const [activeStep, setActiveStep] = useState(0);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<PreviewData | null>(null);
-  const [processando, setProcessando] = useState(false);
-  const [progresso, setProgresso] = useState(0);
+  const [previewData, setPreviewData] = useState<PreviewData | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (!selectedFile) return;
-
-    setFile(selectedFile);
-    setLoading(true);
-    setError(null);
-
     try {
+      setError(null);
+      const selectedFile = event.target.files?.[0];
+      if (!selectedFile) return;
+
+      setFile(selectedFile);
+      setLoading(true);
+
+      // Verificar extensão do arquivo
+      const fileType = selectedFile.name.split('.').pop()?.toLowerCase();
+      if (!['csv', 'json'].includes(fileType || '')) {
+        throw new Error('Formato de arquivo não suportado. Use CSV ou JSON.');
+      }
+
+      // Analisar arquivo
       const preview = await analisarArquivo(selectedFile);
-      setPreview(preview);
+      setPreviewData(preview);
       setActiveStep(1);
-    } catch (err) {
-      setError('Erro ao analisar arquivo. Verifique o formato e tente novamente.');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Erro ao processar arquivo');
     } finally {
       setLoading(false);
     }
   };
 
-  const analisarArquivo = async (file: File): Promise<PreviewData> => {
+  const analisarArquivo = (file: File): Promise<PreviewData> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = async (e) => {
         try {
-          const conteudo = e.target?.result as string;
+          const content = e.target?.result as string;
+          const tipo = file.name.endsWith('.csv') ? 'csv' : 'json';
           let dados;
-          
-          if (file.name.endsWith('.csv')) {
-            dados = processarCSV(conteudo);
-          } else if (file.name.endsWith('.json')) {
-            dados = JSON.parse(conteudo);
+
+          if (tipo === 'csv') {
+            dados = await processarCSV(content);
           } else {
-            throw new Error('Formato não suportado');
+            dados = JSON.parse(content);
           }
 
-          resolve({
-            tipo: file.name.split('.').pop()?.toUpperCase() || '',
-            registros: Array.isArray(dados) ? dados.length : 0,
-            campos: Object.keys(Array.isArray(dados) ? dados[0] : dados),
-            amostra: Array.isArray(dados) ? dados.slice(0, 5) : [dados]
-          });
+          const preview: PreviewData = {
+            tipo,
+            totalRegistros: Array.isArray(dados) ? dados.length : 0,
+            campos: Array.isArray(dados) && dados.length > 0 ? Object.keys(dados[0]) : [],
+            amostra: Array.isArray(dados) ? dados.slice(0, 5) : []
+          };
+
+          resolve(preview);
         } catch (error) {
-          reject(error);
+          reject(new Error('Erro ao analisar arquivo'));
         }
       };
 
@@ -91,71 +98,97 @@ export const ImportacaoForm = () => {
     });
   };
 
-  const processarCSV = (conteudo: string) => {
-    const linhas = conteudo.split('\n');
-    const cabecalho = linhas[0].split(',');
-    
-    return linhas.slice(1).map(linha => {
-      const valores = linha.split(',');
-      return cabecalho.reduce((obj, header, index) => {
-        obj[header.trim()] = valores[index]?.trim();
-        return obj;
-      }, {} as any);
+  const processarCSV = (content: string): Promise<any[]> => {
+    return new Promise((resolve) => {
+      const linhas = content.split('\n');
+      const headers = linhas[0].split(',').map(h => h.trim());
+      const dados = [];
+
+      for (let i = 1; i < linhas.length; i++) {
+        if (!linhas[i].trim()) continue;
+        
+        const valores = linhas[i].split(',').map(v => v.trim());
+        const registro = {};
+        
+        headers.forEach((header, index) => {
+          registro[header] = valores[index];
+        });
+
+        dados.push(registro);
+      }
+
+      resolve(dados);
     });
   };
 
   const iniciarProcessamento = async () => {
-    if (!file || !preview) return;
-
-    setProcessando(true);
-    setProgresso(0);
-
     try {
-      // Criar job de importação
-      const { data: job } = await supabase.from('importacao_jobs').insert([
-        {
-          cliente_id: user?.clienteAtivo?.id,
-          arquivo: file.name,
-          status: 'PROCESSANDO',
-          total_registros: preview.registros
-        }
-      ]).select().single();
+      setLoading(true);
+      setError(null);
 
-      // Simular processamento em lotes
-      const batchSize = 100;
-      const totalBatches = Math.ceil(preview.registros / batchSize);
+      if (!file || !previewData) {
+        throw new Error('Nenhum arquivo selecionado');
+      }
+
+      // Criar job de importação
+      const { data: job, error: jobError } = await supabase
+        .from('importacao_jobs')
+        .insert({
+          nome_arquivo: file.name,
+          status: 'processando',
+          total_registros: previewData.totalRegistros,
+          registros_processados: 0
+        })
+        .select()
+        .single();
+
+      if (jobError) throw jobError;
+
+      // Processar em lotes
+      const tamanhoBatch = 100;
+      const totalBatches = Math.ceil(previewData.totalRegistros / tamanhoBatch);
 
       for (let i = 0; i < totalBatches; i++) {
-        // Processar lote
+        const inicio = i * tamanhoBatch;
+        const fim = Math.min((i + 1) * tamanhoBatch, previewData.totalRegistros);
+        
+        // Simular processamento do lote
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Atualizar progresso
-        const novoProgresso = Math.round(((i + 1) / totalBatches) * 100);
-        setProgresso(novoProgresso);
+        const progressoAtual = Math.round(((i + 1) / totalBatches) * 100);
+        setProgress(progressoAtual);
 
         // Atualizar job
-        await supabase.from('importacao_jobs').update({
-          registros_processados: (i + 1) * batchSize,
-          progresso: novoProgresso
-        }).eq('id', job.id);
+        await supabase
+          .from('importacao_jobs')
+          .update({
+            registros_processados: fim,
+            progresso: progressoAtual
+          })
+          .eq('id', job.id);
       }
 
       // Finalizar job
-      await supabase.from('importacao_jobs').update({
-        status: 'CONCLUIDO',
-        progresso: 100
-      }).eq('id', job.id);
+      await supabase
+        .from('importacao_jobs')
+        .update({
+          status: 'concluido',
+          data_conclusao: new Date().toISOString()
+        })
+        .eq('id', job.id);
 
       setActiveStep(2);
     } catch (error) {
-      setError('Erro ao processar importação');
+      setError(error instanceof Error ? error.message : 'Erro ao processar importação');
     } finally {
-      setProcessando(false);
+      setLoading(false);
+      setProgress(0);
     }
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ width: '100%', p: 3 }}>
       <Typography variant="h5" gutterBottom>
         Importação de Dados
       </Typography>
@@ -174,89 +207,72 @@ export const ImportacaoForm = () => {
         </Alert>
       )}
 
-      {activeStep === 0 && (
-        <Paper
-          sx={{
-            p: 3,
-            textAlign: 'center',
-            border: '2px dashed #ccc',
-            cursor: 'pointer'
-          }}
-          onClick={() => document.getElementById('file-input')?.click()}
-        >
-          <input
-            type="file"
-            id="file-input"
-            hidden
-            accept=".csv,.json,.xml"
-            onChange={handleFileChange}
-          />
-          <UploadIcon sx={{ fontSize: 48, color: 'text.secondary' }} />
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Clique para selecionar ou arraste um arquivo
-          </Typography>
-          <Typography color="text.secondary">
-            Formatos suportados: CSV, JSON, XML
-          </Typography>
-        </Paper>
-      )}
+      <Paper sx={{ p: 3 }}>
+        {activeStep === 0 && (
+          <Box>
+            <input
+              type="file"
+              accept=".csv,.json"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+              id="arquivo-input"
+            />
+            <label htmlFor="arquivo-input">
+              <Button
+                variant="contained"
+                component="span"
+                disabled={loading}
+              >
+                Selecionar Arquivo
+              </Button>
+            </label>
+          </Box>
+        )}
 
-      {activeStep === 1 && preview && (
-        <Box>
-          <Paper sx={{ p: 3, mb: 3 }}>
+        {activeStep === 1 && previewData && (
+          <Box>
             <Typography variant="h6" gutterBottom>
-              Resumo do Arquivo
+              Preview dos Dados
             </Typography>
-            <Typography>Tipo: {preview.tipo}</Typography>
-            <Typography>Total de Registros: {preview.registros}</Typography>
-            <Typography>Campos Identificados: {preview.campos.join(', ')}</Typography>
-          </Paper>
+            
+            <Typography>
+              Tipo: {previewData.tipo.toUpperCase()}
+            </Typography>
+            
+            <Typography>
+              Total de Registros: {previewData.totalRegistros}
+            </Typography>
+            
+            <Typography>
+              Campos Identificados: {previewData.campos.join(', ')}
+            </Typography>
 
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {preview.campos.map((campo) => (
-                    <TableCell key={campo}>{campo}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {preview.amostra.map((registro, index) => (
-                  <TableRow key={index}>
-                    {preview.campos.map((campo) => (
-                      <TableCell key={campo}>{registro[campo]}</TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          <Box sx={{ mt: 3, textAlign: 'right' }}>
             <Button
               variant="contained"
               onClick={iniciarProcessamento}
-              disabled={processando}
+              disabled={loading}
+              sx={{ mt: 2 }}
             >
-              {processando ? (
-                <>
-                  <CircularProgress size={24} sx={{ mr: 1 }} />
-                  Processando ({progresso}%)
-                </>
-              ) : (
-                'Iniciar Processamento'
-              )}
+              Iniciar Processamento
             </Button>
           </Box>
-        </Box>
-      )}
+        )}
 
-      {activeStep === 2 && (
-        <Alert severity="success">
-          Importação concluída com sucesso!
-        </Alert>
-      )}
+        {activeStep === 2 && (
+          <Typography variant="h6" color="primary">
+            Importação concluída com sucesso!
+          </Typography>
+        )}
+
+        {loading && (
+          <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+            <CircularProgress size={24} sx={{ mr: 1 }} />
+            <Typography>
+              {progress > 0 ? `Processando... ${progress}%` : 'Carregando...'}
+            </Typography>
+          </Box>
+        )}
+      </Paper>
     </Box>
   );
 }; 

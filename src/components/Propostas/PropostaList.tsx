@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Typography,
   Paper,
   Table,
   TableBody,
@@ -15,171 +8,226 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Chip
+  TablePagination,
+  IconButton,
+  Chip,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Grid,
+  Button,
+  Typography
 } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import {
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Send as SendIcon
+} from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
-import { supabase } from '../../config/supabase';
+import { PropostaService } from '../../services/PropostaService';
+import { formatarMoeda } from '../../utils/formatters';
 
-interface Proposta {
-  id: string;
-  clienteId: string;
-  descricao: string;
-  valor: number;
-  status: 'SOLICITADA' | 'EM_ANALISE' | 'APROVADA' | 'REJEITADA' | 'CONVERTIDA';
-  dataCriacao: string;
-  representanteId: string;
+interface Filtros {
+  status?: string;
+  dataInicio?: Date | null;
+  dataFim?: Date | null;
 }
 
-export const PropostaList = () => {
+const statusColors = {
+  rascunho: 'default',
+  enviada: 'primary',
+  aprovada: 'success',
+  rejeitada: 'error'
+};
+
+export const PropostaList: React.FC = () => {
   const { user } = useAuth();
-  const [propostas, setPropostas] = useState<Proposta[]>([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [novaProposta, setNovaProposta] = useState({
-    descricao: '',
-    valor: '',
-    clienteId: ''
-  });
+  const propostaService = new PropostaService();
+  const [propostas, setPropostas] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [filtros, setFiltros] = useState<Filtros>({});
+  const [totalPropostas, setTotalPropostas] = useState(0);
 
   useEffect(() => {
     carregarPropostas();
-  }, [user]);
+  }, [page, rowsPerPage, filtros]);
 
-  async function carregarPropostas() {
+  const carregarPropostas = async () => {
     try {
-      let query = supabase.from('propostas').select('*');
+      setLoading(true);
+      const filtrosAPI = {
+        status: filtros.status,
+        data_inicio: filtros.dataInicio,
+        data_fim: filtros.dataFim
+      };
 
-      if (user?.perfil === 'representante') {
-        query = query.eq('representante_id', user.id);
-      } else if (user?.perfil === 'cliente') {
-        query = query.eq('cliente_id', user.clienteAtivo?.id);
+      // Adicionar filtro por cliente ou representante baseado no perfil
+      if (user?.perfil === 'cliente' && user?.clienteAtivo) {
+        filtrosAPI['cliente_id'] = user.clienteAtivo.id;
+      } else if (user?.perfil === 'representante') {
+        filtrosAPI['representante_id'] = user.id;
       }
 
-      const { data } = await query.order('data_criacao', { ascending: false });
-      if (data) {
-        setPropostas(data);
-      }
+      const data = await propostaService.listarPropostas(filtrosAPI);
+      setPropostas(data);
+      setTotalPropostas(data.length);
     } catch (error) {
       console.error('Erro ao carregar propostas:', error);
-    }
-  }
-
-  const handleSubmit = async () => {
-    try {
-      const { data, error } = await supabase.from('propostas').insert([
-        {
-          descricao: novaProposta.descricao,
-          valor: parseFloat(novaProposta.valor),
-          cliente_id: user?.clienteAtivo?.id,
-          representante_id: user?.id,
-          status: 'SOLICITADA'
-        }
-      ]);
-
-      if (error) throw error;
-
-      setOpenDialog(false);
-      carregarPropostas();
-      setNovaProposta({ descricao: '', valor: '', clienteId: '' });
-    } catch (error) {
-      console.error('Erro ao criar proposta:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getStatusColor = (status: string) => {
-    const colors = {
-      SOLICITADA: 'info',
-      EM_ANALISE: 'warning',
-      APROVADA: 'success',
-      REJEITADA: 'error',
-      CONVERTIDA: 'secondary'
-    };
-    return colors[status as keyof typeof colors];
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleFiltroChange = (campo: keyof Filtros, valor: any) => {
+    setFiltros(prev => ({ ...prev, [campo]: valor }));
+    setPage(0);
+  };
+
+  const handleEnviarProposta = async (id: string) => {
+    try {
+      await propostaService.enviarProposta(id, user!.id);
+      await carregarPropostas();
+    } catch (error) {
+      console.error('Erro ao enviar proposta:', error);
+    }
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h5">Propostas Comerciais</Typography>
-        {user?.perfil === 'representante' && (
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setOpenDialog(true)}
-          >
-            Nova Proposta
-          </Button>
-        )}
-      </Box>
+    <Box>
+      <Typography variant="h5" gutterBottom>
+        Propostas Comerciais
+      </Typography>
 
+      {/* Filtros */}
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={4}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={filtros.status || ''}
+                label="Status"
+                onChange={(e) => handleFiltroChange('status', e.target.value)}
+              >
+                <MenuItem value="">Todos</MenuItem>
+                <MenuItem value="rascunho">Rascunho</MenuItem>
+                <MenuItem value="enviada">Enviada</MenuItem>
+                <MenuItem value="aprovada">Aprovada</MenuItem>
+                <MenuItem value="rejeitada">Rejeitada</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <DatePicker
+              label="Data Início"
+              value={filtros.dataInicio}
+              onChange={(date) => handleFiltroChange('dataInicio', date)}
+              slotProps={{ textField: { size: 'small', fullWidth: true } }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <DatePicker
+              label="Data Fim"
+              value={filtros.dataFim}
+              onChange={(date) => handleFiltroChange('dataFim', date)}
+              slotProps={{ textField: { size: 'small', fullWidth: true } }}
+            />
+          </Grid>
+        </Grid>
+      </Paper>
+
+      {/* Tabela */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Número</TableCell>
               <TableCell>Data</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell align="right">Valor</TableCell>
+              <TableCell>Cliente</TableCell>
+              <TableCell>Valor Total</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Ações</TableCell>
+              <TableCell align="right">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {propostas.map((proposta) => (
-              <TableRow key={proposta.id}>
-                <TableCell>{new Date(proposta.dataCriacao).toLocaleDateString()}</TableCell>
-                <TableCell>{proposta.descricao}</TableCell>
-                <TableCell align="right">
-                  {new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                  }).format(proposta.valor)}
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    label={proposta.status.replace('_', ' ')}
-                    color={getStatusColor(proposta.status)}
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell>
-                  <Button size="small" onClick={() => {}}>
-                    Detalhes
-                  </Button>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  Carregando...
                 </TableCell>
               </TableRow>
-            ))}
+            ) : propostas.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  Nenhuma proposta encontrada
+                </TableCell>
+              </TableRow>
+            ) : (
+              propostas
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((proposta) => (
+                  <TableRow key={proposta.id}>
+                    <TableCell>{proposta.id}</TableCell>
+                    <TableCell>
+                      {new Date(proposta.data_criacao).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>{proposta.cliente?.razao_social}</TableCell>
+                    <TableCell>{formatarMoeda(proposta.valor_total)}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={proposta.status}
+                        color={statusColors[proposta.status]}
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton size="small" onClick={() => {}}>
+                        <VisibilityIcon />
+                      </IconButton>
+                      {proposta.status === 'rascunho' && (
+                        <>
+                          <IconButton size="small" onClick={() => {}}>
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEnviarProposta(proposta.id)}
+                          >
+                            <SendIcon />
+                          </IconButton>
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))
+            )}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={totalPropostas}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Itens por página"
+        />
       </TableContainer>
-
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Nova Proposta Comercial</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Descrição"
-            type="text"
-            fullWidth
-            value={novaProposta.descricao}
-            onChange={(e) => setNovaProposta({ ...novaProposta, descricao: e.target.value })}
-          />
-          <TextField
-            margin="dense"
-            label="Valor"
-            type="number"
-            fullWidth
-            value={novaProposta.valor}
-            onChange={(e) => setNovaProposta({ ...novaProposta, valor: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
-          <Button onClick={handleSubmit} variant="contained">
-            Enviar
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }; 
