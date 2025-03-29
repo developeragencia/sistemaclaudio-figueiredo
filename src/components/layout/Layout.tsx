@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
+import { Toaster } from "@/components/ui/toaster";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,8 +18,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <ClientProvider>
-      <div className="flex h-screen bg-gradient-to-br from-blue-50 to-white overflow-hidden">
-        <div className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'}`}>
+      <div className="flex h-screen bg-gradient-to-br from-slate-50 to-blue-50 overflow-hidden">
+        <div className={`transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} shadow-lg`}>
           <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
         </div>
         
@@ -26,10 +27,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Header toggleSidebar={toggleSidebar} />
           
           <main className="flex-grow overflow-auto p-6 animate-fade-in">
-            {children}
+            <div className="max-w-7xl mx-auto">
+              {children}
+            </div>
           </main>
         </div>
       </div>
+      <Toaster />
     </ClientProvider>
   );
 };
