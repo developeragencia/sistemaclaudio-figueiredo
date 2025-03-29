@@ -1,99 +1,91 @@
 
-import React from 'react';
-import { useClient } from '../../contexts/ClientContext';
-import { ChevronDown, Bell, Building2, User, Menu } from 'lucide-react';
+import React, { useState } from 'react';
+import { Bell, Menu, X, LogOut } from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import AnimatedLogo from '../ui/AnimatedLogo';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/ui/use-toast';
 
 interface HeaderProps {
   toggleSidebar: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
-  const { activeClient } = useClient();
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const { userEmail, logout } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logout realizado",
+      description: "Você foi desconectado do sistema."
+    });
+    navigate('/login');
+  };
+  
+  const userInitials = userEmail ? userEmail.substring(0, 2).toUpperCase() : 'AA';
 
   return (
-    <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 shadow-sm">
-      <div className="flex items-center">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="mr-4 hover:bg-gray-100 transition-colors"
-          onClick={toggleSidebar}
-        >
-          <Menu className="w-5 h-5" />
-          <span className="sr-only">Toggle Sidebar</span>
+    <header className="h-16 px-4 border-b flex items-center justify-between bg-white">
+      {/* Left section - Menu toggle */}
+      <div>
+        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="lg:hidden" aria-label="Menu">
+          <Menu className="h-6 w-6" />
         </Button>
-
-        <div className="hidden md:block">
-          <AnimatedLogo size="small" showText={true} />
-        </div>
-        
-        {/* Active Client Selector */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2 bg-white hover:bg-gray-50 transition-all duration-200 border-lawyer-600 text-lawyer-800 ml-4"
-            >
-              <Building2 className="w-5 h-5" />
-              <span className="font-medium">
-                {activeClient ? activeClient.name : 'Selecionar Cliente'}
-              </span>
-              <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="bg-white w-72 z-50 animate-in fade-in-80 slide-in-from-top-5">
-            <DropdownMenuItem className="cursor-pointer hover:bg-muted focus:bg-muted transition-colors">
-              Prefeitura de São Paulo
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer hover:bg-muted focus:bg-muted transition-colors">
-              Governo do Estado de Minas Gerais
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer hover:bg-muted focus:bg-muted transition-colors">
-              Universidade Federal do Rio de Janeiro
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
+      {/* Right section - notifications and user menu */}
       <div className="flex items-center space-x-4">
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="relative hover:bg-gray-100 transition-colors"
-        >
-          <Bell className="w-5 h-5" />
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-            3
-          </span>
-        </Button>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2 hover:bg-gray-100 transition-colors">
-              <div className="w-8 h-8 rounded-full bg-lawyer-200 flex items-center justify-center">
-                <User className="w-5 h-5 text-lawyer-800" />
-              </div>
-              <div className="hidden md:block text-left">
-                <p className="text-sm font-medium">Advogado</p>
-                <p className="text-xs text-gray-500">admin@advogadosassociados.com</p>
-              </div>
-              <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
+        {/* Notifications */}
+        <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative">
+              <Bell className="h-5 w-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white w-56 z-50 animate-in fade-in-80 slide-in-from-top-5">
-            <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 transition-colors">Meu Perfil</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer hover:bg-gray-50 transition-colors">Configurações</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors">Sair</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 mt-2" align="end">
+            <div className="space-y-4">
+              <div className="font-medium">Notificações</div>
+              <div className="text-sm text-muted-foreground">
+                Você não tem novas notificações.
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* User Avatar */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Avatar>
+                <AvatarFallback>{userInitials}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-60 mt-2" align="end">
+            <div className="space-y-3">
+              <div>
+                <p className="font-medium">Administrador</p>
+                <p className="text-sm text-muted-foreground">{userEmail}</p>
+              </div>
+              <div className="border-t pt-2">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sair
+                </Button>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </header>
   );
