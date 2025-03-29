@@ -4,8 +4,18 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { BarChart4, Users, CreditCard, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
+import { 
+  BarChart4, Users, CheckCircle2, ArrowRight, 
+  ChevronLeft, ChevronRight 
+} from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Index = () => {
   // Timeline data
@@ -30,6 +40,30 @@ const Index = () => {
       date: "07/09",
       status: "Em andamento",
       statusColor: "bg-amber-500"
+    }
+  ];
+
+  // Feature cards data
+  const featureCards = [
+    {
+      title: "Recuperação IRRF/PJ",
+      description: "Maximize seus créditos tributários com nossa solução especializada",
+      icon: <ChevronRight className="h-6 w-6" />
+    },
+    {
+      title: "Gestão de Clientes",
+      description: "Acompanhe processos e resultados dos seus clientes em tempo real",
+      icon: <ChevronRight className="h-6 w-6" />
+    },
+    {
+      title: "Cálculos Tributários",
+      description: "Automatize cálculos complexos e reduza riscos de conformidade",
+      icon: <ChevronRight className="h-6 w-6" />
+    },
+    {
+      title: "Relatórios Fiscais",
+      description: "Visualize dados detalhados sobre sua recuperação de créditos",
+      icon: <ChevronRight className="h-6 w-6" />
     }
   ];
 
@@ -73,6 +107,48 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Features Carousel Section */}
+      <section className="py-16 px-6 bg-gray-100">
+        <div className="container mx-auto max-w-5xl">
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold mb-2">Nossas Soluções</h2>
+            <p className="text-gray-500">Explore nossos recursos principais</p>
+          </div>
+          
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {featureCards.map((feature, index) => (
+                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                  <div className="p-1">
+                    <Card className="hover-card h-[200px] glass-card">
+                      <CardContent className="flex flex-col justify-between p-6 h-full">
+                        <h3 className="font-semibold text-lg">{feature.title}</h3>
+                        <p className="text-gray-500 text-sm mt-2">{feature.description}</p>
+                        <div className="mt-4 flex justify-end">
+                          <div className="rounded-full bg-gray-200 p-2">
+                            {feature.icon}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-2 mt-4">
+              <CarouselPrevious className="relative static" />
+              <CarouselNext className="relative static" />
+            </div>
+          </Carousel>
+        </div>
+      </section>
+
       {/* Dashboard Section */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto max-w-5xl">
@@ -81,91 +157,133 @@ const Index = () => {
             <p className="text-gray-500">Atualizado</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <StatCard 
-              title="Economia" 
-              value="32%" 
-              icon={<BarChart4 className="h-6 w-6 text-taxBlue-800" />}
-              className="hover-card"
-            />
-            <StatCard 
-              title="Processos" 
-              value="145" 
-              icon={<Users className="h-6 w-6 text-taxBlue-800" />}
-              className="hover-card"
-            />
-            <StatCard 
-              title="Sucesso" 
-              value="98%" 
-              icon={<CheckCircle2 className="h-6 w-6 text-taxBlue-800" />}
-              className="hover-card"
-            />
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <Card className="hover-card overflow-hidden">
-              <CardHeader>
-                <CardTitle>Evolução de Recuperação</CardTitle>
-                <p className="text-sm text-gray-500">Análise Tributária</p>
-                <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                  Otimizado
-                </span>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium">Distribuição de Créditos</span>
-                      <span className="text-sm font-medium text-taxBlue-800">72%</span>
-                    </div>
-                    <Progress value={72} className="h-2" />
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium">Eficiência Processual</span>
-                      <span className="text-sm font-medium text-taxBlue-800">89%</span>
-                    </div>
-                    <Progress value={89} className="h-2" />
-                  </div>
-                  
-                  <div className="pt-4">
-                    <div className="flex items-center text-sm text-green-700">
-                      <span className="flex items-center">
-                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd"></path>
-                        </svg>
-                        15% de crescimento este mês
-                      </span>
-                    </div>
-                  </div>
+          <Carousel
+            opts={{
+              align: "center",
+              loop: false,
+            }}
+            className="w-full mb-12"
+          >
+            <CarouselContent>
+              <CarouselItem className="basis-full md:basis-1/3">
+                <div className="p-1">
+                  <StatCard 
+                    title="Economia" 
+                    value="32%" 
+                    icon={<BarChart4 className="h-6 w-6 text-taxBlue-800" />}
+                    className="hover-card"
+                  />
                 </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="hover-card">
-              <CardHeader>
-                <CardTitle>Timeline de Atividades</CardTitle>
-                <p className="text-sm text-gray-500">Em Tempo Real</p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {timelineItems.map((item) => (
-                    <div key={item.id} className="flex items-center gap-4">
-                      <div className={`h-3 w-3 rounded-full ${item.statusColor}`}></div>
-                      <div className="flex-1">
-                        <p className="font-medium">{item.title}</p>
-                        <div className="flex justify-between text-sm text-gray-500">
-                          <span>{item.date}</span>
-                          <span>{item.status}</span>
+              </CarouselItem>
+              <CarouselItem className="basis-full md:basis-1/3">
+                <div className="p-1">
+                  <StatCard 
+                    title="Processos" 
+                    value="145" 
+                    icon={<Users className="h-6 w-6 text-taxBlue-800" />}
+                    className="hover-card"
+                  />
+                </div>
+              </CarouselItem>
+              <CarouselItem className="basis-full md:basis-1/3">
+                <div className="p-1">
+                  <StatCard 
+                    title="Sucesso" 
+                    value="98%" 
+                    icon={<CheckCircle2 className="h-6 w-6 text-taxBlue-800" />}
+                    className="hover-card"
+                  />
+                </div>
+              </CarouselItem>
+            </CarouselContent>
+            <div className="flex justify-center gap-2 mt-4">
+              <CarouselPrevious className="relative static" />
+              <CarouselNext className="relative static" />
+            </div>
+          </Carousel>
+          
+          <Carousel
+            opts={{
+              align: "center",
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              <CarouselItem className="basis-full md:basis-1/2">
+                <div className="p-1">
+                  <Card className="hover-card overflow-hidden">
+                    <CardHeader>
+                      <CardTitle>Evolução de Recuperação</CardTitle>
+                      <p className="text-sm text-gray-500">Análise Tributária</p>
+                      <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                        Otimizado
+                      </span>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-6">
+                        <div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-sm font-medium">Distribuição de Créditos</span>
+                            <span className="text-sm font-medium text-taxBlue-800">72%</span>
+                          </div>
+                          <Progress value={72} className="h-2" />
+                        </div>
+                        
+                        <div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-sm font-medium">Eficiência Processual</span>
+                            <span className="text-sm font-medium text-taxBlue-800">89%</span>
+                          </div>
+                          <Progress value={89} className="h-2" />
+                        </div>
+                        
+                        <div className="pt-4">
+                          <div className="flex items-center text-sm text-green-700">
+                            <span className="flex items-center">
+                              <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd"></path>
+                              </svg>
+                              15% de crescimento este mês
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </CarouselItem>
+              <CarouselItem className="basis-full md:basis-1/2">
+                <div className="p-1">
+                  <Card className="hover-card">
+                    <CardHeader>
+                      <CardTitle>Timeline de Atividades</CardTitle>
+                      <p className="text-sm text-gray-500">Em Tempo Real</p>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-6">
+                        {timelineItems.map((item) => (
+                          <div key={item.id} className="flex items-center gap-4">
+                            <div className={`h-3 w-3 rounded-full ${item.statusColor}`}></div>
+                            <div className="flex-1">
+                              <p className="font-medium">{item.title}</p>
+                              <div className="flex justify-between text-sm text-gray-500">
+                                <span>{item.date}</span>
+                                <span>{item.status}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CarouselItem>
+            </CarouselContent>
+            <div className="flex justify-center gap-2 mt-4">
+              <CarouselPrevious className="relative static" />
+              <CarouselNext className="relative static" />
+            </div>
+          </Carousel>
         </div>
       </section>
       

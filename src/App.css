@@ -201,3 +201,89 @@
   transform: scaleX(1);
   transform-origin: left;
 }
+
+/* Carousel custom animations */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+}
+
+.carousel-item-enter {
+  animation: slide-in 0.4s ease forwards;
+}
+
+.carousel-item-exit {
+  animation: slide-out 0.4s ease forwards;
+}
+
+/* Custom embla carousel styling */
+.embla__slide {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.embla__slide.is-prev {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.embla__slide.is-next {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.embla__slide.is-selected {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Custom control buttons */
+.carousel-button {
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.carousel-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Custom carousel dots */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.2);
+}
