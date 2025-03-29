@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { 
@@ -16,7 +15,7 @@ import {
   Globe,
   ShieldCheck,
   Lock,
-  Pie,
+  PieChart,
   Wallet,
   Inbox,
   List,
@@ -111,7 +110,7 @@ const Admin: React.FC = () => {
     },
     { 
       title: "Dashboard Interativo", 
-      icon: <Pie className="w-5 h-5 text-blue-700" />, 
+      icon: <PieChart className="w-5 h-5 text-blue-700" />, 
       link: "/interactive-dashboard" 
     },
     { 
