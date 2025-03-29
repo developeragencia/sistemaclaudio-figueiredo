@@ -1,4 +1,4 @@
-import { ToastProvider } from "@/hooks/use-toast";
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +16,7 @@ import Favicon from "./components/ui/Favicon";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import SiteEditor from "./components/admin/SiteEditor";
+import { ToastProvider } from "@/hooks/use-toast";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -24,11 +25,11 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ToastProvider>
-          <Favicon />
-          <Toaster />
-          <Sonner />
           <AuthProvider>
             <BrowserRouter>
+              <Favicon />
+              <Toaster />
+              <Sonner />
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Index />} />
