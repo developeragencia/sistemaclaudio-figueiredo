@@ -28,8 +28,8 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ 
-        y: -8,
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
+        y: -5,
+        boxShadow: '0 15px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
       }}
       className={cn(
         "rounded-xl border transition-all duration-500 h-full overflow-hidden shadow-md group",
@@ -37,26 +37,26 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
       )}
     >
       <Link to={to} className="flex flex-col h-full">
-        <div className="px-6 pt-8 pb-4 relative overflow-hidden">
-          {/* Animated background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/20 opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
+        <div className="px-5 pt-6 pb-3 relative overflow-hidden">
+          {/* Animated background gradient with transparency */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-black/30 opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
           
           <div className="relative z-10">
             <motion.div 
               initial={{ scale: 1 }}
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="p-3 rounded-full bg-white/20 mb-5 inline-flex"
+              className="p-2.5 rounded-full bg-white/25 mb-4 inline-flex"
             >
-              <Icon className="w-7 h-7 text-white" />
+              <Icon className="w-6 h-6 text-white" />
             </motion.div>
             
-            <h3 className="font-bold text-xl text-white mb-3">{title}</h3>
-            <p className="text-white/80 text-sm mb-6 line-clamp-3">{description}</p>
+            <h3 className="font-bold text-lg text-white mb-2">{title}</h3>
+            <p className="text-white/90 text-sm mb-4 line-clamp-2">{description}</p>
           </div>
         </div>
         
-        <div className="mt-auto bg-black/10 p-4 group-hover:bg-black/20 transition-all duration-300">
+        <div className="mt-auto bg-black/15 p-3 group-hover:bg-black/25 transition-all duration-300">
           <motion.div 
             whileHover={{ x: 5 }}
             className="inline-flex items-center text-white text-sm font-medium"
@@ -85,13 +85,14 @@ interface ModuleGridProps {
   }[];
 }
 
+// Enhanced color classes with transparency for a more modern look
 const colorClasses = [
-  "bg-gradient-to-br from-blue-600 to-blue-800 border-blue-500/20",
-  "bg-gradient-to-br from-purple-600 to-indigo-800 border-purple-500/20",
-  "bg-gradient-to-br from-rose-500 to-pink-700 border-rose-500/20",
-  "bg-gradient-to-br from-amber-500 to-orange-700 border-amber-500/20",
-  "bg-gradient-to-br from-emerald-500 to-green-700 border-emerald-500/20",
-  "bg-gradient-to-br from-cyan-500 to-teal-700 border-cyan-500/20",
+  "bg-gradient-to-br from-blue-500/90 to-blue-700/90 border-blue-400/30",
+  "bg-gradient-to-br from-purple-500/90 to-indigo-700/90 border-purple-400/30",
+  "bg-gradient-to-br from-rose-500/90 to-pink-700/90 border-rose-400/30",
+  "bg-gradient-to-br from-amber-500/90 to-orange-600/90 border-amber-400/30",
+  "bg-gradient-to-br from-emerald-500/90 to-green-600/90 border-emerald-400/30",
+  "bg-gradient-to-br from-cyan-500/90 to-teal-600/90 border-cyan-400/30",
 ];
 
 const ModuleGrid: React.FC<ModuleGridProps> = ({ modules }) => {
@@ -108,7 +109,7 @@ const ModuleGrid: React.FC<ModuleGridProps> = ({ modules }) => {
 
   return (
     <motion.div 
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
       variants={containerVariants}
       initial="hidden"
       animate="show"

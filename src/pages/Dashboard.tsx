@@ -372,25 +372,25 @@ const Dashboard = () => {
               Gerencie todos os aspectos do sistema através destes módulos
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-6 pb-8">
-            <div className="space-y-10">
+          <CardContent className="pt-5 pb-6">
+            <div className="space-y-7">
               <div>
-                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-blue-500 pl-3">Principais Módulos</h3>
+                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-blue-500 pl-3">Principais Módulos</h3>
                 <ModuleGrid modules={systemModules} />
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-purple-500 pl-3">Relatórios e Análises</h3>
+                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-purple-500 pl-3">Relatórios e Análises</h3>
                 <ModuleGrid modules={reportModules} />
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-emerald-500 pl-3">Operações</h3>
+                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-emerald-500 pl-3">Operações</h3>
                 <ModuleGrid modules={operationalModules} />
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-amber-500 pl-3">Sistema e Suporte</h3>
+                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-amber-500 pl-3">Sistema e Suporte</h3>
                 <ModuleGrid modules={systemSettingsModules} />
               </div>
             </div>
