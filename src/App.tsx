@@ -33,7 +33,7 @@ import TwoFactorAuthPage from "./pages/SecurityPages/TwoFactorAuthPage";
 import SessionExpirationPage from "./pages/SecurityPages/SessionExpirationPage";
 import AccessProtectionPage from "./pages/SecurityPages/AccessProtectionPage";
 import AuditTrailsPage from "./pages/SecurityPages/AuditTrailsPage";
-import UsersPermissionsPage from "./pages/UsersPermissionsPage";
+import UsersPermissionsPage from "./pages/SecurityPages/UsersPermissionsPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 
 // Import new settings pages

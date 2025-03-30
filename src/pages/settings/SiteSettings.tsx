@@ -135,7 +135,7 @@ const SiteSettings: React.FC = () => {
       <div>
         <h3 className="text-2xl font-bold text-gray-900">Gerenciamento do Site</h3>
         <p className="text-muted-foreground">
-          Edite o conteúdo e estrutura do site.
+          Edite a aparência e conteúdo do seu site com nosso editor intuitivo.
         </p>
       </div>
       
@@ -209,7 +209,10 @@ const SiteSettings: React.FC = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end">
+            <CardFooter className="flex justify-between">
+              <Button type="button" variant="outline" onClick={() => {}}>
+                Visualizar
+              </Button>
               <Button onClick={handleSavePages} disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Salvar alterações
@@ -286,7 +289,10 @@ const SiteSettings: React.FC = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end">
+            <CardFooter className="flex justify-between">
+              <Button type="button" variant="outline">
+                Visualizar
+              </Button>
               <Button onClick={handleSaveMenu} disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Salvar menu

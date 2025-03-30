@@ -1,7 +1,6 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -17,6 +16,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 }) => {
   const hasSubmenu = item.submenu && item.submenu.length > 0;
   const location = useLocation();
+  const [isHovered, setIsHovered] = useState(false);
   
   // Check if any submenu item is active
   const isSubmenuActive = hasSubmenu && item.submenu?.some(
@@ -44,12 +44,28 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -5 }
   };
+
+  // Handler for mouse enter
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (hasSubmenu) {
+      // Automatically open submenu on hover if not collapsed
+      if (!collapsed) {
+        toggleSubmenu();
+      }
+    }
+  };
+
+  // Handler for mouse leave
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   
   if (collapsed) {
     return (
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
-          <div className="mb-1">
+          <div className="mb-1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {hasSubmenu ? (
               <motion.button
                 onClick={toggleSubmenu}
@@ -124,7 +140,11 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   }
   
   return (
-    <div className="mb-1.5">
+    <div 
+      className="mb-1.5" 
+      onMouseEnter={handleMouseEnter} 
+      onMouseLeave={handleMouseLeave}
+    >
       {hasSubmenu ? (
         <div>
           <motion.button
@@ -158,18 +178,11 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                   {item.badge}
                 </Badge>
               )}
-              
-              <motion.div
-                animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <ChevronDown className={`h-4 w-4 ${isItemActive ? "text-white" : "text-blue-400"}`} />
-              </motion.div>
             </div>
           </motion.button>
           
           <AnimatePresence initial={false}>
-            {isOpen && hasSubmenu && (
+            {(isOpen || isHovered) && hasSubmenu && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}

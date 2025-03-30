@@ -14,3 +14,16 @@ export interface SubMenuItemType {
   to: string;
   badge?: string | number;
 }
+
+export interface SidebarProps {
+  collapsed: boolean;
+  toggleCollapse: () => void;
+}
+
+export interface SidebarItemProps {
+  item: MenuItemType;
+  collapsed: boolean;
+  isActive: boolean;
+  isOpen: boolean;
+  toggleSubmenu: () => void;
+}
