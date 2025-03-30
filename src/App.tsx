@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,7 +22,6 @@ import SecuritySettings from "./pages/SecuritySettings";
 import SuppliersManagement from "./pages/SuppliersManagement";
 import PaymentsManagement from "./pages/PaymentsManagement";
 import { TwoFactorAuth } from "./components/auth/TwoFactorAuth";
-// Import the new operational pages
 import OperationalImport from "./pages/operational/OperationalImport";
 import OperationalDashboard from "./pages/operational/OperationalDashboard";
 import OperationalAudits from "./pages/operational/OperationalAudits";
@@ -63,7 +61,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Data Import - New Page */}
               <Route path="/import" element={
                 <ProtectedRoute>
                   <Layout>
@@ -72,7 +69,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Retention Audit - New Page */}
               <Route path="/retention-audit" element={
                 <ProtectedRoute>
                   <Layout>
@@ -81,7 +77,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Reports - New Page */}
               <Route path="/reports" element={
                 <ProtectedRoute>
                   <Layout>
@@ -90,7 +85,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Security Settings - New Page */}
               <Route path="/security" element={
                 <ProtectedRoute>
                   <Layout>
@@ -99,7 +93,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Site Editor Route */}
               <Route path="/site-editor" element={
                 <ProtectedRoute>
                   <Layout>
@@ -108,7 +101,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Client Management */}
               <Route path="/clients-management" element={
                 <ProtectedRoute>
                   <Layout>
@@ -117,7 +109,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Suppliers Management - New Page */}
               <Route path="/suppliers-management" element={
                 <ProtectedRoute>
                   <Layout>
@@ -126,7 +117,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Payments Management - New Page */}
               <Route path="/payments-management" element={
                 <ProtectedRoute>
                   <Layout>
@@ -135,7 +125,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Operational Section - New Routes */}
               <Route path="/operational-import" element={
                 <ProtectedRoute>
                   <Layout>
@@ -168,7 +157,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Módulos Principais - Protected */}
               <Route path="/clients-management" element={
                 <ProtectedRoute>
                   <Layout>
@@ -180,7 +168,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Cálculos e Recuperação - Protected */}
               <Route path="/irrf-calculations" element={
                 <ProtectedRoute>
                   <Layout>
@@ -214,7 +201,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Relatórios - Protected */}
               <Route path="/detailed-reports" element={
                 <ProtectedRoute>
                   <Layout>
@@ -259,7 +245,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Gestão - Protected */}
               <Route path="/commercial-proposals" element={
                 <ProtectedRoute>
                   <Layout>
@@ -293,7 +278,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Sistema - Protected */}
               <Route path="/security-audit" element={
                 <ProtectedRoute>
                   <Layout>
@@ -349,7 +333,6 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -179,7 +179,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Dashboard
+            Painel Administrador
           </motion.h1>
           <motion.p 
             className="opacity-90 max-w-2xl"

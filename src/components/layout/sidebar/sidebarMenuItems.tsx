@@ -14,7 +14,8 @@ import {
   Database,
   BarChart4,
   Clipboard,
-  FileCheck
+  FileCheck,
+  Import
 } from 'lucide-react';
 import { MenuItemType } from './types';
 
@@ -27,7 +28,7 @@ export const getSidebarItems = (): MenuItemType[] => {
     },
     { 
       icon: <LayoutDashboard />, 
-      label: "Dashboard", 
+      label: "Painel Administrador", 
       to: "/dashboard" 
     },
     { 
@@ -72,6 +73,7 @@ export const getSidebarItems = (): MenuItemType[] => {
         { label: "Propostas Comerciais", to: "/commercial-proposals", badge: "5" },
         { label: "Compensação Tributária", to: "/tax-compensation" },
         { label: "Gestão de Auditorias", to: "/audit-management" },
+        { label: "Importação de Dados", to: "/operational-import" },
       ]
     },
     { 
@@ -80,7 +82,6 @@ export const getSidebarItems = (): MenuItemType[] => {
       to: "#",
       badge: "New",
       submenu: [
-        { label: "Importação de Dados", to: "/operational-import", badge: "New" },
         { label: "Painel Operacional", to: "/operational-dashboard" },
         { label: "Auditorias Operacionais", to: "/operational-audits" },
         { label: "Comprovantes Operacionais", to: "/operational-receipts" },
@@ -94,7 +95,6 @@ export const getSidebarItems = (): MenuItemType[] => {
         { label: "Segurança & Auditoria", to: "/security-audit" },
         { label: "Operacional", to: "/operational" },
         { label: "Site e Conteúdo", to: "/site-editor" },
-        { label: "Importação", to: "/import" },
       ]
     },
     { 
