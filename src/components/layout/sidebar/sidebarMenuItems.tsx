@@ -21,7 +21,12 @@ import {
   FileBarChart,
   Handshake,
   BookOpen,
-  Table
+  Table,
+  Lock,
+  Shield,
+  Clock,
+  KeyRound,
+  UserCheck
 } from 'lucide-react';
 import { MenuItemType } from './types';
 
@@ -64,11 +69,6 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
-      icon: <ShieldCheck />, 
-      label: "Auditoria Tributária", 
-      to: "/tax-audit" 
-    },
-    { 
       icon: <FileText />, 
       label: "Relatórios", 
       to: "#",
@@ -92,10 +92,22 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
+      icon: <Shield />, 
+      label: "Segurança & Auditoria", 
+      to: "#",
+      badge: "Novo",
+      submenu: [
+        { label: "Autenticação em Dois Fatores", to: "/two-factor-auth" },
+        { label: "Expiração de Sessão", to: "/session-expiration" },
+        { label: "Proteção de Acesso", to: "/access-protection" },
+        { label: "Trilhas de Auditoria", to: "/audit-trails" },
+        { label: "Usuários e Permissões", to: "/users-permissions" },
+      ]
+    },
+    { 
       icon: <Database />, 
       label: "Operacional", 
       to: "#",
-      badge: "Novo",
       submenu: [
         { label: "Painel Operacional", to: "/operational-dashboard" },
         { label: "Auditorias Operacionais", to: "/operational-audits" },
@@ -129,7 +141,7 @@ export const getGroupedSidebarItems = () => {
   
   return {
     mainItems: sidebarItems.slice(0, 2),
-    moduleItems: sidebarItems.slice(2, 10), // Adjusted to include all module items (index 2-9)
-    systemItems: sidebarItems.slice(10)     // Adjusted to start from index 10
+    moduleItems: sidebarItems.slice(2, 11), // Updated to include the new Security & Audit item
+    systemItems: sidebarItems.slice(11)     // Updated to start from the correct index
   };
 };

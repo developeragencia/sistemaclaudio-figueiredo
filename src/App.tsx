@@ -29,6 +29,12 @@ import OperationalAudits from "./pages/operational/OperationalAudits";
 import OperationalReceipts from "./pages/operational/OperationalReceipts";
 import TaxCredits from "./pages/TaxCredits";
 import AdvancedCalculator from "./pages/AdvancedCalculator";
+import SecurityHub from "./pages/SecurityHub";
+import TwoFactorAuthPage from "./pages/SecurityPages/TwoFactorAuthPage";
+import SessionExpirationPage from "./pages/SecurityPages/SessionExpirationPage";
+import AccessProtectionPage from "./pages/SecurityPages/AccessProtectionPage";
+import AuditTrailsPage from "./pages/SecurityPages/AuditTrailsPage";
+import UsersPermissionsPage from "./pages/SecurityPages/UsersPermissionsPage";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -160,7 +166,7 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* New routes */}
+              {/* Tax Credits routes */}
               <Route path="/tax-credits" element={
                 <ProtectedRoute>
                   <Layout>
@@ -173,6 +179,55 @@ const App = () => {
                 <ProtectedRoute>
                   <Layout>
                     <AdvancedCalculator />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Security & Audit Routes */}
+              <Route path="/security-hub" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SecurityHub />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/two-factor-auth" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <TwoFactorAuthPage />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/session-expiration" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SessionExpirationPage />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/access-protection" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <AccessProtectionPage />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/audit-trails" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <AuditTrailsPage />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/users-permissions" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <UsersPermissionsPage />
                   </Layout>
                 </ProtectedRoute>
               } />
