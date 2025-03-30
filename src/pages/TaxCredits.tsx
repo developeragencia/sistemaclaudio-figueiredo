@@ -7,8 +7,8 @@ import { CreditCard, Calculator, FileCheck, BarChart3 } from 'lucide-react';
 // Import components
 import TaxCreditsTable from '@/components/tax-credits/TaxCreditsTable';
 import TaxCreditsSummary from '@/components/tax-credits/TaxCreditsSummary';
-import TaxCreditsCalculator from '@/components/tax-credits/TaxCreditsCalculator';
 import TaxCreditsTimeline from '@/components/tax-credits/TaxCreditsTimeline';
+import TaxCreditSimulator from '@/components/tax-credits/TaxCreditSimulator';
 
 const TaxCredits = () => {
   return (
@@ -29,11 +29,27 @@ const TaxCredits = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="table" className="w-full">
-            <TabsList className="grid grid-cols-4 mb-8">
-              <TabsTrigger value="table">Créditos Disponíveis</TabsTrigger>
-              <TabsTrigger value="summary">Resumo Gerencial</TabsTrigger>
-              <TabsTrigger value="calculator">Calculadora</TabsTrigger>
-              <TabsTrigger value="timeline">Linha do Tempo</TabsTrigger>
+            <TabsList className="grid grid-cols-5 mb-8">
+              <TabsTrigger value="table">
+                <CreditCard className="h-4 w-4 mr-2" />
+                Créditos Disponíveis
+              </TabsTrigger>
+              <TabsTrigger value="summary">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Resumo Gerencial
+              </TabsTrigger>
+              <TabsTrigger value="simulator">
+                <Calculator className="h-4 w-4 mr-2" />
+                Simulador
+              </TabsTrigger>
+              <TabsTrigger value="calculator">
+                <Calculator className="h-4 w-4 mr-2" />
+                Calculadora
+              </TabsTrigger>
+              <TabsTrigger value="timeline">
+                <FileCheck className="h-4 w-4 mr-2" />
+                Linha do Tempo
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="table" className="mt-0">
@@ -42,6 +58,10 @@ const TaxCredits = () => {
             
             <TabsContent value="summary" className="mt-0">
               <TaxCreditsSummary />
+            </TabsContent>
+            
+            <TabsContent value="simulator" className="mt-0">
+              <TaxCreditSimulator />
             </TabsContent>
             
             <TabsContent value="calculator" className="mt-0">

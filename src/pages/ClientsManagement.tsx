@@ -9,14 +9,44 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
 import { 
   Building2, Users, ListChecks, FileSearch, Plus, 
-  PenSquare, AlertCircle, CheckCircle2, XCircle, Briefcase
+  PenSquare, AlertCircle, CheckCircle2, XCircle, Briefcase,
+  CreditCard, Calculator
 } from 'lucide-react';
 import ClientDetails from '@/components/client/ClientDetails';
 import ClientUsers from '@/components/client/ClientUsers';
 import ClientProposals from '@/components/client/ClientProposals';
 import ClientExecution from '@/components/client/ClientExecution';
 import ClientTimeline from '@/components/client/ClientTimeline';
+import ClientDetailsPanel from '@/components/client/ClientDetailsPanel';
 import { motion } from 'framer-motion';
+
+// Import client mock data
+import { ClientDetailedInfo } from '@/types/client';
+
+// Sample detailed client info for demonstration
+const sampleClientDetailedInfo: ClientDetailedInfo = {
+  contacts: [
+    { name: "João Silva", role: "Diretor Financeiro", email: "joao.silva@empresa.com", phone: "(11) 98765-4321" },
+    { name: "Maria Santos", role: "Contador", email: "maria.santos@empresa.com", phone: "(11) 91234-5678" },
+  ],
+  financialInfo: {
+    taxId: "12.345.678/0001-90",
+    bankAccount: "Banco XYZ - Ag: 1234 - CC: 56789-0",
+    billingAddress: "Av. Paulista, 1000, São Paulo - SP",
+    paymentMethod: "Transferência Bancária",
+    creditLimit: 50000,
+  },
+  taxCredits: [
+    { id: "tx1", type: "IRRF", amount: 12500, createdAt: new Date(2023, 6, 15), status: "approved" },
+    { id: "tx2", type: "PIS/COFINS", amount: 8750, createdAt: new Date(2023, 8, 22), status: "pending" },
+    { id: "tx3", type: "CSLL", amount: 3200, createdAt: new Date(2023, 9, 5), status: "rejected" },
+  ],
+  documents: [
+    { name: "Contrato de Serviço", type: "PDF", uploadDate: new Date(2023, 5, 10), url: "#" },
+    { name: "CNPJ", type: "PDF", uploadDate: new Date(2023, 5, 12), url: "#" },
+    { name: "Procuração", type: "PDF", uploadDate: new Date(2023, 6, 20), url: "#" },
+  ],
+};
 
 const ClientsManagement = () => {
   const { clients, loading, setActiveClient } = useClient();
@@ -238,7 +268,7 @@ const ClientsManagement = () => {
 
               {/* Tabs */}
               <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
-                <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full">
+                <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full">
                   <TabsTrigger value="details" className="flex items-center gap-1">
                     <Building2 className="h-4 w-4" />
                     <span className="hidden md:inline">Detalhes</span>
@@ -259,10 +289,18 @@ const ClientsManagement = () => {
                     <CheckCircle2 className="h-4 w-4" />
                     <span className="hidden md:inline">Timeline</span>
                   </TabsTrigger>
+                  <TabsTrigger value="tax-credits" className="flex items-center gap-1">
+                    <CreditCard className="h-4 w-4" />
+                    <span className="hidden md:inline">Créditos</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="calculator" className="flex items-center gap-1">
+                    <Calculator className="h-4 w-4" />
+                    <span className="hidden md:inline">Calculadora</span>
+                  </TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="details" className="space-y-4">
-                  <ClientDetails client={selectedClient} />
+                  <ClientDetailsPanel client={selectedClient} detailedInfo={sampleClientDetailedInfo} />
                 </TabsContent>
                 
                 <TabsContent value="users" className="space-y-4">
@@ -279,6 +317,66 @@ const ClientsManagement = () => {
                 
                 <TabsContent value="timeline" className="space-y-4">
                   <ClientTimeline clientId={selectedClient.id} />
+                </TabsContent>
+                
+                <TabsContent value="tax-credits" className="space-y-4">
+                  <div className="grid gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <CreditCard className="h-5 w-5 text-blue-600" />
+                          Créditos Tributários do Cliente
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {sampleClientDetailedInfo.taxCredits.map((credit) => (
+                            <div key={credit.id} className="flex items-center justify-between p-4 border rounded-lg">
+                              <div>
+                                <h4 className="font-medium">{credit.type}</h4>
+                                <p className="text-sm text-gray-500">{credit.createdAt.toLocaleDateString()}</p>
+                              </div>
+                              <div className="text-end">
+                                <p className="text-lg font-bold">{new Intl.NumberFormat('pt-BR', {
+                                  style: 'currency',
+                                  currency: 'BRL'
+                                }).format(credit.amount)}</p>
+                                <Badge 
+                                  variant={
+                                    credit.status === 'approved' ? 'default' :
+                                    credit.status === 'rejected' ? 'destructive' : 'outline'
+                                  }
+                                >
+                                  {credit.status === 'approved' ? 'Aprovado' :
+                                   credit.status === 'rejected' ? 'Rejeitado' : 'Pendente'}
+                                </Badge>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        <Button className="w-full">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Adicionar Novo Crédito
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="calculator" className="space-y-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Calculator className="h-5 w-5 text-blue-600" />
+                        Calculadora de Impostos Personalizados
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <TaxCalculator />
+                    </CardContent>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </motion.div>

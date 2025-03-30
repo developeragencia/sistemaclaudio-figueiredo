@@ -8,6 +8,7 @@ import { Calculator, FileText, Table, BarChart3 } from 'lucide-react';
 import CalculatorForm from '@/components/calculator/CalculatorForm';
 import CalculatorHistory from '@/components/calculator/CalculatorHistory';
 import CalculatorCharts from '@/components/calculator/CalculatorCharts';
+import TaxCalculator from '@/components/calculator/TaxCalculator';
 
 const AdvancedCalculator = () => {
   const [calculationResults, setCalculationResults] = useState<any>(null);
@@ -38,12 +39,29 @@ const AdvancedCalculator = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="form" className="w-full">
-                <TabsList className="grid grid-cols-3 mb-8">
-                  <TabsTrigger value="form">Calculadora</TabsTrigger>
-                  <TabsTrigger value="history">Histórico</TabsTrigger>
-                  <TabsTrigger value="charts">Gráficos</TabsTrigger>
+              <Tabs defaultValue="tax" className="w-full">
+                <TabsList className="grid grid-cols-4 mb-8">
+                  <TabsTrigger value="tax">
+                    <Calculator className="h-4 w-4 mr-2" />
+                    Calculadora de Impostos
+                  </TabsTrigger>
+                  <TabsTrigger value="form">
+                    <Calculator className="h-4 w-4 mr-2" />
+                    Calculadora Completa
+                  </TabsTrigger>
+                  <TabsTrigger value="history">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Histórico
+                  </TabsTrigger>
+                  <TabsTrigger value="charts">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Gráficos
+                  </TabsTrigger>
                 </TabsList>
+                
+                <TabsContent value="tax" className="mt-0">
+                  <TaxCalculator />
+                </TabsContent>
                 
                 <TabsContent value="form" className="mt-0">
                   <CalculatorForm onCalculate={handleCalculationComplete} />
