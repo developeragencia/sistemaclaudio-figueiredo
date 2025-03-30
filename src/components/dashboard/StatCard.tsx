@@ -1,55 +1,71 @@
 
 import React from 'react';
-import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
+import { TrendingUp, TrendingDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface StatCardProps {
   title: string;
-  value: string | number;
+  value: number | string;
   icon: React.ReactNode;
   trend?: {
     value: number;
     isPositive: boolean;
   };
   className?: string;
+  iconClassName?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ 
-  title, value, icon, trend, className 
+const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  icon,
+  trend,
+  className = "",
+  iconClassName = "bg-muted"
 }) => {
-  const formattedValue = typeof value === 'number' && title.includes('R$') 
+  const formattedValue = typeof value === 'number' && title.includes('R$')
     ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
     : value;
-    
+
+  // Format trend percentage
+  const formattedTrend = trend
+    ? `${trend.isPositive ? '+' : '-'}${trend.value}%`
+    : null;
+
   return (
-    <Card className={cn("overflow-hidden", className)}>
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-500">{title}</p>
-            <h4 className="text-2xl font-bold mt-2">{formattedValue}</h4>
+    <motion.div 
+      whileHover={{ y: -5 }} 
+      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+    >
+      <Card className={`overflow-hidden border transition-all duration-300 hover:shadow-lg ${className}`}>
+        <CardContent className="p-6">
+          <div className="flex justify-between">
+            <div className={`p-2 rounded-lg ${iconClassName}`}>
+              {icon}
+            </div>
             
             {trend && (
-              <div className="flex items-center mt-2">
-                <span
-                  className={cn(
-                    "text-xs font-medium",
-                    trend.isPositive ? "text-green-600" : "text-red-600"
-                  )}
-                >
-                  {trend.isPositive ? "+" : "-"}{trend.value}%
-                </span>
-                <span className="text-xs text-gray-500 ml-1">em relação ao mês passado</span>
+              <div className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                trend.isPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              }`}>
+                {trend.isPositive ? (
+                  <TrendingUp className="w-3 h-3 mr-1" />
+                ) : (
+                  <TrendingDown className="w-3 h-3 mr-1" />
+                )}
+                {formattedTrend}
               </div>
             )}
           </div>
           
-          <div className="p-3 bg-taxBlue-100 rounded-lg">
-            {icon}
+          <div className="mt-3">
+            <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+            <p className="text-2xl font-bold mt-1">{formattedValue}</p>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 
