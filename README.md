@@ -1,6 +1,6 @@
-# Bueiro Digital
+# Sistema Claudio Figueiredo
 
-Sistema de gerenciamento para manutenção de bueiros e infraestrutura urbana.
+Sistema de gerenciamento empresarial integrado.
 
 ## Tecnologias Utilizadas
 
