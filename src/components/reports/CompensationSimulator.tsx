@@ -1,210 +1,179 @@
 
-import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DatePicker } from "@/components/ui/date-picker";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, FileSpreadsheet, Calculator } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CalculatorIcon, PlusCircle, Download, LineChart } from 'lucide-react';
 
-export default function CompensationSimulator() {
-  const { toast } = useToast();
-  const [creditValue, setCreditValue] = useState<string>("0");
-  const [creditDate, setCreditDate] = useState<Date | undefined>(new Date());
-  const [compensationDate, setCompensationDate] = useState<Date | undefined>(
-    new Date(new Date().setMonth(new Date().getMonth() + 3))
-  );
-  const [compensationType, setCompensationType] = useState<string>("perdcomp");
-  const [correctedValue, setCorrectedValue] = useState<number | null>(null);
+export function CompensationSimulator() {
+  const [baseValue, setBaseValue] = useState<number>(10000);
+  const [taxRate, setTaxRate] = useState<number>(4.65);
+  const [startDate, setStartDate] = useState<Date>(new Date(new Date().setMonth(new Date().getMonth() - 3)));
+  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [selicRate, setSelicRate] = useState<number>(0.92);
+  const [compensationType, setCompensationType] = useState<string>("per_dcomp");
+  const [result, setResult] = useState<number | null>(null);
+  const [historicalData, setHistoricalData] = useState<any[]>([]);
 
-  const calculateCompensation = () => {
-    // Simple calculation for demo purposes
-    // In a real implementation, this would use the actual SELIC rates from an API
-    const creditAmount = parseFloat(creditValue.replace(/[^\d.-]/g, ''));
-    
-    if (isNaN(creditAmount) || !creditDate || !compensationDate) {
-      toast({
-        title: "Erro na simulação",
-        description: "Por favor, preencha todos os campos corretamente.",
-        variant: "destructive",
-      });
-      return;
+  // Calculate the compensation value
+  useEffect(() => {
+    if (baseValue && taxRate && startDate && endDate) {
+      // Get the difference in months
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30));
+      
+      // Calculate base tax amount
+      const taxAmount = baseValue * (taxRate / 100);
+      
+      // Apply Selic correction
+      const selicCorrection = taxAmount * ((selicRate / 100) * diffMonths);
+      
+      const totalCompensation = taxAmount + selicCorrection;
+      setResult(totalCompensation);
+      
+      // Generate historical data for simulation
+      const newHistoricalData = [];
+      let currentDate = new Date(startDate);
+      let accumulatedValue = taxAmount;
+      
+      while (currentDate <= end) {
+        newHistoricalData.push({
+          date: new Date(currentDate).toLocaleDateString('pt-BR'),
+          value: accumulatedValue
+        });
+        
+        // Move to next month and add Selic correction
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        accumulatedValue += accumulatedValue * (selicRate / 100);
+      }
+      
+      setHistoricalData(newHistoricalData);
     }
-
-    // Calculate months difference
-    const monthDiff = (compensationDate.getFullYear() - creditDate.getFullYear()) * 12 + 
-                      compensationDate.getMonth() - creditDate.getMonth();
-    
-    // Apply a mock SELIC rate of 0.5% per month
-    const selicMonthlyRate = 0.005;
-    const corrected = creditAmount * Math.pow(1 + selicMonthlyRate, monthDiff);
-    
-    setCorrectedValue(corrected);
-    
-    toast({
-      title: "Simulação realizada",
-      description: "O valor corrigido foi calculado com base na taxa SELIC.",
-      variant: "default",
-    });
-  };
-
-  const formatCurrency = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value) {
-      value = (parseInt(value) / 100).toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    } else {
-      value = "0,00";
-    }
-    setCreditValue(value);
-  };
-
-  const exportReport = () => {
-    toast({
-      title: "Relatório exportado",
-      description: "O relatório de simulação foi exportado com sucesso.",
-      variant: "default",
-    });
-  };
+  }, [baseValue, taxRate, startDate, endDate, selicRate]);
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Valor do Crédito (R$)</Label>
-                <Input
-                  value={creditValue}
-                  onChange={formatCurrency}
-                  className="text-right"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label>Data do Crédito Original</Label>
-                <DatePicker
-                  date={creditDate}
-                  setDate={setCreditDate}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label>Data Prevista para Compensação</Label>
-                <DatePicker
-                  date={compensationDate}
-                  setDate={setCompensationDate}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label>Tipo de Compensação</Label>
-                <Select
-                  value={compensationType}
-                  onValueChange={setCompensationType}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="perdcomp">PER/DCOMP</SelectItem>
-                    <SelectItem value="judicial">Decisão Judicial</SelectItem>
-                    <SelectItem value="administrativa">Processo Administrativo</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <Button 
-                onClick={calculateCompensation}
-                className="w-full bg-sky-700 hover:bg-sky-800"
-              >
-                <Calculator className="mr-2 h-4 w-4" />
-                Calcular Correção
-              </Button>
+    <Card className="w-full shadow-md">
+      <CardHeader className="bg-sky-50/50">
+        <CardTitle className="text-sky-800 flex items-center gap-2">
+          <CalculatorIcon className="h-5 w-5 text-sky-600" />
+          Simulador de Compensação Tributária
+        </CardTitle>
+        <CardDescription>
+          Simule valores de compensação com correção monetária pela taxa Selic
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="baseValue">Valor Base (R$)</Label>
+              <Input 
+                id="baseValue"
+                type="number" 
+                value={baseValue}
+                onChange={(e) => setBaseValue(Number(e.target.value))}
+                className="border-sky-200 focus:border-sky-500"
+              />
             </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="pt-6">
-            <h3 className="text-lg font-medium mb-4">Resultado da Simulação</h3>
             
-            {correctedValue !== null && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="text-sm text-muted-foreground">Valor Original:</div>
-                  <div className="text-right font-medium">
-                    {parseFloat(creditValue.replace(/[^\d.-]/g, '')).toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL'
-                    })}
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="text-sm text-muted-foreground">Valor Corrigido:</div>
-                  <div className="text-right font-medium text-green-600">
-                    {correctedValue.toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL'
-                    })}
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="text-sm text-muted-foreground">Juros Acumulados:</div>
-                  <div className="text-right font-medium text-sky-600">
-                    {(correctedValue - parseFloat(creditValue.replace(/[^\d.-]/g, ''))).toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL'
-                    })}
-                  </div>
-                </div>
-                
-                <Separator />
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="text-sm text-muted-foreground">Período:</div>
-                  <div className="text-right">
-                    {creditDate?.toLocaleDateString('pt-BR')} a {compensationDate?.toLocaleDateString('pt-BR')}
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="text-sm text-muted-foreground">Tipo de Compensação:</div>
-                  <div className="text-right capitalize">
-                    {compensationType === "perdcomp" ? "PER/DCOMP" : 
-                     compensationType === "judicial" ? "Decisão Judicial" : "Processo Administrativo"}
-                  </div>
-                </div>
-                
-                <div className="pt-4">
-                  <Button 
-                    onClick={exportReport} 
-                    variant="outline" 
-                    className="w-full border-sky-300 text-sky-700 hover:bg-sky-50"
-                  >
-                    <FileSpreadsheet className="mr-2 h-4 w-4" />
-                    Exportar Relatório
-                  </Button>
-                </div>
+            <div className="space-y-2">
+              <Label htmlFor="taxRate">Alíquota (%)</Label>
+              <Input 
+                id="taxRate"
+                type="number" 
+                value={taxRate}
+                onChange={(e) => setTaxRate(Number(e.target.value))}
+                step="0.01"
+                className="border-sky-200 focus:border-sky-500"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="startDate">Data Inicial</Label>
+              <DatePicker
+                date={startDate}
+                onSelect={setStartDate}
+                id="startDate"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="endDate">Data Final</Label>
+              <DatePicker
+                date={endDate}
+                onSelect={setEndDate}
+                id="endDate"
+              />
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="selicRate">Taxa Selic mensal (%)</Label>
+              <Input 
+                id="selicRate"
+                type="number"
+                value={selicRate}
+                onChange={(e) => setSelicRate(Number(e.target.value))}
+                step="0.01"
+                className="border-sky-200 focus:border-sky-500"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="compensationType">Tipo de Compensação</Label>
+              <Select 
+                value={compensationType} 
+                onValueChange={setCompensationType}
+              >
+                <SelectTrigger className="border-sky-200 focus:border-sky-500">
+                  <SelectValue placeholder="Selecione o tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="per_dcomp">PER/DCOMP</SelectItem>
+                  <SelectItem value="judicial">Decisão Judicial</SelectItem>
+                  <SelectItem value="administrative">Processo Administrativo</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {result !== null && (
+              <div className="p-4 bg-sky-50 rounded-md mt-4">
+                <p className="text-sm text-sky-700 font-medium">Valor estimado para compensação:</p>
+                <p className="text-xl font-bold text-sky-800">
+                  R$ {result.toFixed(2).replace('.', ',')}
+                </p>
+                <p className="text-xs text-sky-600 mt-1">
+                  Valor original: R$ {(baseValue * (taxRate / 100)).toFixed(2).replace('.', ',')}
+                </p>
+                <p className="text-xs text-sky-600">
+                  Correção Selic: R$ {(result - (baseValue * (taxRate / 100))).toFixed(2).replace('.', ',')}
+                </p>
               </div>
             )}
-            
-            {correctedValue === null && (
-              <div className="py-8 text-center text-muted-foreground">
-                Preencha os dados ao lado e clique em "Calcular Correção" para ver o resultado da simulação.
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="flex flex-wrap gap-2 justify-between bg-sky-50/30">
+        <div className="flex gap-2">
+          <Button variant="outline" className="text-sky-700 border-sky-300">
+            <PlusCircle className="mr-2 h-4 w-4" /> Novo Cálculo
+          </Button>
+          <Button variant="outline" className="text-sky-700 border-sky-300">
+            <Download className="mr-2 h-4 w-4" /> Exportar
+          </Button>
+        </div>
+        <Button className="bg-sky-700 hover:bg-sky-800">
+          <LineChart className="mr-2 h-4 w-4" /> Ver Projeção
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
+
+export default CompensationSimulator;
