@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -63,15 +64,17 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           <Link 
             to={to} 
             className={cn(
-              "flex items-center p-3 rounded-xl mb-1 hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-sky-400/20 transition-all ease-in-out duration-200",
-              isActive && "bg-gradient-to-r from-indigo-500/30 to-sky-500/30 text-white shadow-md",
+              "flex items-center justify-center p-3 rounded-xl mb-2 transition-all duration-300",
+              isActive 
+                ? "bg-white/20 text-white shadow-lg" 
+                : "hover:bg-white/10 text-white/70",
               className
             )}
             onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
           >
-            <div className="w-full flex justify-center relative">
+            <div className="relative">
               {React.cloneElement(icon as React.ReactElement, { 
-                className: cn("h-5 w-5", isActive ? "text-white" : "text-indigo-100/70") 
+                className: cn("h-5 w-5", isActive ? "text-white" : "text-white/70") 
               })}
               
               {badge && (
@@ -82,7 +85,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             </div>
           </Link>
         </TooltipTrigger>
-        <TooltipContent side="right" className="border-indigo-400/20 bg-indigo-950/90">
+        <TooltipContent side="right" className="border-none bg-gray-800/90">
           {label}
         </TooltipContent>
       </Tooltip>
@@ -94,20 +97,21 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       to={hasSubmenu ? "#" : to}
       onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
       className={cn(
-        "flex items-center justify-between px-4 py-3 rounded-xl mb-1 transition-all duration-200 hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-sky-400/20 group",
-        isActive && "bg-gradient-to-r from-indigo-500/30 to-sky-500/30 text-white shadow-lg",
+        "flex items-center justify-between px-4 py-3 rounded-xl mb-2 transition-all duration-300",
+        isActive 
+          ? "bg-white/20 text-white shadow-lg" 
+          : "text-white/70 hover:bg-white/10 hover:text-white",
         className
       )}
     >
       <div className="flex items-center">
         {React.cloneElement(icon as React.ReactElement, { 
           className: cn("h-5 w-5 mr-3", 
-            isActive ? "text-white" : "text-indigo-200/70") 
+            isActive ? "text-white" : "text-white/70") 
         })}
         <span className={cn(
-          "font-medium text-sm transition-all", 
-          isActive ? "text-white" : "text-indigo-100/70",
-          "group-hover:text-white"
+          "font-medium text-sm",
+          isActive ? "text-white" : "text-white/80"
         )}>
           {label}
         </span>
@@ -125,7 +129,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             animate={{ rotate: isSubmenuOpen ? 90 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <ChevronRight className="h-4 w-4 text-indigo-200/70" />
+            <ChevronRight className="h-4 w-4 text-white/70" />
           </motion.div>
         )}
       </div>
@@ -152,7 +156,7 @@ const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapse
     <AnimatePresence>
       {isOpen && (
         <motion.div 
-          className="ml-5 mt-1 space-y-1 border-l-2 border-sky-500/30 pl-3"
+          className="ml-5 mt-1 mb-3 space-y-1 border-l border-white/20 pl-3"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
@@ -163,10 +167,10 @@ const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapse
               key={index}
               to={item.to}
               className={cn(
-                "flex items-center justify-between py-2 pl-2 pr-4 text-sm rounded-lg transition-colors",
+                "flex items-center justify-between py-2 pl-2 pr-3 text-sm rounded-md transition-all duration-200",
                 location.pathname === item.to 
-                  ? "text-white bg-sky-500/20 font-medium" 
-                  : "text-indigo-200/70 hover:text-white hover:bg-indigo-600/20"
+                  ? "text-white bg-white/10 font-medium" 
+                  : "text-white/60 hover:text-white hover:bg-white/5"
               )}
             >
               <span>{item.label}</span>
@@ -180,6 +184,18 @@ const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapse
         </motion.div>
       )}
     </AnimatePresence>
+  );
+};
+
+const SidebarSection: React.FC<{title: string, collapsed: boolean}> = ({ title, collapsed }) => {
+  if (collapsed) return null;
+  
+  return (
+    <div className="px-4 py-2">
+      <h3 className="text-xs font-semibold uppercase text-white/50 tracking-wider">
+        {title}
+      </h3>
+    </div>
   );
 };
 
@@ -227,14 +243,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   ];
 
   const sidebarVariants = {
-    expanded: { width: '16rem' },
-    collapsed: { width: '5rem' }
+    expanded: { width: '260px' },
+    collapsed: { width: '80px' }
   };
 
   return (
     <motion.aside 
       className={cn(
-        "h-screen fixed z-30 bg-gradient-to-br from-indigo-950 via-indigo-900 to-sky-950 border-r border-sky-500/10 transition-all flex flex-col shadow-lg",
+        "h-screen fixed z-30 transition-all flex flex-col",
+        "bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-md",
+        "shadow-xl border-r border-white/10",
         collapsed ? "w-20" : "w-64"
       )}
       variants={sidebarVariants}
@@ -242,37 +260,38 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       animate={collapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      <div className="flex items-center h-16 border-b border-sky-500/20 px-3">
+      <div className={cn(
+        "flex items-center h-16 border-b border-white/10",
+        collapsed ? "justify-center px-2" : "px-4 justify-between"
+      )}>
         {!collapsed ? (
-          <div className="w-full flex items-center justify-between">
+          <>
             <AnimatedLogo size="small" />
             <button 
               onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-indigo-700/30 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors"
             >
-              <ChevronRight className="h-4 w-4 text-sky-300" />
+              <ChevronLeft className="h-4 w-4 text-white/80" />
             </button>
-          </div>
+          </>
         ) : (
-          <div className="w-full flex justify-center">
-            <button 
-              onClick={toggleCollapse} 
-              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-indigo-700/30 transition-colors"
-            >
-              <AnimatedLogo size="small" showText={false} />
-            </button>
-          </div>
+          <button 
+            onClick={toggleCollapse} 
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors"
+          >
+            <AnimatedLogo size="small" showText={false} />
+          </button>
         )}
       </div>
       
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1 backdrop-blur-sm">
+      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
         <SidebarItem 
           icon={<ArrowLeft />} 
           label="Voltar para Home" 
           to="/" 
           isActive={location.pathname === "/"} 
           collapsed={collapsed} 
-          className="mb-4 bg-gradient-to-r from-sky-600/50 to-indigo-600/50 hover:from-sky-600/70 hover:to-indigo-600/70"
+          className="mb-4 bg-gradient-to-r from-blue-600/70 to-indigo-600/70 hover:from-blue-600/80 hover:to-indigo-600/80"
         />
         
         <SidebarItem 
@@ -283,13 +302,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           collapsed={collapsed} 
         />
         
-        <div className={cn("pt-4 pb-2", !collapsed && "px-1")}>
-          {!collapsed && (
-            <div className="ml-2 text-xs font-medium uppercase text-sky-300/80 border-b border-sky-500/20 pb-1">
-              Módulos Principais
-            </div>
-          )}
-        </div>
+        <SidebarSection title="Módulos Principais" collapsed={collapsed} />
         
         <SidebarItem 
           icon={<Users />} 
@@ -358,13 +371,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           collapsed={collapsed} 
         />
         
-        <div className={cn("pt-4 pb-2", !collapsed && "px-1")}>
-          {!collapsed && (
-            <div className="ml-2 text-xs font-medium uppercase text-sky-300/80 border-b border-sky-500/20 pb-1">
-              Sistema
-            </div>
-          )}
-        </div>
+        <SidebarSection title="Sistema" collapsed={collapsed} />
         
         <SidebarItem 
           icon={<Globe />} 
@@ -400,13 +407,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       </div>
       
       {!collapsed && (
-        <div className="border-t border-sky-500/20 px-3 py-2 bg-indigo-900/30 backdrop-blur-md">
+        <div className="border-t border-white/10 px-4 py-3 bg-white/5 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></div>
-              <span className="text-xs text-sky-200/80">Sistema operacional</span>
+              <span className="text-xs text-white/70">Sistema operacional</span>
             </div>
-            <span className="text-xs text-sky-200/60">v1.2.0</span>
+            <span className="text-xs text-white/50">v1.2.0</span>
           </div>
         </div>
       )}
