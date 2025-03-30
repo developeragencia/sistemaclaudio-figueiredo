@@ -38,33 +38,33 @@ import { MenuItemType } from './types';
 export const getSidebarItems = (): MenuItemType[] => {
   return [
     { 
-      icon: <ArrowLeft />, 
+      icon: ArrowLeft, 
       label: "Voltar para Home", 
       to: "/" 
     },
     { 
-      icon: <LayoutDashboard />, 
+      icon: LayoutDashboard, 
       label: "Painel Administrador", 
       to: "/dashboard" 
     },
     { 
-      icon: <Users />, 
+      icon: Users, 
       label: "Gestão de Clientes", 
       to: "/clients-management",
       badge: "2" 
     },
     { 
-      icon: <CreditCard />, 
+      icon: CreditCard, 
       label: "Créditos Tributários", 
       to: "/tax-credits" 
     },
     { 
-      icon: <Calculator />, 
+      icon: Calculator, 
       label: "Calculadora Avançada", 
       to: "/advanced-calculator" 
     },
     { 
-      icon: <Calculator />, 
+      icon: Calculator, 
       label: "Cálculos e Recuperação", 
       to: "#",
       submenu: [
@@ -74,7 +74,7 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
-      icon: <FileText />, 
+      icon: FileText, 
       label: "Relatórios", 
       to: "#",
       badge: "3",
@@ -86,7 +86,7 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
-      icon: <BarChart3 />, 
+      icon: BarChart3, 
       label: "Gestão", 
       to: "#",
       badge: "5",
@@ -97,7 +97,7 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
-      icon: <Shield />, 
+      icon: Shield, 
       label: "Segurança & Auditoria", 
       to: "#",
       badge: "Novo",
@@ -110,7 +110,7 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
-      icon: <Database />, 
+      icon: Database, 
       label: "Operacional", 
       to: "#",
       submenu: [
@@ -120,7 +120,7 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
-      icon: <Globe />, 
+      icon: Globe, 
       label: "Sistema", 
       to: "#",
       submenu: [
@@ -128,12 +128,12 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
-      icon: <LifeBuoy />, 
+      icon: LifeBuoy, 
       label: "Suporte", 
       to: "/support" 
     },
     { 
-      icon: <Cog />, 
+      icon: Cog, 
       label: "Configurações", 
       to: "#",
       submenu: [

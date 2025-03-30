@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { MenuItemType } from './types';
+import { MenuItemType, SubMenuItemType } from './types';
 import { ChevronDown } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -51,6 +51,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     }
   };
 
+  const Icon = item.icon;
+
   return (
     <div className="mb-1">
       {/* Main menu item */}
@@ -68,7 +70,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         >
           {item.icon && (
             <span className={cn("text-blue-600", collapsed && "text-lg")}>
-              <item.icon />
+              <Icon />
             </span>
           )}
           
@@ -103,7 +105,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         >
           {item.icon && (
             <span className={cn("text-blue-600", collapsed && "text-lg")}>
-              <item.icon />
+              <Icon />
             </span>
           )}
           
@@ -145,7 +147,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 >
                   {submenuItem.icon && (
                     <span className="text-blue-600 mr-2">
-                      <submenuItem.icon className="h-4 w-4" />
+                      {React.createElement(submenuItem.icon, { className: "h-4 w-4" })}
                     </span>
                   )}
                   <span className="whitespace-nowrap overflow-hidden text-ellipsis">

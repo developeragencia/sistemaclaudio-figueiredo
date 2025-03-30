@@ -1,8 +1,9 @@
 
 import { ReactNode } from 'react';
+import { LucideIcon } from 'lucide-react';
 
 export interface MenuItemType {
-  icon: ReactNode;
+  icon: LucideIcon;
   label: string;
   to: string;
   badge?: string | number;
@@ -13,6 +14,7 @@ export interface SubMenuItemType {
   label: string;
   to: string;
   badge?: string | number;
+  icon?: LucideIcon;
 }
 
 export interface SidebarProps {
