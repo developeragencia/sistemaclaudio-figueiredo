@@ -5,15 +5,13 @@ import { Button } from "@/components/ui/button";
 import AnimatedLogo from "@/components/ui/AnimatedLogo";
 import { 
   ArrowRight,
-  CheckCircle,
-  Shield,
+  ChevronDown,
   BarChart3,
-  FileText,
-  FileSearch,
-  LayoutDashboard,
   Calculator,
   Database,
-  ChevronDown
+  LayoutDashboard,
+  FileSearch,
+  Shield
 } from "lucide-react";
 import {
   Carousel,
@@ -27,7 +25,6 @@ import { motion } from "framer-motion";
 const Index: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState({
-    features: false,
     carousel: false
   });
 
@@ -57,16 +54,7 @@ const Index: React.FC = () => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
       
-      const featuresSection = document.getElementById('features-section');
       const carouselSection = document.getElementById('carousel-section');
-      
-      if (featuresSection) {
-        const featurePosition = featuresSection.getBoundingClientRect();
-        setIsVisible(prev => ({
-          ...prev,
-          features: featurePosition.top < window.innerHeight - 100
-        }));
-      }
       
       if (carouselSection) {
         const carouselPosition = carouselSection.getBoundingClientRect();
@@ -83,14 +71,6 @@ const Index: React.FC = () => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Scroll to features function
-  const scrollToFeatures = () => {
-    const featuresSection = document.getElementById('features-section');
-    if (featuresSection) {
-      featuresSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -116,7 +96,7 @@ const Index: React.FC = () => {
         </motion.div>
       </header>
 
-      {/* Hero Section with parallax effect */}
+      {/* Enhanced Hero Section with parallax effect */}
       <section className="py-20 md:py-32 bg-white relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-gradient-to-b from-sky-50/40 to-white pointer-events-none"
@@ -125,6 +105,34 @@ const Index: React.FC = () => {
             transition: 'transform 0.2s ease-out' 
           }}
         ></div>
+        
+        {/* Animated background elements */}
+        <motion.div 
+          className="absolute top-1/4 left-1/5 w-32 h-32 rounded-full bg-sky-100/30 filter blur-xl"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        <motion.div 
+          className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-purple-100/20 filter blur-xl"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.4, 0.2]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between">
@@ -172,25 +180,11 @@ const Index: React.FC = () => {
                   <Link to="/login">
                     <Button 
                       size="lg" 
-                      className="bg-sky-600 hover:bg-sky-700 transition-all duration-300 shadow-md hover:shadow-xl"
+                      className="bg-sky-600 hover:bg-sky-700 transition-all duration-300 shadow-md hover:shadow-xl w-full sm:w-auto"
                     >
                       Acessar Sistema <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
-                </motion.div>
-                
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                    className="border-sky-200 text-sky-700 hover:bg-sky-50"
-                    onClick={scrollToFeatures}
-                  >
-                    Explorar Funcionalidades <ChevronDown className="ml-2 h-4 w-4" />
-                  </Button>
                 </motion.div>
               </div>
             </motion.div>
@@ -229,7 +223,7 @@ const Index: React.FC = () => {
             </motion.div>
           </div>
           
-          {/* Scroll indicator */}
+          {/* Animated scroll indicator */}
           <motion.div 
             className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
             initial={{ opacity: 0 }}
@@ -240,7 +234,9 @@ const Index: React.FC = () => {
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
               className="text-sky-600 cursor-pointer"
-              onClick={scrollToFeatures}
+              onClick={() => {
+                document.getElementById('carousel-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               <ChevronDown className="h-8 w-8" />
             </motion.div>
@@ -248,71 +244,45 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Features with scroll triggered animations */}
-      <motion.section 
-        id="features-section"
-        className="py-20 bg-gradient-to-r from-white to-sky-50"
-        initial={{ opacity: 0 }}
-        animate={isVisible.features ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="text-center mb-16"
-            variants={containerVariants}
-            initial="hidden"
-            animate={isVisible.features ? "visible" : "hidden"}
-          >
-            <motion.h2 
-              className="text-3xl md:text-4xl font-bold mb-4 text-lawyer-800"
-              variants={itemVariants}
-            >
-              Funcionalidades Principais
-            </motion.h2>
-            <motion.p 
-              className="text-lawyer-600 md:text-lg max-w-3xl mx-auto"
-              variants={itemVariants}
-            >
-              Nossa plataforma oferece um conjunto completo de ferramentas para otimizar a gestão tributária do seu escritório
-            </motion.p>
-          </motion.div>
-          
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate={isVisible.features ? "visible" : "hidden"}
-          >
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-sky-100"
-                variants={itemVariants}
-                whileHover={{ 
-                  y: -5,
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                }}
-              >
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${feature.bgColor}`}>
-                  <feature.icon className={`h-6 w-6 ${feature.iconColor}`} />
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-lawyer-800">{feature.title}</h3>
-                <p className="text-lawyer-600">{feature.description}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Reimagined Feature Carousel Section */}
+      {/* Enhanced Feature Carousel Section */}
       <motion.section 
         id="carousel-section"
-        className="py-16 bg-gradient-to-r from-sky-100 to-sky-50"
+        className="py-16 bg-gradient-to-br from-sky-100 to-sky-50/80 relative overflow-hidden"
         initial={{ opacity: 0 }}
         animate={isVisible.carousel ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="container mx-auto px-4">
+        {/* Animated background elements */}
+        <motion.div 
+          className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-sky-200/30 filter blur-3xl"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            x: [0, 20, 0],
+            y: [0, -20, 0]
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        <motion.div 
+          className="absolute -bottom-40 -right-20 w-96 h-96 rounded-full bg-purple-200/20 filter blur-3xl"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            x: [0, -30, 0],
+            y: [0, 30, 0]
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             className="text-center mb-12"
             variants={containerVariants}
@@ -333,42 +303,55 @@ const Index: React.FC = () => {
             </motion.p>
           </motion.div>
           
-          <div className="max-w-5xl mx-auto">
+          {/* Enhanced carousel with 3D effects */}
+          <div className="max-w-6xl mx-auto">
             <Carousel
               opts={{
-                align: "start",
+                align: "center",
                 loop: true,
               }}
               className="w-full"
             >
               <CarouselContent>
-                {/* Carousel items */}
                 {carouselItems.map((item, index) => (
                   <CarouselItem key={item.title} className="md:basis-1/2 lg:basis-1/3 p-2">
                     <motion.div 
-                      className={`h-full rounded-xl overflow-hidden bg-gradient-to-br from-${item.colorFrom}-50 to-white shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-${item.colorFrom}-500`}
-                      whileHover={{ y: -5, scale: 1.02 }}
-                      initial={{ opacity: 0, y: 20 }}
+                      className={`h-full rounded-xl overflow-hidden bg-gradient-to-br from-${item.colorFrom}-50 to-white shadow-lg hover:shadow-xl transition-all duration-500 border-t-4 border-${item.colorFrom}-500 perspective-1000`}
+                      whileHover={{ 
+                        y: -8, 
+                        scale: 1.03,
+                        rotateY: 5,
+                      }}
+                      initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1, duration: 0.5 }}
+                      transition={{ 
+                        delay: index * 0.1, 
+                        duration: 0.5,
+                        type: "spring",
+                        stiffness: 100
+                      }}
                     >
                       <div className="p-6 flex flex-col h-full">
                         <motion.div 
                           className={`rounded-full bg-${item.colorFrom}-100 p-3 w-12 h-12 flex items-center justify-center mb-4`}
-                          whileHover={{ rotate: 10 }}
+                          whileHover={{ rotate: 15, scale: 1.1 }}
                         >
                           <item.icon className={`w-6 h-6 text-${item.colorFrom}-600`} />
                         </motion.div>
                         <h3 className="text-xl font-bold text-lawyer-800 mb-2">{item.title}</h3>
                         <p className="text-lawyer-600 mb-4 flex-grow">{item.description}</p>
                         <Link to={item.link} className="mt-auto">
-                          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                          <motion.div 
+                            whileHover={{ scale: 1.05 }} 
+                            whileTap={{ scale: 0.95 }}
+                            className="w-full"
+                          >
                             <Button 
                               variant="outline" 
-                              className={`border-${item.colorFrom}-200 hover:border-${item.colorFrom}-400 text-${item.colorFrom}-700 hover:text-${item.colorFrom}-800 hover:bg-${item.colorFrom}-50 w-full`}
+                              className={`border-${item.colorFrom}-200 hover:border-${item.colorFrom}-400 text-${item.colorFrom}-700 hover:text-${item.colorFrom}-800 hover:bg-${item.colorFrom}-50 w-full group`}
                             >
                               {item.buttonText}
-                              <ArrowRight className="ml-2 h-4 w-4" />
+                              <ArrowRight className={`ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1`} />
                             </Button>
                           </motion.div>
                         </Link>
@@ -377,21 +360,66 @@ const Index: React.FC = () => {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <div className="flex items-center justify-center mt-8 gap-4">
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                  <CarouselPrevious className="static transform-none bg-sky-600 hover:bg-sky-700 text-white border-none" />
+              <div className="flex items-center justify-center mt-8 gap-6">
+                <motion.div 
+                  whileHover={{ scale: 1.1 }} 
+                  whileTap={{ scale: 0.9 }}
+                  className="shadow-lg"
+                >
+                  <CarouselPrevious className="static transform-none bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800 text-white border-none h-12 w-12" />
                 </motion.div>
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                  <CarouselNext className="static transform-none bg-sky-600 hover:bg-sky-700 text-white border-none" />
+                <motion.div 
+                  whileHover={{ scale: 1.1 }} 
+                  whileTap={{ scale: 0.9 }}
+                  className="shadow-lg"
+                >
+                  <CarouselNext className="static transform-none bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800 text-white border-none h-12 w-12" />
                 </motion.div>
               </div>
             </Carousel>
           </div>
+          
+          {/* Carousel indicators */}
+          <div className="carousel-dots mt-8 flex justify-center items-center gap-2">
+            {[...Array(5)].map((_, i) => (
+              <motion.div 
+                key={i}
+                className="carousel-dot w-3 h-3 rounded-full bg-sky-200 cursor-pointer"
+                whileHover={{ scale: 1.3 }}
+                animate={{ 
+                  backgroundColor: i === 0 ? 'rgb(14 165 233)' : 'rgb(186 230 253)', 
+                  scale: i === 0 ? 1.2 : 1 
+                }}
+              />
+            ))}
+          </div>
         </div>
       </motion.section>
 
-      {/* Simplified Footer */}
-      <footer className="bg-lawyer-800 text-white py-8">
+      {/* Enhanced Footer with animation */}
+      <footer className="bg-gradient-to-br from-lawyer-800 to-lawyer-900 text-white py-16 relative overflow-hidden">
+        {/* Animated particles */}
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-white/10 rounded-full"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -100],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 8,
+              repeat: Infinity,
+              delay: i * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+        
         <div className="container mx-auto px-4">
           <motion.div 
             className="flex flex-col md:flex-row justify-between items-center"
@@ -399,12 +427,22 @@ const Index: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-lawyer-200">
-              © {new Date().getFullYear()} Advogados Associados. Todos os direitos reservados.
-            </p>
-            <div className="flex items-center">
-              <p className="text-lawyer-200 mr-3">
-                Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="text-white hover:text-lawyer-300 transition-colors">Alex Developer</a>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="mb-6 md:mb-0"
+            >
+              <Link to="/" className="flex items-center">
+                <AnimatedLogo size="medium" />
+                <span className="ml-2 text-xl font-bold">Advogados Associados</span>
+              </Link>
+              <p className="text-lawyer-200 mt-3 max-w-md">
+                Soluções jurídicas especializadas em direito tributário, recuperação de créditos e consultoria fiscal para empresas.
+              </p>
+            </motion.div>
+            
+            <div className="flex flex-col items-end">
+              <p className="text-lawyer-200 mb-3">
+                Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="text-white hover:text-sky-300 transition-colors font-medium">Alex Developer</a>
               </p>
               <div className="flex space-x-4">
                 {socialIcons.map((social, index) => (
@@ -421,57 +459,22 @@ const Index: React.FC = () => {
               </div>
             </div>
           </motion.div>
+          
+          <motion.div 
+            className="mt-10 pt-10 border-t border-lawyer-700 text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            <p className="text-lawyer-300">
+              © {new Date().getFullYear()} Advogados Associados. Todos os direitos reservados.
+            </p>
+          </motion.div>
         </div>
       </footer>
     </div>
   );
 };
-
-// Feature data
-const features = [
-  {
-    title: "Cálculos Precisos",
-    description: "Algoritmos avançados para cálculos precisos de recuperação tributária com base na legislação vigente.",
-    icon: Calculator,
-    bgColor: "bg-blue-100",
-    iconColor: "text-blue-600"
-  },
-  {
-    title: "Importação de Dados",
-    description: "Importe facilmente dados de múltiplos sistemas e fontes para análise centralizada.",
-    icon: FileSearch,
-    bgColor: "bg-purple-100",
-    iconColor: "text-purple-600"
-  },
-  {
-    title: "Auditoria Completa",
-    description: "Ferramentas de auditoria que identificam oportunidades de recuperação fiscal com segurança jurídica.",
-    icon: Shield,
-    bgColor: "bg-amber-100",
-    iconColor: "text-amber-600"
-  },
-  {
-    title: "Relatórios Detalhados",
-    description: "Visualize métricas e indicadores em dashboards interativos e personalizáveis.",
-    icon: BarChart3,
-    bgColor: "bg-green-100",
-    iconColor: "text-green-600"
-  },
-  {
-    title: "Gestão de Documentos",
-    description: "Armazenamento seguro e organizado de todos os documentos fiscais e comprovantes.",
-    icon: FileText,
-    bgColor: "bg-rose-100",
-    iconColor: "text-rose-600"
-  },
-  {
-    title: "Painel Administrativo",
-    description: "Interface intuitiva para gerenciamento completo das operações tributárias.",
-    icon: LayoutDashboard,
-    bgColor: "bg-cyan-100",
-    iconColor: "text-cyan-600"
-  }
-];
 
 // Carousel items data
 const carouselItems = [
