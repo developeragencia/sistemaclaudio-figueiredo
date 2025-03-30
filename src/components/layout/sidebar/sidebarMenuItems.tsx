@@ -92,8 +92,6 @@ export const getSidebarItems = (): MenuItemType[] => {
       label: "Sistema", 
       to: "#",
       submenu: [
-        { label: "Segurança & Auditoria", to: "/security-audit" },
-        { label: "Operacional", to: "/operational" },
         { label: "Site e Conteúdo", to: "/site-editor" },
       ]
     },

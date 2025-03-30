@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -191,88 +192,6 @@ const Index: React.FC = () => {
                 <CarouselNext className="static transform-none bg-sky-600 hover:bg-sky-700 text-white border-none" />
               </div>
             </Carousel>
-          </div>
-        </div>
-      </section>
-
-      {/* Redesigned System Features Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-opacity-20 bg-grid-white/5"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-12">
-              <AnimatedLogo size="large" className="mx-auto mb-6" showText={false} />
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-                Sistema Claudio Figueiredo v1.0
-              </h2>
-              <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-                Solução completa e integrada para gestão tributária com foco em resultados concretos para seu escritório.
-              </p>
-              <Link to="/login">
-                <Button size="lg" className="bg-white text-blue-800 hover:bg-blue-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl">
-                  <span className="flex items-center justify-center text-lg font-semibold">
-                    Acessar Sistema
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </span>
-                </Button>
-              </Link>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6 mt-16">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
-                <h3 className="text-xl font-bold text-white mb-2">Interface Intuitiva</h3>
-                <p className="text-blue-100">Navegação simplificada e recursos facilmente acessíveis</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
-                <h3 className="text-xl font-bold text-white mb-2">Tecnologia Avançada</h3>
-                <p className="text-blue-100">Sistema desenvolvido com as mais modernas tecnologias do mercado</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
-                <h3 className="text-xl font-bold text-white mb-2">Resultados Garantidos</h3>
-                <p className="text-blue-100">Ferramentas que maximizam a eficiência e produtividade da sua equipe</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Call To Action Section */}
-      <section className="py-20 bg-gradient-to-r from-sky-700 to-sky-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-opacity-20 bg-grid-white/5"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-12">
-              <AnimatedLogo size="large" className="mx-auto mb-6" showText={false} />
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-                Pronto para otimizar sua gestão tributária?
-              </h2>
-              <p className="text-sky-100 text-lg mb-8 max-w-2xl mx-auto">
-                Agende uma demonstração com nossa equipe e descubra como podemos ajudar seu escritório a maximizar resultados.
-              </p>
-              <Link to="/login">
-                <Button size="lg" className="bg-white text-sky-800 hover:bg-sky-50 px-8 py-6 rounded-xl border-2 border-white/20 shadow-xl">
-                  <span className="flex items-center justify-center text-lg font-semibold">
-                    Acessar Sistema
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </span>
-                </Button>
-              </Link>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6 mt-16">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
-                <h3 className="text-xl font-bold text-white mb-2">Fácil Integração</h3>
-                <p className="text-sky-100">Conecte-se rapidamente com seus sistemas existentes</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
-                <h3 className="text-xl font-bold text-white mb-2">Suporte Dedicado</h3>
-                <p className="text-sky-100">Equipe especializada pronta para ajudar quando necessário</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/15 transition-all duration-300">
-                <h3 className="text-xl font-bold text-white mb-2">Resultados Comprovados</h3>
-                <p className="text-sky-100">Maximize a recuperação de créditos com métodos eficientes</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
