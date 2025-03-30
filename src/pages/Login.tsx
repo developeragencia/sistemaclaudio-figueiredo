@@ -1,4 +1,3 @@
-
 import React, { useState, FormEvent } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -176,7 +175,7 @@ function Login() {
               
               <div className="text-center">
                 <p className="text-xs text-muted-foreground">
-                  Precisa de ajuda? Entre em contato com o suporte.
+                  Sistema Claudio Figueiredo.
                 </p>
               </div>
             </CardFooter>
