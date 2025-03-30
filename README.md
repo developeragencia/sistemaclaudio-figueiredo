@@ -1,69 +1,119 @@
-# Welcome to your Lovable project
+# Bueiro Digital
 
-## Project info
+Sistema de gerenciamento para manutenção de bueiros e infraestrutura urbana.
 
-**URL**: https://lovable.dev/projects/d7da846b-42ad-430d-ac8c-e7cc328a39de
+## Tecnologias Utilizadas
 
-## How can I edit this code?
+### Backend
+- FastAPI
+- SQLModel
+- PostgreSQL
+- Celery
+- Redis
+- JWT + 2FA
 
-There are several ways of editing your application.
+### Frontend
+- React.js
+- Chakra UI
+- React Query
+- Zustand
+- Formik + Yup
 
-**Use Lovable**
+## Pré-requisitos
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d7da846b-42ad-430d-ac8c-e7cc328a39de) and start prompting.
+- Docker e Docker Compose
+- Node.js 18+
+- Python 3.9+
 
-Changes made via Lovable will be committed automatically to this repo.
+## Instalação
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+1. Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/bueiro-digital.git
+cd bueiro-digital
 ```
 
-**Edit a file directly in GitHub**
+2. Configure as variáveis de ambiente:
+```bash
+cp backend/.env.example backend/.env
+# Edite o arquivo .env com suas configurações
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+3. Inicie os containers:
+```bash
+docker-compose up -d
+```
 
-**Use GitHub Codespaces**
+4. Execute as migrações do banco de dados:
+```bash
+docker-compose exec backend alembic upgrade head
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+5. Crie um superusuário:
+```bash
+docker-compose exec backend python -m scripts.create_superuser
+```
 
-## What technologies are used for this project?
+## Desenvolvimento
 
-This project is built with .
+### Backend
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+O backend estará disponível em `http://localhost:8000`
 
-## How can I deploy this project?
+API Docs:
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
 
-Simply open [Lovable](https://lovable.dev/projects/d7da846b-42ad-430d-ac8c-e7cc328a39de) and click on Share -> Publish.
+### Frontend
 
-## I want to use a custom domain - is that possible?
+O frontend estará disponível em `http://localhost:3000`
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Estrutura do Projeto
+
+```
+.
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── db/
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   └── utils/
+│   ├── tests/
+│   └── alembic/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── contexts/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── utils/
+│   └── public/
+└── infrastructure/
+    └── docker/
+```
+
+## Funcionalidades Principais
+
+- Autenticação com JWT e 2FA para perfis críticos
+- Gerenciamento de usuários e permissões
+- Cadastro e monitoramento de bueiros
+- Gestão de manutenções e ocorrências
+- Relatórios e dashboards
+- Notificações em tempo real
+- Processamento assíncrono de tarefas
+
+## Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Crie um Pull Request
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
