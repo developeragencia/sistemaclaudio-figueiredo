@@ -27,7 +27,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
-      <div className="flex h-screen bg-gradient-to-br from-background to-background/95 overflow-hidden">
+      <div className="flex h-screen bg-gradient-to-br from-sky-50 to-white overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div 
             className={`transition-all duration-300 relative ${sidebarCollapsed ? 'w-16' : 'w-64'}`}

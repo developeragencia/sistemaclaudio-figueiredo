@@ -231,7 +231,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   return (
     <motion.aside 
       className={cn(
-        "h-screen fixed z-30 bg-sidebar border-r transition-all flex flex-col shadow-lg",
+        "h-screen fixed z-30 bg-gradient-to-b from-sky-800 to-sky-900 border-r border-sky-700 transition-all flex flex-col shadow-lg",
         collapsed ? "w-16" : "w-64"
       )}
       variants={sidebarVariants}
@@ -239,22 +239,22 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       animate={collapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      <div className="flex items-center h-16 border-b border-sidebar-border px-3">
+      <div className="flex items-center h-16 border-b border-sky-700 px-3">
         {!collapsed ? (
           <div className="w-full flex items-center justify-between">
             <AnimatedLogo size="small" />
             <button 
               onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-sidebar-accent transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-sky-700 transition-colors"
             >
-              <ChevronRight className="h-4 w-4 text-sidebar-foreground" />
+              <ChevronRight className="h-4 w-4 text-white" />
             </button>
           </div>
         ) : (
           <div className="w-full flex justify-center">
             <button 
               onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-sidebar-accent transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-sky-700 transition-colors"
             >
               <AnimatedLogo size="small" showText={false} />
             </button>
@@ -275,7 +275,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         {/* Módulos Principais */}
         <div className={cn("pt-4 pb-2", !collapsed && "px-1")}>
           {!collapsed && (
-            <div className="ml-2 text-xs text-sidebar-foreground/60 font-medium uppercase border-b border-sidebar-border/50 pb-1">
+            <div className="ml-2 text-xs text-sky-300 font-medium uppercase border-b border-sky-700/50 pb-1">
               Módulos Principais
             </div>
           )}
@@ -351,7 +351,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         {/* Sistema */}
         <div className={cn("pt-4 pb-2", !collapsed && "px-1")}>
           {!collapsed && (
-            <div className="ml-2 text-xs text-sidebar-foreground/60 font-medium uppercase border-b border-sidebar-border/50 pb-1">
+            <div className="ml-2 text-xs text-sky-300 font-medium uppercase border-b border-sky-700/50 pb-1">
               Sistema
             </div>
           )}
@@ -392,13 +392,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       
       {/* Footer with status */}
       {!collapsed && (
-        <div className="border-t border-sidebar-border px-3 py-2">
+        <div className="border-t border-sky-700 px-3 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-              <span className="text-xs text-sidebar-foreground/80">Sistema operacional</span>
+              <span className="text-xs text-sky-200/80">Sistema operacional</span>
             </div>
-            <span className="text-xs text-sidebar-foreground/60">v1.2.0</span>
+            <span className="text-xs text-sky-200/60">v1.2.0</span>
           </div>
         </div>
       )}
