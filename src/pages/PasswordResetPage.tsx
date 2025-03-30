@@ -3,8 +3,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import LoginHeader from '@/components/auth/LoginHeader';
 import PasswordReset from '@/components/auth/PasswordReset';
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 
 function PasswordResetPage() {
   return (
@@ -16,16 +14,6 @@ function PasswordResetPage() {
         className="max-w-md w-full"
       >
         <LoginHeader />
-        
-        <div className="mb-4">
-          <Link 
-            to="/login" 
-            className="text-sky-600 hover:text-sky-800 text-sm flex items-center transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Voltar para o login
-          </Link>
-        </div>
         
         <PasswordReset />
         

@@ -7,7 +7,7 @@ import * as z from "zod";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AlertTriangle, ArrowRight, CheckCircle2, Mail, RotateCw } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -184,14 +184,15 @@ const PasswordReset: React.FC = () => {
 
       <CardFooter className="flex flex-col space-y-4">
         <div className="text-center w-full">
-          <Button 
-            type="button" 
-            variant="ghost" 
-            className="text-sky-600 hover:text-sky-800 mx-auto"
-            onClick={handleBackToLogin}
-          >
-            Voltar para o Login
-          </Button>
+          <Link to="/">
+            <Button 
+              type="button" 
+              variant="ghost" 
+              className="text-sky-600 hover:text-sky-800 mx-auto"
+            >
+              Voltar para Home
+            </Button>
+          </Link>
         </div>
       </CardFooter>
     </Card>
