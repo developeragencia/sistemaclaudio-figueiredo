@@ -1,16 +1,19 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface AnimatedLogoProps {
   size?: 'small' | 'medium' | 'large';
   showText?: boolean;
   className?: string;
+  linkToHome?: boolean;
 }
 
 const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ 
   size = 'medium', 
   showText = true,
-  className = ''
+  className = '',
+  linkToHome = true
 }) => {
   
   // Define sizes based on the size prop
@@ -34,8 +37,8 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
   const selected = dimensions[size];
 
-  return (
-    <div className={`flex items-center ${className}`}>
+  const logoContent = (
+    <>
       <div className={`${selected.logoContainer} relative hover-scale transition-transform duration-300 hover:rotate-12`}>
         {/* Logo triangular pattern */}
         <div className="absolute inset-0">
@@ -60,6 +63,18 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
         <div className="font-medium tracking-wide">
           <span className={`${selected.text} text-sky-800`}>ADVOGADOS ASSOCIADOS</span>
         </div>
+      )}
+    </>
+  );
+
+  return (
+    <div className={`flex items-center ${className}`}>
+      {linkToHome ? (
+        <Link to="/" className="flex items-center no-underline hover:no-underline">
+          {logoContent}
+        </Link>
+      ) : (
+        logoContent
       )}
     </div>
   );
