@@ -38,7 +38,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
       />
       
       <motion.div 
-        className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-green-100/20 filter blur-xl"
+        className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-sky-100/20 filter blur-xl"
         animate={{ 
           scale: [1, 1.3, 1],
           opacity: [0.2, 0.4, 0.2]
@@ -72,7 +72,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
               Sistema de <span className="text-sky-600 relative">
                 Gestão Tributária
                 <motion.span 
-                  className="absolute bottom-0 left-0 w-full h-1 bg-green-500"
+                  className="absolute bottom-0 left-0 w-full h-1 bg-sky-400"
                   initial={{ width: 0 }}
                   animate={{ width: '100%' }}
                   transition={{ delay: 1, duration: 0.8 }}
@@ -129,7 +129,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
                 className="rounded-lg w-full object-cover"
               />
               <motion.div 
-                className="absolute -bottom-4 -left-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg"
+                className="absolute -bottom-4 -left-4 bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 1, type: "spring" }}

@@ -21,7 +21,7 @@ const Header: React.FC = () => {
         <Link to="/login">
           <Button 
             variant="default" 
-            className="bg-green-700 hover:bg-green-600 text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            className="bg-sky-600 hover:bg-sky-500 text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
           >
             Área Restrita <ArrowRight className="ml-2 h-4 w-4" />
           </Button>

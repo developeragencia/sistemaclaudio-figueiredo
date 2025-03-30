@@ -40,25 +40,25 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
         {/* Logo triangular pattern */}
         <div className="absolute inset-0">
           {/* First row of triangles */}
-          <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-0 left-1/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
-          <div className="absolute top-0 left-2/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
+          <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-sky-800 transform rotate-45"></div>
+          <div className="absolute top-0 left-1/3 w-1/3 h-1/3 bg-white border border-sky-300 transform rotate-45"></div>
+          <div className="absolute top-0 left-2/3 w-1/3 h-1/3 bg-white border border-sky-300 transform rotate-45"></div>
           
           {/* Second row of triangles */}
-          <div className="absolute top-1/3 left-0 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-1/3 left-2/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
+          <div className="absolute top-1/3 left-0 w-1/3 h-1/3 bg-sky-800 transform rotate-45"></div>
+          <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 bg-sky-800 transform rotate-45"></div>
+          <div className="absolute top-1/3 left-2/3 w-1/3 h-1/3 bg-white border border-sky-300 transform rotate-45"></div>
           
           {/* Third row of triangles */}
-          <div className="absolute top-2/3 left-0 w-1/3 h-1/3 bg-lawyer-800 transform rotate-45"></div>
-          <div className="absolute top-2/3 left-1/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
-          <div className="absolute top-2/3 left-2/3 w-1/3 h-1/3 bg-white border border-lawyer-300 transform rotate-45"></div>
+          <div className="absolute top-2/3 left-0 w-1/3 h-1/3 bg-sky-800 transform rotate-45"></div>
+          <div className="absolute top-2/3 left-1/3 w-1/3 h-1/3 bg-white border border-sky-300 transform rotate-45"></div>
+          <div className="absolute top-2/3 left-2/3 w-1/3 h-1/3 bg-white border border-sky-300 transform rotate-45"></div>
         </div>
       </div>
       
       {showText && (
         <div className="font-medium tracking-wide">
-          <span className={`${selected.text} text-lawyer-800`}>ADVOGADOS ASSOCIADOS</span>
+          <span className={`${selected.text} text-sky-800`}>ADVOGADOS ASSOCIADOS</span>
         </div>
       )}
     </div>
