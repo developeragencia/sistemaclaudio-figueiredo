@@ -26,6 +26,18 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   // Combine active states
   const isItemActive = isActive || isSubmenuActive;
   
+  // Determine badge color - use light green for "Novo", red for others
+  const getBadgeVariant = (badgeText: string) => {
+    return badgeText === "Novo" ? "outline" : "destructive";
+  };
+  
+  // Determine badge style - use light green for "Novo", red for others
+  const getBadgeStyle = (badgeText: string) => {
+    return badgeText === "Novo" 
+      ? "bg-green-100 text-green-700 border border-green-200" 
+      : "";
+  };
+  
   // Animation variants for the menu items
   const menuItemVariants = {
     initial: { opacity: 0, y: 5 },
@@ -57,8 +69,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                   })}
                   
                   {item.badge && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                      {item.badge}
+                    <span className={cn(
+                      "absolute -top-1 -right-1 text-[10px] rounded-full w-4 h-4 flex items-center justify-center",
+                      item.badge === "Novo" 
+                        ? "bg-green-100 text-green-700 border border-green-200" 
+                        : "bg-red-500 text-white"
+                    )}>
+                      {item.badge === "Novo" ? "N" : item.badge}
                     </span>
                   )}
                 </div>
@@ -84,8 +101,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                     })}
                     
                     {item.badge && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                        {item.badge}
+                      <span className={cn(
+                        "absolute -top-1 -right-1 text-[10px] rounded-full w-4 h-4 flex items-center justify-center",
+                        item.badge === "Novo" 
+                          ? "bg-green-100 text-green-700 border border-green-200" 
+                          : "bg-red-500 text-white"
+                      )}>
+                        {item.badge === "Novo" ? "N" : item.badge}
                       </span>
                     )}
                   </div>
@@ -126,7 +148,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             
             <div className="flex items-center space-x-2">
               {item.badge && (
-                <Badge variant="destructive" className="h-5 min-w-[20px] px-1.5 font-medium">
+                <Badge 
+                  variant={getBadgeVariant(item.badge)} 
+                  className={cn(
+                    "h-5 min-w-[20px] px-1.5 font-medium",
+                    getBadgeStyle(item.badge)
+                  )}
+                >
                   {item.badge}
                 </Badge>
               )}
@@ -169,7 +197,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                     >
                       <span>{subitem.label}</span>
                       {subitem.badge && (
-                        <Badge variant="destructive" className="h-5 min-w-[20px] px-1.5 font-medium">
+                        <Badge 
+                          variant={getBadgeVariant(subitem.badge)} 
+                          className={cn(
+                            "h-5 min-w-[20px] px-1.5 font-medium",
+                            getBadgeStyle(subitem.badge)
+                          )}
+                        >
                           {subitem.badge}
                         </Badge>
                       )}
@@ -203,7 +237,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             </div>
             
             {item.badge && (
-              <Badge variant="destructive" className="h-5 min-w-[20px] px-1.5 font-medium">
+              <Badge 
+                variant={getBadgeVariant(item.badge)} 
+                className={cn(
+                  "h-5 min-w-[20px] px-1.5 font-medium",
+                  getBadgeStyle(item.badge)
+                )}
+              >
                 {item.badge}
               </Badge>
             )}

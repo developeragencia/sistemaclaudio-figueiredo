@@ -80,7 +80,7 @@ export const getSidebarItems = (): MenuItemType[] => {
       icon: <Database />, 
       label: "Operacional", 
       to: "#",
-      badge: "New",
+      badge: "Novo",
       submenu: [
         { label: "Painel Operacional", to: "/operational-dashboard" },
         { label: "Auditorias Operacionais", to: "/operational-audits" },
