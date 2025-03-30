@@ -5,7 +5,7 @@ import { Activity } from '@/types';
 import { motion } from 'framer-motion';
 import { 
   CheckCircle2, AlertTriangle, FileText, User, 
-  Calendar, Clock, Filter, RefreshCcw 
+  Calendar, Clock, Filter, RefreshCcw, ActivityIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -84,7 +84,7 @@ const ActivityIcon = ({ type }: { type: Activity['type'] }) => {
     case 'login':
       return <User className="h-5 w-5 text-gray-600" />;
     default:
-      return <Activity className="h-5 w-5 text-gray-600" />;
+      return <ActivityIcon className="h-5 w-5 text-gray-600" />;
   }
 };
 

@@ -1,3 +1,4 @@
+
 import { Client, User, Proposal, Activity, DashboardStats, Supplier, Payment, TaxRate, AuditReport } from '../types';
 
 // Mock Clients
@@ -59,23 +60,6 @@ const clients: Client[] = [
   }
 ];
 
-// Get Active Client
-export const getActiveClient = async (): Promise<Client | null> => {
-  // Simulating API delay
-  await new Promise(resolve => setTimeout(resolve, 800));
-  
-  // Return the first active client for demo purpose
-  return clients.find(client => client.status === 'active') || null;
-};
-
-// Get all clients
-export const getClientsList = async (): Promise<Client[]> => {
-  // Simulating API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  return [...clients];
-};
-
 // Default dashboard stats
 const defaultStats: DashboardStats = {
   totalClients: 5,
@@ -106,14 +90,6 @@ const defaultStats: DashboardStats = {
       createdAt: new Date('2023-06-12T16:45:00')
     }
   ]
-};
-
-// Get dashboard stats
-export const getDashboardStats = async (): Promise<DashboardStats> => {
-  // Simulating API delay
-  await new Promise(resolve => setTimeout(resolve, 1200));
-  
-  return defaultStats;
 };
 
 // Mock Users
@@ -245,8 +221,21 @@ export const getClients = (): Promise<Client[]> => {
   return Promise.resolve(clients);
 };
 
-export const getActiveClient = (): Promise<Client | null> => {
-  return Promise.resolve(clients.find(client => client.status === 'active') || null);
+// Unified getActiveClient function (removing the duplicate)
+export const getActiveClient = async (): Promise<Client | null> => {
+  // Simulating API delay
+  await new Promise(resolve => setTimeout(resolve, 800));
+  
+  // Return the first active client for demo purpose
+  return clients.find(client => client.status === 'active') || null;
+};
+
+// Get all clients
+export const getClientsList = async (): Promise<Client[]> => {
+  // Simulating API delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  return [...clients];
 };
 
 export const getUsers = (): Promise<User[]> => {
@@ -265,6 +254,10 @@ export const getActivities = (clientId?: string): Promise<Activity[]> => {
   return Promise.resolve(filteredActivities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()));
 };
 
-export const getDashboardStats = (): Promise<DashboardStats> => {
-  return Promise.resolve(dashboardStats);
+// Unified getDashboardStats function (removing the duplicate)
+export const getDashboardStats = async (): Promise<DashboardStats> => {
+  // Simulating API delay
+  await new Promise(resolve => setTimeout(resolve, 1200));
+  
+  return defaultStats;
 };
