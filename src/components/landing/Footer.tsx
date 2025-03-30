@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gradient-to-br from-lawyer-900 to-sky-900 text-white py-10 relative">
+    <footer className="bg-gradient-to-br from-sky-900 to-green-900 text-white py-10 relative">
       <div className="container mx-auto px-6">
         {/* Social Media Icons */}
         <motion.div 
@@ -58,7 +58,7 @@ const SocialIcon: React.FC<{ icon: React.ReactNode, href: string }> = ({ icon, h
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="bg-sky-800/50 hover:bg-sky-700 p-3 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-sky-500/20"
+      className="bg-green-800/50 hover:bg-green-700 p-3 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-sky-500/20"
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.95 }}
     >
