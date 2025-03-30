@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
@@ -19,6 +18,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => setMounted(false);
   }, []);
 
+  // Add toggleSidebar function for Header component
+  const toggleSidebar = () => {
+    // This function is required by Header but since we removed the sidebar,
+    // we'll keep it as an empty function for now
+    console.log('Sidebar toggle requested, but sidebar has been removed');
+  };
+
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
       <div className="flex h-screen overflow-hidden bg-gradient-to-br from-white to-blue-50/30">
@@ -29,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          <Header />
+          <Header toggleSidebar={toggleSidebar} />
           
           <AnimatePresence mode="wait">
             {mounted && (
