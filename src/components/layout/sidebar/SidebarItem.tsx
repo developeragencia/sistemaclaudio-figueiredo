@@ -44,8 +44,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 className={cn(
                   "w-full p-2 flex justify-center rounded-lg transition-all",
                   isItemActive 
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-900/20 text-white" 
-                    : "text-slate-300 hover:bg-slate-700/60"
+                    ? "bg-blue-500 shadow-md shadow-blue-200 text-white" 
+                    : "text-blue-600 hover:bg-blue-50"
                 )}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -53,7 +53,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 <div className="relative">
                   {React.cloneElement(item.icon as React.ReactElement, { 
                     size: 20,
-                    className: cn(isItemActive ? "text-white" : "text-slate-300") 
+                    className: cn(isItemActive ? "text-white" : "text-blue-600") 
                   })}
                   
                   {item.badge && (
@@ -73,14 +73,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                   className={cn(
                     "w-full p-2 flex justify-center rounded-lg transition-all",
                     isItemActive 
-                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-900/20 text-white" 
-                      : "text-slate-300 hover:bg-slate-700/60"
+                      ? "bg-blue-500 shadow-md shadow-blue-200 text-white" 
+                      : "text-blue-600 hover:bg-blue-50"
                   )}
                 >
                   <div className="relative">
                     {React.cloneElement(item.icon as React.ReactElement, { 
                       size: 20,
-                      className: cn(isItemActive ? "text-white" : "text-slate-300") 
+                      className: cn(isItemActive ? "text-white" : "text-blue-600") 
                     })}
                     
                     {item.badge && (
@@ -94,7 +94,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             )}
           </div>
         </TooltipTrigger>
-        <TooltipContent side="right" className="bg-slate-800 border-slate-700 text-white">
+        <TooltipContent side="right" className="bg-white border-blue-100 text-blue-900">
           {item.label}
         </TooltipContent>
       </Tooltip>
@@ -110,8 +110,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             className={cn(
               "w-full p-3 flex items-center justify-between rounded-lg transition-all",
               isItemActive 
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-900/20 text-white" 
-                : "text-slate-300 hover:bg-slate-700/40 hover:text-white"
+                ? "bg-gradient-to-r from-blue-500 to-blue-600 shadow-md shadow-blue-200/50 text-white" 
+                : "text-blue-700 hover:bg-blue-50 hover:text-blue-800"
             )}
             whileHover={{ x: 3 }}
             whileTap={{ scale: 0.98 }}
@@ -119,7 +119,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             <div className="flex items-center space-x-3">
               {React.cloneElement(item.icon as React.ReactElement, { 
                 size: 18,
-                className: cn(isItemActive ? "text-white" : "text-slate-300") 
+                className: cn(isItemActive ? "text-white" : "text-blue-600") 
               })}
               <span className="text-sm font-medium">{item.label}</span>
             </div>
@@ -135,7 +135,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 animate={{ rotate: isOpen ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-4 w-4 text-slate-400" />
+                <ChevronDown className={`h-4 w-4 ${isItemActive ? "text-white" : "text-blue-400"}`} />
               </motion.div>
             </div>
           </motion.button>
@@ -147,7 +147,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="ml-4 pl-4 border-l border-slate-700/50 mt-1 space-y-1"
+                className="ml-4 pl-4 border-l border-blue-200 mt-1 space-y-1"
               >
                 {item.submenu?.map((subitem) => (
                   <motion.div
@@ -163,8 +163,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                       className={cn(
                         "flex items-center justify-between py-2.5 px-3 my-1 rounded-md text-sm transition-all",
                         location.pathname === subitem.to 
-                          ? "bg-blue-800/50 text-white font-medium" 
-                          : "text-slate-300 hover:bg-slate-700/30 hover:text-white"
+                          ? "bg-blue-100 text-blue-700 font-medium" 
+                          : "text-blue-600 hover:bg-blue-50 hover:text-blue-800"
                       )}
                     >
                       <span>{subitem.label}</span>
@@ -190,14 +190,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             className={cn(
               "w-full p-3 flex items-center justify-between rounded-lg transition-all",
               isItemActive 
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-900/20 text-white" 
-                : "text-slate-300 hover:bg-slate-700/40 hover:text-white"
+                ? "bg-gradient-to-r from-blue-500 to-blue-600 shadow-md shadow-blue-200/50 text-white" 
+                : "text-blue-700 hover:bg-blue-50 hover:text-blue-800"
             )}
           >
             <div className="flex items-center space-x-3">
               {React.cloneElement(item.icon as React.ReactElement, { 
                 size: 18,
-                className: cn(isItemActive ? "text-white" : "text-slate-300") 
+                className: cn(isItemActive ? "text-white" : "text-blue-600") 
               })}
               <span className="text-sm font-medium">{item.label}</span>
             </div>

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserRole } from '../types';
 
@@ -9,6 +8,7 @@ type AuthContextType = {
   login: (email: string, role?: UserRole) => void;
   logout: () => void;
   setUserRole: (role: UserRole) => void;
+  currentUser: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,8 +17,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
 
-  // Check localStorage on component mount
   useEffect(() => {
     const storedLoggedIn = localStorage.getItem('isLoggedIn');
     const storedEmail = localStorage.getItem('userEmail');
@@ -31,7 +31,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (storedRole) {
         setUserRole(storedRole);
       } else {
-        // Default role
         setUserRole('admin');
         localStorage.setItem('userRole', 'admin');
       }
@@ -42,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoggedIn(true);
     setUserEmail(email);
     setUserRole(role);
+    setCurrentUser(email);
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('userEmail', email);
     localStorage.setItem('userRole', role);
@@ -51,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoggedIn(false);
     setUserEmail(null);
     setUserRole(null);
+    setCurrentUser(null);
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userRole');
@@ -68,7 +69,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       userRole, 
       login, 
       logout,
-      setUserRole: updateUserRole
+      setUserRole: updateUserRole,
+      currentUser
     }}>
       {children}
     </AuthContext.Provider>

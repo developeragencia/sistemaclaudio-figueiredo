@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   const location = useLocation();
-  const { userRole, user } = useAuth();
+  const { userRole, currentUser } = useAuth();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [openMenus, setOpenMenus] = useState<{[key: string]: boolean}>({});
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       {/* Mobile menu button */}
       <div className="fixed top-4 left-4 z-50 md:hidden">
         <motion.button 
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-blue-600 shadow-lg border border-blue-100"
           onClick={handleMobileToggle}
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.1 }}
@@ -75,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       {/* Sidebar overlay for mobile */}
       {isMobileMenuOpen && (
         <motion.div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -100,18 +100,18 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       >
         <div className={cn(
           "flex flex-col h-full overflow-hidden",
-          "bg-gradient-to-b from-slate-900 to-slate-800",
-          "text-white shadow-xl rounded-r-xl"
+          "bg-white shadow-xl rounded-r-xl",
+          "text-blue-900 border-r border-blue-100"
         )}>
           {/* Sidebar header */}
-          <div className="flex items-center justify-between px-4 py-5 border-b border-slate-700/50">
+          <div className="flex items-center justify-between px-4 py-5 border-b border-blue-100">
             <SidebarHeader collapsed={collapsed} />
             
             <motion.button 
               onClick={toggleCollapse}
               className={cn(
                 "w-8 h-8 flex items-center justify-center",
-                "rounded-full hover:bg-slate-700/60 transition-colors",
+                "rounded-full hover:bg-blue-50 text-blue-500 transition-colors",
                 collapsed && "mx-auto"
               )}
               whileHover={{ scale: 1.1 }}
@@ -126,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           </div>
           
           {/* Sidebar content */}
-          <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800">
+          <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
             <SidebarContent 
               items={mainItems} 
               title="Navegação Principal" 
@@ -158,7 +158,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           </div>
           
           {/* Sidebar user profile */}
-          <div className="p-4 border-t border-slate-700/50 bg-slate-800/50">
+          <div className="p-4 border-t border-blue-100 bg-blue-50/50">
             <div className={cn(
               "flex items-center",
               collapsed ? "justify-center" : "justify-between"
@@ -166,30 +166,30 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
               {!collapsed ? (
                 <>
                   <div className="flex items-center space-x-3">
-                    <Avatar className="h-8 w-8 ring-2 ring-blue-500/50">
+                    <Avatar className="h-8 w-8 ring-2 ring-blue-500/30">
                       <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
-                      <AvatarFallback className="bg-blue-600">
+                      <AvatarFallback className="bg-blue-600 text-white">
                         {userRole?.substring(0, 1).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="space-y-0.5">
-                      <p className="text-sm font-medium leading-none">{user?.name || 'Admin User'}</p>
-                      <p className="text-xs text-slate-400">{userRole === 'admin' ? 'Administrador' : 'Usuário'}</p>
+                      <p className="text-sm font-medium leading-none text-blue-900">{currentUser?.name || 'Admin User'}</p>
+                      <p className="text-xs text-blue-500">{userRole === 'admin' ? 'Administrador' : 'Usuário'}</p>
                     </div>
                   </div>
                   
                   <motion.button 
-                    className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-slate-700/60"
+                    className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-blue-100 text-blue-500"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <LogOut size={16} className="text-slate-400" />
+                    <LogOut size={16} />
                   </motion.button>
                 </>
               ) : (
-                <Avatar className="h-10 w-10 ring-2 ring-blue-500/50">
+                <Avatar className="h-10 w-10 ring-2 ring-blue-500/30">
                   <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
-                  <AvatarFallback className="bg-blue-600">
+                  <AvatarFallback className="bg-blue-600 text-white">
                     {userRole?.substring(0, 1).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
@@ -197,9 +197,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
             </div>
             
             {!collapsed && (
-              <div className="mt-3 pt-3 border-t border-slate-700/30 text-xs text-center text-slate-400">
+              <div className="mt-3 pt-3 border-t border-blue-100/50 text-xs text-center text-blue-400">
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></div>
                   <span>Sistema v1.2.0</span>
                 </div>
               </div>
@@ -230,8 +230,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ collapsed }) => {
     >
       <AnimatedLogo size="small" />
       <div className="space-y-0.5">
-        <span className="font-semibold text-lg tracking-tight">TaxSystem</span>
-        <p className="text-xs text-blue-300">Admin Dashboard</p>
+        <span className="font-semibold text-lg tracking-tight text-blue-900">TaxSystem</span>
+        <p className="text-xs text-blue-500">Admin Dashboard</p>
       </div>
     </motion.div>
   );
@@ -257,7 +257,7 @@ const SidebarContent: React.FC<SidebarContentProps> = ({
   hasBorder = false
 }) => {
   return (
-    <div className={cn("p-3", hasBorder && "border-t border-slate-700/30 pt-5")}>
+    <div className={cn("p-3", hasBorder && "border-t border-blue-100/70 pt-5")}>
       {!collapsed && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -265,7 +265,7 @@ const SidebarContent: React.FC<SidebarContentProps> = ({
           exit={{ opacity: 0 }}
           className="mb-3 px-3"
         >
-          <span className="text-xs uppercase font-semibold tracking-wider text-blue-300">
+          <span className="text-xs uppercase font-semibold tracking-wider text-blue-500">
             {title}
           </span>
         </motion.div>
