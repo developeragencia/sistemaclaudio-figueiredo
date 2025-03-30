@@ -25,6 +25,7 @@ import {
   getAllSuppliers
 } from '../services/mockDatabaseService';
 import { Payment, Supplier, AuditReport } from '../types';
+import { Search, ChevronRight, AlertTriangle, CheckCircle, FileSpreadsheet } from 'lucide-react';
 
 const AuditTax = () => {
   const { toast } = useToast();
@@ -191,40 +192,60 @@ const AuditTax = () => {
   }, [activeTab]);
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      <h1 className="text-3xl font-bold mb-6">Auditoria Fiscal e Tributária</h1>
+    <div className="container mx-auto p-4 md:p-6 max-w-7xl">
+      <div className="flex flex-col space-y-4 mb-6">
+        <div className="bg-gradient-to-r from-sky-100 to-sky-50 p-6 rounded-lg shadow-md">
+          <h1 className="text-3xl font-bold text-sky-900 flex items-center">
+            <FileSpreadsheet className="mr-3 h-8 w-8 text-sky-600" />
+            Auditoria Fiscal e Tributária
+          </h1>
+          <p className="text-sky-700 mt-2">
+            Gerencie suas auditorias tributárias e identifique oportunidades de recuperação fiscal.
+          </p>
+        </div>
+      </div>
       
-      <Tabs defaultValue="import" onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-3 w-full mb-6">
-          <TabsTrigger value="import">Importar Dados</TabsTrigger>
-          <TabsTrigger value="payments">Pagamentos</TabsTrigger>
-          <TabsTrigger value="audit">Resultados da Auditoria</TabsTrigger>
+      <Tabs defaultValue="import" onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid grid-cols-3 w-full mb-6 bg-sky-50 p-1 rounded-lg">
+          <TabsTrigger value="import" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white">
+            Importar Dados
+          </TabsTrigger>
+          <TabsTrigger value="payments" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white">
+            Pagamentos
+          </TabsTrigger>
+          <TabsTrigger value="audit" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white">
+            Resultados da Auditoria
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="import">
-          <Card>
-            <CardHeader>
-              <CardTitle>Importar Dados de Fornecedores</CardTitle>
-              <CardDescription>
+          <Card className="border-sky-100 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-sky-50 to-white border-b border-sky-100">
+              <CardTitle className="text-sky-900">Importar Dados de Fornecedores</CardTitle>
+              <CardDescription className="text-sky-700">
                 Busque informações de fornecedores pelo CNPJ e registre pagamentos para análise posterior.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-3">
-                  <Label htmlFor="cnpj">CNPJ do Fornecedor</Label>
-                  <Input
-                    id="cnpj"
-                    placeholder="00.000.000/0000-00"
-                    value={cnpjInput}
-                    onChange={(e) => setCnpjInput(e.target.value)}
-                  />
+                  <Label htmlFor="cnpj" className="text-sky-800">CNPJ do Fornecedor</Label>
+                  <div className="relative mt-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <Input
+                      id="cnpj"
+                      placeholder="00.000.000/0000-00"
+                      value={cnpjInput}
+                      onChange={(e) => setCnpjInput(e.target.value)}
+                      className="pl-10 border-sky-200 focus:border-sky-400 focus:ring-sky-300"
+                    />
+                  </div>
                 </div>
                 <div className="flex items-end">
                   <Button 
                     onClick={handleLookupCNPJ} 
                     disabled={isLoading}
-                    className="w-full"
+                    className="w-full bg-sky-600 hover:bg-sky-700 text-white"
                   >
                     {isLoading ? "Buscando..." : "Buscar CNPJ"}
                   </Button>
@@ -232,92 +253,104 @@ const AuditTax = () => {
               </div>
               
               {supplierDetails && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-medium mb-2">Dados do Fornecedor</h3>
-                  <div className="bg-muted p-4 rounded-md">
+                <div className="mt-6 animate-fade-in">
+                  <h3 className="text-lg font-medium text-sky-900 mb-2 flex items-center">
+                    <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+                    Dados do Fornecedor
+                  </h3>
+                  <div className="bg-gradient-to-r from-blue-50 to-sky-50 p-4 rounded-md shadow-inner border border-sky-100">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm font-medium">Nome:</p>
-                        <p className="text-sm">{supplierDetails.name}</p>
+                      <div className="p-3 bg-white bg-opacity-70 rounded-md shadow-sm">
+                        <p className="text-sm font-medium text-sky-900">Nome:</p>
+                        <p className="text-base">{supplierDetails.name}</p>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">CNPJ:</p>
-                        <p className="text-sm">{formatCNPJ(supplierDetails.cnpj)}</p>
+                      <div className="p-3 bg-white bg-opacity-70 rounded-md shadow-sm">
+                        <p className="text-sm font-medium text-sky-900">CNPJ:</p>
+                        <p className="text-base">{formatCNPJ(supplierDetails.cnpj)}</p>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">Nome Fantasia:</p>
-                        <p className="text-sm">{supplierDetails.tradeName || 'Não informado'}</p>
+                      <div className="p-3 bg-white bg-opacity-70 rounded-md shadow-sm">
+                        <p className="text-sm font-medium text-sky-900">Nome Fantasia:</p>
+                        <p className="text-base">{supplierDetails.tradeName || 'Não informado'}</p>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">Atividade Principal:</p>
-                        <p className="text-sm">{supplierDetails.activityDescription || 'Não informado'}</p>
+                      <div className="p-3 bg-white bg-opacity-70 rounded-md shadow-sm">
+                        <p className="text-sm font-medium text-sky-900">Atividade Principal:</p>
+                        <p className="text-base">{supplierDetails.activityDescription || 'Não informado'}</p>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">Código da Atividade:</p>
-                        <p className="text-sm">{supplierDetails.activityCode || 'Não informado'}</p>
+                      <div className="p-3 bg-white bg-opacity-70 rounded-md shadow-sm">
+                        <p className="text-sm font-medium text-sky-900">Código da Atividade:</p>
+                        <p className="text-base">{supplierDetails.activityCode || 'Não informado'}</p>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">Regime Tributário:</p>
-                        <p className="text-sm">{supplierDetails.taxRegime || 'Não informado'}</p>
+                      <div className="p-3 bg-white bg-opacity-70 rounded-md shadow-sm">
+                        <p className="text-sm font-medium text-sky-900">Regime Tributário:</p>
+                        <p className="text-base">{supplierDetails.taxRegime || 'Não informado'}</p>
                       </div>
                     </div>
                   </div>
                   
-                  <Separator className="my-6" />
+                  <Separator className="my-6 bg-sky-100" />
                   
-                  <h3 className="text-lg font-medium mb-4">Registrar Pagamento</h3>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <h3 className="text-lg font-medium text-sky-900 mb-4 flex items-center">
+                    <FileSpreadsheet className="mr-2 h-5 w-5 text-sky-600" />
+                    Registrar Pagamento
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4 p-4 bg-gradient-to-r from-white to-sky-50 rounded-lg border border-sky-100">
                       <div>
-                        <Label htmlFor="invoiceNumber">Número da Nota Fiscal</Label>
+                        <Label htmlFor="invoiceNumber" className="text-sky-800">Número da Nota Fiscal</Label>
                         <Input
                           id="invoiceNumber"
                           placeholder="NF-123456"
                           value={invoiceNumber}
                           onChange={(e) => setInvoiceNumber(e.target.value)}
+                          className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 mt-1"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="paymentAmount">Valor do Pagamento (R$)</Label>
+                        <Label htmlFor="paymentAmount" className="text-sky-800">Valor do Pagamento (R$)</Label>
                         <Input
                           id="paymentAmount"
                           type="number"
                           placeholder="0,00"
                           value={paymentAmount}
                           onChange={(e) => setPaymentAmount(e.target.value)}
+                          className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 mt-1"
                         />
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-4 p-4 bg-gradient-to-r from-sky-50 to-white rounded-lg border border-sky-100">
                       <div>
-                        <Label htmlFor="paymentDate">Data do Pagamento</Label>
+                        <Label htmlFor="paymentDate" className="text-sky-800">Data do Pagamento</Label>
                         <Input
                           id="paymentDate"
                           type="date"
                           value={paymentDate}
                           onChange={(e) => setPaymentDate(e.target.value)}
+                          className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 mt-1"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="taxWithheld">Valor Retido (R$)</Label>
+                        <Label htmlFor="taxWithheld" className="text-sky-800">Valor Retido (R$)</Label>
                         <Input
                           id="taxWithheld"
                           type="number"
                           placeholder="0,00"
                           value={taxWithheld}
                           onChange={(e) => setTaxWithheld(e.target.value)}
+                          className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 mt-1"
                         />
                       </div>
                     </div>
                     
-                    <div>
-                      <Label htmlFor="paymentDescription">Descrição</Label>
+                    <div className="md:col-span-2">
+                      <Label htmlFor="paymentDescription" className="text-sky-800">Descrição</Label>
                       <Input
                         id="paymentDescription"
                         placeholder="Descrição do pagamento"
                         value={paymentDescription}
                         onChange={(e) => setPaymentDescription(e.target.value)}
+                        className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 mt-1"
                       />
                     </div>
                   </div>
@@ -326,64 +359,89 @@ const AuditTax = () => {
             </CardContent>
             
             {supplierDetails && (
-              <CardFooter>
-                <Button onClick={handleAddPayment}>Registrar Pagamento</Button>
+              <CardFooter className="bg-gradient-to-r from-white to-sky-50 border-t border-sky-100 flex justify-end">
+                <Button 
+                  onClick={handleAddPayment}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  Registrar Pagamento
+                </Button>
               </CardFooter>
             )}
           </Card>
         </TabsContent>
         
         <TabsContent value="payments">
-          <Card>
-            <CardHeader>
-              <CardTitle>Pagamentos Registrados</CardTitle>
-              <CardDescription>
+          <Card className="border-sky-100 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-sky-50 to-white border-b border-sky-100">
+              <CardTitle className="text-sky-900">Pagamentos Registrados</CardTitle>
+              <CardDescription className="text-sky-700">
                 Visualize todos os pagamentos registrados e selecione pagamentos para auditoria.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               {payments.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Fornecedor</TableHead>
-                      <TableHead>Nota Fiscal</TableHead>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Valor</TableHead>
-                      <TableHead>Valor Retido</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {payments.map((payment) => {
-                      const supplier = suppliers.find(s => s.id === payment.supplierId);
-                      return (
-                        <TableRow key={payment.id}>
-                          <TableCell>{supplier?.name || 'Desconhecido'}</TableCell>
-                          <TableCell>{payment.invoiceNumber || 'N/A'}</TableCell>
-                          <TableCell>{formatDate(payment.date)}</TableCell>
-                          <TableCell>{formatCurrency(payment.amount)}</TableCell>
-                          <TableCell>{formatCurrency(payment.taxWithheld || 0)}</TableCell>
-                          <TableCell>{payment.hasAudit ? 'Auditado' : 'Pendente'}</TableCell>
-                          <TableCell>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleAuditPayment(payment.id)}
-                              disabled={payment.hasAudit}
-                            >
-                              {payment.hasAudit ? 'Auditado' : 'Auditar'}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                <div className="rounded-lg overflow-hidden border border-sky-100">
+                  <Table>
+                    <TableHeader className="bg-sky-100">
+                      <TableRow>
+                        <TableHead className="text-sky-900">Fornecedor</TableHead>
+                        <TableHead className="text-sky-900">Nota Fiscal</TableHead>
+                        <TableHead className="text-sky-900">Data</TableHead>
+                        <TableHead className="text-sky-900">Valor</TableHead>
+                        <TableHead className="text-sky-900">Valor Retido</TableHead>
+                        <TableHead className="text-sky-900">Status</TableHead>
+                        <TableHead className="text-sky-900">Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {payments.map((payment, index) => {
+                        const supplier = suppliers.find(s => s.id === payment.supplierId);
+                        const isEven = index % 2 === 0;
+                        
+                        return (
+                          <TableRow key={payment.id} className={isEven ? "bg-white" : "bg-sky-50"}>
+                            <TableCell className="font-medium">{supplier?.name || 'Desconhecido'}</TableCell>
+                            <TableCell>{payment.invoiceNumber || 'N/A'}</TableCell>
+                            <TableCell>{formatDate(payment.date)}</TableCell>
+                            <TableCell>{formatCurrency(payment.amount)}</TableCell>
+                            <TableCell>{formatCurrency(payment.taxWithheld || 0)}</TableCell>
+                            <TableCell>
+                              {payment.hasAudit ? (
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                  <CheckCircle className="mr-1 h-3 w-3" /> Auditado
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                  <AlertTriangle className="mr-1 h-3 w-3" /> Pendente
+                                </span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Button 
+                                variant={payment.hasAudit ? "outline" : "default"} 
+                                size="sm"
+                                onClick={() => handleAuditPayment(payment.id)}
+                                disabled={payment.hasAudit}
+                                className={payment.hasAudit ? 
+                                  "border-green-200 text-green-700" : 
+                                  "bg-sky-600 hover:bg-sky-700 text-white"
+                                }
+                              >
+                                {payment.hasAudit ? 'Auditado' : 'Auditar'}
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-muted-foreground">Nenhum pagamento registrado.</p>
+                <div className="text-center py-16 bg-sky-50/50 rounded-lg border border-dashed border-sky-200">
+                  <FileSpreadsheet className="mx-auto h-12 w-12 text-sky-300" />
+                  <p className="mt-4 text-sky-800 font-medium">Nenhum pagamento registrado.</p>
+                  <p className="text-sky-600">Registre pagamentos na aba "Importar Dados".</p>
                 </div>
               )}
             </CardContent>
@@ -391,93 +449,122 @@ const AuditTax = () => {
         </TabsContent>
         
         <TabsContent value="audit">
-          <Card>
-            <CardHeader>
-              <CardTitle>Resultados da Auditoria</CardTitle>
-              <CardDescription>
+          <Card className="border-sky-100 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-sky-50 to-white border-b border-sky-100">
+              <CardTitle className="text-sky-900">Resultados da Auditoria</CardTitle>
+              <CardDescription className="text-sky-700">
                 Visualize os resultados da auditoria fiscal e tributária.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               {auditReports.length > 0 ? (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Total Auditado</CardTitle>
+                    <Card className="border-green-100 bg-gradient-to-br from-white to-green-50">
+                      <CardHeader className="pb-2 border-b border-green-100">
+                        <CardTitle className="text-sm font-medium text-green-800">Total Auditado</CardTitle>
                       </CardHeader>
-                      <CardContent>
-                        <p className="text-2xl font-bold">
+                      <CardContent className="pt-4">
+                        <p className="text-2xl font-bold text-green-700">
                           {auditReports.length}
                         </p>
+                        <p className="text-xs text-green-600 mt-1">Pagamentos analisados</p>
                       </CardContent>
                     </Card>
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Pagamentos Corretos</CardTitle>
+                    <Card className="border-green-100 bg-gradient-to-br from-white to-green-50">
+                      <CardHeader className="pb-2 border-b border-green-100">
+                        <CardTitle className="text-sm font-medium text-green-800">Pagamentos Corretos</CardTitle>
                       </CardHeader>
-                      <CardContent>
-                        <p className="text-2xl font-bold text-green-500">
+                      <CardContent className="pt-4">
+                        <p className="text-2xl font-bold text-green-700">
                           {auditReports.filter(ar => ar.status === 'correct').length}
                         </p>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                          <div 
+                            className="bg-green-600 h-1.5 rounded-full" 
+                            style={{width: `${(auditReports.filter(ar => ar.status === 'correct').length / auditReports.length) * 100}%`}}
+                          ></div>
+                        </div>
                       </CardContent>
                     </Card>
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Com Discrepâncias</CardTitle>
+                    <Card className="border-amber-100 bg-gradient-to-br from-white to-amber-50">
+                      <CardHeader className="pb-2 border-b border-amber-100">
+                        <CardTitle className="text-sm font-medium text-amber-800">Com Discrepâncias</CardTitle>
                       </CardHeader>
-                      <CardContent>
-                        <p className="text-2xl font-bold text-red-500">
+                      <CardContent className="pt-4">
+                        <p className="text-2xl font-bold text-amber-600">
                           {auditReports.filter(ar => ar.status === 'discrepancy').length}
                         </p>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                          <div 
+                            className="bg-amber-500 h-1.5 rounded-full" 
+                            style={{width: `${(auditReports.filter(ar => ar.status === 'discrepancy').length / auditReports.length) * 100}%`}}
+                          ></div>
+                        </div>
                       </CardContent>
                     </Card>
                   </div>
                   
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Fornecedor</TableHead>
-                        <TableHead>Valor Original</TableHead>
-                        <TableHead>Retenção Aplicada</TableHead>
-                        <TableHead>Retenção Calculada</TableHead>
-                        <TableHead>Diferença</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {auditReports.map((report) => {
-                        const supplier = suppliers.find(s => s.id === report.supplierId);
-                        return (
-                          <TableRow key={report.id}>
-                            <TableCell>{supplier?.name || 'Desconhecido'}</TableCell>
-                            <TableCell>{formatCurrency(report.originalAmount)}</TableCell>
-                            <TableCell>{formatCurrency(report.actualTaxAmount)}</TableCell>
-                            <TableCell>{formatCurrency(report.calculatedTaxAmount)}</TableCell>
-                            <TableCell className={report.difference > 0 ? 'text-red-500' : report.difference < 0 ? 'text-amber-500' : 'text-green-500'}>
-                              {formatCurrency(Math.abs(report.difference))}
-                              {report.difference > 0 ? ' (a menos)' : report.difference < 0 ? ' (a mais)' : ''}
-                            </TableCell>
-                            <TableCell>
-                              {report.status === 'correct' ? (
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                  Correto
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                  Discrepância
-                                </span>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
+                  <div className="rounded-lg overflow-hidden border border-sky-100">
+                    <Table>
+                      <TableHeader className="bg-sky-100">
+                        <TableRow>
+                          <TableHead className="text-sky-900">Fornecedor</TableHead>
+                          <TableHead className="text-sky-900">Valor Original</TableHead>
+                          <TableHead className="text-sky-900">Retenção Aplicada</TableHead>
+                          <TableHead className="text-sky-900">Retenção Calculada</TableHead>
+                          <TableHead className="text-sky-900">Diferença</TableHead>
+                          <TableHead className="text-sky-900">Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {auditReports.map((report, index) => {
+                          const supplier = suppliers.find(s => s.id === report.supplierId);
+                          const isEven = index % 2 === 0;
+                          
+                          return (
+                            <TableRow key={report.id} className={isEven ? "bg-white" : "bg-sky-50"}>
+                              <TableCell className="font-medium">{supplier?.name || 'Desconhecido'}</TableCell>
+                              <TableCell>{formatCurrency(report.originalAmount)}</TableCell>
+                              <TableCell>{formatCurrency(report.actualTaxAmount)}</TableCell>
+                              <TableCell>{formatCurrency(report.calculatedTaxAmount)}</TableCell>
+                              <TableCell className={
+                                report.difference > 0 
+                                  ? 'text-red-600 font-medium' 
+                                  : report.difference < 0 
+                                    ? 'text-amber-600 font-medium' 
+                                    : 'text-green-600 font-medium'
+                              }>
+                                {formatCurrency(Math.abs(report.difference))}
+                                {report.difference > 0 
+                                  ? ' (a menos)' 
+                                  : report.difference < 0 
+                                    ? ' (a mais)' 
+                                    : ''}
+                              </TableCell>
+                              <TableCell>
+                                {report.status === 'correct' ? (
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <CheckCircle className="mr-1 h-3 w-3" /> Correto
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    <AlertTriangle className="mr-1 h-3 w-3" /> Discrepância
+                                  </span>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-muted-foreground">Nenhuma auditoria realizada.</p>
+                <div className="text-center py-16 bg-sky-50/50 rounded-lg border border-dashed border-sky-200">
+                  <AlertTriangle className="mx-auto h-12 w-12 text-sky-300" />
+                  <p className="mt-4 text-sky-800 font-medium">Nenhuma auditoria realizada.</p>
+                  <p className="text-sky-600">Audite pagamentos na aba "Pagamentos".</p>
                 </div>
               )}
             </CardContent>
