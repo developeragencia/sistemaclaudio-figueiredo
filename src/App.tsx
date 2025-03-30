@@ -23,6 +23,11 @@ import SecuritySettings from "./pages/SecuritySettings";
 import SuppliersManagement from "./pages/SuppliersManagement";
 import PaymentsManagement from "./pages/PaymentsManagement";
 import { TwoFactorAuth } from "./components/auth/TwoFactorAuth";
+// Import the new operational pages
+import OperationalImport from "./pages/operational/OperationalImport";
+import OperationalDashboard from "./pages/operational/OperationalDashboard";
+import OperationalAudits from "./pages/operational/OperationalAudits";
+import OperationalReceipts from "./pages/operational/OperationalReceipts";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -126,6 +131,39 @@ const App = () => {
                 <ProtectedRoute>
                   <Layout>
                     <PaymentsManagement />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Operational Section - New Routes */}
+              <Route path="/operational-import" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <OperationalImport />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/operational-dashboard" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <OperationalDashboard />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/operational-audits" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <OperationalAudits />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/operational-receipts" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <OperationalReceipts />
                   </Layout>
                 </ProtectedRoute>
               } />

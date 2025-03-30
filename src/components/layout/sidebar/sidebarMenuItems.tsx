@@ -10,7 +10,11 @@ import {
   Globe,
   LifeBuoy,
   Cog,
-  ShieldCheck
+  ShieldCheck,
+  Database,
+  BarChart4,
+  Clipboard,
+  FileCheck
 } from 'lucide-react';
 import { MenuItemType } from './types';
 
@@ -71,6 +75,18 @@ export const getSidebarItems = (): MenuItemType[] => {
       ]
     },
     { 
+      icon: <Database />, 
+      label: "Operacional", 
+      to: "#",
+      badge: "New",
+      submenu: [
+        { label: "Importação de Dados", to: "/operational-import", badge: "New" },
+        { label: "Painel Operacional", to: "/operational-dashboard" },
+        { label: "Auditorias Operacionais", to: "/operational-audits" },
+        { label: "Comprovantes Operacionais", to: "/operational-receipts" },
+      ]
+    },
+    { 
       icon: <Globe />, 
       label: "Sistema", 
       to: "#",
@@ -99,7 +115,7 @@ export const getGroupedSidebarItems = () => {
   const sidebarItems = getSidebarItems();
   return {
     mainItems: sidebarItems.slice(0, 2),
-    moduleItems: sidebarItems.slice(2, 7),
-    systemItems: sidebarItems.slice(7)
+    moduleItems: sidebarItems.slice(2, 8),
+    systemItems: sidebarItems.slice(8)
   };
 };
