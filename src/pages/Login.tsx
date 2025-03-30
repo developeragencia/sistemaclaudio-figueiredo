@@ -4,7 +4,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { motion } from 'framer-motion';
 import { UserRole } from '@/types';
 import LoginHeader from '@/components/auth/LoginHeader';
 import LoginForm from '@/components/auth/LoginForm';
@@ -64,123 +63,51 @@ function Login() {
     }
   };
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { type: "spring", stiffness: 300, damping: 24 } 
-    }
-  };
-
-  // Sparkle effects coordinates
-  const sparkles = [
-    { top: '10%', left: '5%', delay: 0 },
-    { top: '15%', right: '10%', delay: 0.5 },
-    { top: '50%', left: '15%', delay: 1 },
-    { top: '70%', right: '8%', delay: 1.5 },
-    { top: '80%', left: '8%', delay: 2 },
-  ];
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-white to-blue-50 p-4 overflow-hidden relative">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full">
-          {/* Decorative circles and shapes */}
-          <div className="absolute top-24 left-10 w-32 h-32 rounded-full border border-sky-100"></div>
-          <div className="absolute top-1/3 right-1/4 w-48 h-48 rounded-full border border-sky-100"></div>
-          <div className="absolute bottom-1/4 left-1/2 w-24 h-24 rounded-full border border-sky-200"></div>
-          <div className="absolute top-1/2 left-1/3 w-16 h-16 rounded-full bg-sky-50/30"></div>
-          <div className="absolute bottom-32 right-20 w-20 h-20 rounded-full bg-sky-50/20"></div>
-        </div>
-      </div>
-      
-      {/* Animated sparkles */}
-      {sparkles.map((sparkle, index) => (
-        <motion.div
-          key={index}
-          className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-70"
-          style={{ top: sparkle.top, left: sparkle.left, right: sparkle.right }}
-          animate={{ 
-            scale: [1, 1.5, 1],
-            opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 3, 
-            delay: sparkle.delay,
-            ease: "easeInOut"
-          }}
-        />
-      ))}
-
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-lg w-full"
-      >
-        <motion.div variants={itemVariants}>
-          <LoginHeader />
-        </motion.div>
+    <div className="min-h-screen flex items-center justify-center bg-sky-50 p-4">
+      <div className="max-w-lg w-full">
+        <LoginHeader />
         
-        <motion.div variants={itemVariants}>
-          <Card className="shadow-xl border-sky-100 overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-sky-50 to-blue-50 space-y-1 border-b border-sky-100">
-              <CardTitle className="text-sky-800 text-2xl text-center font-bold">Acesso ao Sistema</CardTitle>
-            </CardHeader>
-            
-            <CardContent className="pt-6">
-              <LoginForm onSubmit={handleLogin} />
-            </CardContent>
-            
-            <CardFooter className="flex flex-col space-y-4 bg-gradient-to-r from-white to-sky-50/30">
-              <LoginFooter />
-            </CardFooter>
-          </Card>
-        </motion.div>
+        <Card className="shadow-md border-sky-100">
+          <CardHeader className="bg-white space-y-1 border-b border-sky-100">
+            <CardTitle className="text-sky-800 text-2xl text-center font-bold">Acesso ao Sistema</CardTitle>
+          </CardHeader>
+          
+          <CardContent className="pt-6">
+            <LoginForm onSubmit={handleLogin} />
+          </CardContent>
+          
+          <CardFooter className="flex flex-col space-y-4 bg-white">
+            <LoginFooter />
+          </CardFooter>
+        </Card>
         
-        {/* Return to Home button moved below the card */}
-        <motion.div variants={itemVariants} className="mt-6 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <Link to="/">
             <Button 
               variant="outline" 
-              className="text-sky-600 border-sky-200 hover:bg-sky-50 hover:text-sky-700 flex items-center gap-2 group"
+              className="text-sky-600 border-sky-200 hover:bg-sky-50 hover:text-sky-700 flex items-center gap-2"
             >
               <ArrowLeft size={16} />
               Voltar para Home
             </Button>
           </Link>
-        </motion.div>
+        </div>
         
-        {/* Developer attribution */}
-        <motion.div variants={itemVariants} className="text-center mt-6 text-sm text-gray-500">
+        <div className="text-center mt-6 text-sm text-gray-500">
           <p>
             Desenvolvido por{" "}
             <a 
               href="https://alexdesenvolvedor.com.br" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sky-600 hover:text-sky-800 font-medium transition-colors duration-300 relative inline-block animated-link"
+              className="text-sky-600 hover:text-sky-800 font-medium"
             >
               Alex Developer
             </a>
           </p>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 }

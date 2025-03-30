@@ -1,13 +1,10 @@
 
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { UserRole } from '@/types';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { Link } from 'react-router-dom';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -91,7 +88,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                 <Input
                   {...field}
                   type="email"
-                  className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 transition-colors"
+                  className="border-sky-200 focus:border-sky-400"
                   placeholder="seu-email@exemplo.com"
                   autoComplete="email"
                   disabled={isSubmitting}
@@ -121,7 +118,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                 <Input
                   {...field}
                   type="password"
-                  className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 transition-colors"
+                  className="border-sky-200 focus:border-sky-400"
                   placeholder="Sua senha"
                   autoComplete="current-password"
                   disabled={isSubmitting}
@@ -151,7 +148,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                     id="remember"
                     checked={field.value}
                     onChange={(e) => field.onChange(e.target.checked)}
-                    className="rounded border-sky-300 text-sky-600 focus:ring-sky-500"
+                    className="rounded border-sky-300 text-sky-600"
                   />
                   <Label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">
                     Lembrar-me
@@ -163,21 +160,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           
           <Link 
             to="/reset-password" 
-            className="text-sm font-medium text-sky-600 hover:text-sky-800 hover:underline transition-colors"
+            className="text-sm font-medium text-sky-600 hover:text-sky-800"
           >
             Esqueceu a senha?
           </Link>
         </div>
         
         {error && (
-          <div className="bg-red-50 text-red-700 p-3 rounded-md flex items-center gap-2 animate-fade-in">
+          <div className="bg-red-50 text-red-700 p-3 rounded-md flex items-center gap-2">
             <AlertTriangle className="h-4 w-4" />
             <p className="text-sm">{error}</p>
           </div>
         )}
         
         {form.formState.isValid && form.formState.isDirty && !error && (
-          <div className="bg-green-50 text-green-700 p-3 rounded-md flex items-center gap-2 animate-fade-in">
+          <div className="bg-green-50 text-green-700 p-3 rounded-md flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4" />
             <p className="text-sm">Dados válidos! Pronto para entrar.</p>
           </div>
@@ -185,17 +182,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       
         <Button 
           type="submit" 
-          className="w-full bg-sky-600 hover:bg-sky-700 transition-colors shadow" 
+          className="w-full bg-sky-600 hover:bg-sky-700" 
           disabled={isSubmitting || (!form.formState.isValid && form.formState.isDirty)}
         >
-          {isSubmitting ? (
-            <>
-              <span className="animate-pulse mr-2">●</span>
-              Entrando...
-            </>
-          ) : (
-            "Entrar"
-          )}
+          {isSubmitting ? "Entrando..." : "Entrar"}
         </Button>
       </form>
     </Form>
