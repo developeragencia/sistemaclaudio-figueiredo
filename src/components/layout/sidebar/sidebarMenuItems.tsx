@@ -12,7 +12,6 @@ import {
   Cog,
   ShieldCheck,
   Database,
-  BarChart4,
   Clipboard,
   FileCheck,
   Import,
@@ -90,7 +89,6 @@ export const getSidebarItems = (): MenuItemType[] => {
         { label: "Propostas Comerciais", to: "/commercial-proposals", badge: "5" },
         { label: "Compensação Tributária", to: "/tax-compensation" },
         { label: "Gestão de Auditorias", to: "/audit-management" },
-        { label: "Importação de Dados", to: "/operational-import" },
       ]
     },
     { 

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -26,6 +27,8 @@ import OperationalImport from "./pages/operational/OperationalImport";
 import OperationalDashboard from "./pages/operational/OperationalDashboard";
 import OperationalAudits from "./pages/operational/OperationalAudits";
 import OperationalReceipts from "./pages/operational/OperationalReceipts";
+import TaxCredits from "./pages/TaxCredits";
+import AdvancedCalculator from "./pages/AdvancedCalculator";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -157,17 +160,24 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              <Route path="/clients-management" element={
+              {/* New routes */}
+              <Route path="/tax-credits" element={
                 <ProtectedRoute>
                   <Layout>
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">Gestão de Clientes</h1>
-                      <p className="text-gray-500">Página em desenvolvimento</p>
-                    </div>
+                    <TaxCredits />
                   </Layout>
                 </ProtectedRoute>
               } />
               
+              <Route path="/advanced-calculator" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <AdvancedCalculator />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Placeholder routes */}
               <Route path="/irrf-calculations" element={
                 <ProtectedRoute>
                   <Layout>
@@ -238,7 +248,7 @@ const App = () => {
                 <ProtectedRoute>
                   <Layout>
                     <div className="p-6">
-                      <h1 className="text-2xl font-bold">Dashboard Interativo</h1>
+                      <h1 className="text-2xl font-bold">Painel Interativo</h1>
                       <p className="text-gray-500">Página em desenvolvimento</p>
                     </div>
                   </Layout>
@@ -272,39 +282,6 @@ const App = () => {
                   <Layout>
                     <div className="p-6">
                       <h1 className="text-2xl font-bold">Gestão de Auditorias</h1>
-                      <p className="text-gray-500">Página em desenvolvimento</p>
-                    </div>
-                  </Layout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/security-audit" element={
-                <ProtectedRoute>
-                  <Layout>
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">Segurança & Auditoria</h1>
-                      <p className="text-gray-500">Página em desenvolvimento</p>
-                    </div>
-                  </Layout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/operational" element={
-                <ProtectedRoute>
-                  <Layout>
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">Operacional</h1>
-                      <p className="text-gray-500">Página em desenvolvimento</p>
-                    </div>
-                  </Layout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/site-content" element={
-                <ProtectedRoute>
-                  <Layout>
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">Site e Conteúdo</h1>
                       <p className="text-gray-500">Página em desenvolvimento</p>
                     </div>
                   </Layout>
