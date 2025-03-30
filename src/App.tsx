@@ -1,4 +1,5 @@
 
+import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,7 +11,6 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import AuditTax from "./pages/AuditTax";
 import Login from "./pages/Login";
-import { useState } from "react";
 import Favicon from "./components/ui/Favicon";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
