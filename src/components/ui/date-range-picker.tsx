@@ -14,6 +14,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+// Re-export the DateRange type from react-day-picker
+export type { DateRange } from "react-day-picker";
+
 interface DateRangePickerProps {
   date: DateRange | undefined;
   setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
@@ -61,6 +64,7 @@ export function DateRangePicker({
             onSelect={setDate}
             numberOfMonths={2}
             locale={pt}
+            className="pointer-events-auto"
           />
         </PopoverContent>
       </Popover>

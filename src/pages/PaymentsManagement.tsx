@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Plus, Receipt, FileBarChart } from 'lucide-react';
-import { DateRange } from '@/components/ui/date-range-picker';
+import { DateRangePicker, DateRange } from '@/components/ui/date-range-picker';
 import { addDays, format, subMonths } from 'date-fns';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,17 +14,13 @@ import { Payment } from '@/types';
 
 export default function PaymentsManagement() {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [dateRange, setDateRange] = useState<{
-    from: Date;
-    to: Date;
-  }>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: subMonths(new Date(), 3),
     to: new Date(),
   });
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [filterSupplier, setFilterSupplier] = useState<string>('all');
   
-  // Mock data for demo purposes
   const mockPayments: Payment[] = [
     {
       id: '1',
@@ -71,7 +66,6 @@ export default function PaymentsManagement() {
     },
   ];
   
-  // Filter payments based on search, date range and supplier
   const filteredPayments = mockPayments.filter(payment => {
     const matchesSearch = payment.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         payment.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -83,7 +77,6 @@ export default function PaymentsManagement() {
     return matchesSearch && matchesDateRange && matchesSupplier;
   });
   
-  // Calculate total stats
   const totalAmount = filteredPayments.reduce((sum, payment) => sum + payment.amount, 0);
   const totalTaxWithheld = filteredPayments.reduce((sum, payment) => sum + (payment.taxWithheld || 0), 0);
   
@@ -130,9 +123,9 @@ export default function PaymentsManagement() {
                   />
                 </div>
                 
-                <DateRange 
-                  date={dateRange} 
-                  onDateChange={setDateRange}
+                <DateRangePicker 
+                  date={dateRange}
+                  setDate={setDateRange}
                 />
                 
                 <Select value={filterSupplier} onValueChange={setFilterSupplier}>
