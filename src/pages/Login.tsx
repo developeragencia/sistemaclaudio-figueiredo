@@ -160,12 +160,7 @@ function Login() {
               variant="outline" 
               className="text-sky-600 border-sky-200 hover:bg-sky-50 hover:text-sky-700 flex items-center gap-2 group"
             >
-              <motion.span 
-                animate={{ x: [0, -3, 0] }} 
-                transition={{ repeat: Infinity, duration: 2 }}
-              >
-                <ArrowLeft size={16} />
-              </motion.span>
+              <ArrowLeft size={16} />
               Voltar para Home
             </Button>
           </Link>

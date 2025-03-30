@@ -3,7 +3,7 @@ import React, { useState, FormEvent, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, CheckCircle2, Lock, Mail } from 'lucide-react';
+import { AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { UserRole } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -84,8 +84,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-2 text-sky-800 font-medium">
-                <Mail className="h-4 w-4" />
+              <FormLabel className="text-sky-800 font-medium">
                 Email
               </FormLabel>
               <FormControl>
@@ -115,8 +114,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-2 text-sky-800 font-medium">
-                <Lock className="h-4 w-4" />
+              <FormLabel className="text-sky-800 font-medium">
                 Senha
               </FormLabel>
               <FormControl>
