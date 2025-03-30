@@ -3,35 +3,48 @@ import React, { useState, FormEvent } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, Lock, Mail } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Lock, Mail } from 'lucide-react';
 import { UserRole } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
 }
 
+// Create a schema for form validation
+const formSchema = z.object({
+  email: z.string().email("Por favor, insira um email válido.").min(1, "Email é obrigatório."),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres."),
+  rememberMe: z.boolean().default(true)
+});
+
+type FormData = z.infer<typeof formSchema>;
+
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
-  const [email, setEmail] = useState<string>('admin@claudiofigueiredo.com');
-  const [password, setPassword] = useState<string>('password');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [rememberMe, setRememberMe] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    
-    if (!email || !password) {
-      setError('Por favor, preencha todos os campos.');
-      return;
+  // Initialize form with react-hook-form and zod validation
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: 'admin@claudiofigueiredo.com',
+      password: 'password',
+      rememberMe: true
     }
-    
+  });
+  
+  const handleFormSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
       setError(null);
-      await onSubmit(email, password);
+      await onSubmit(data.email, data.password);
     } catch (err) {
       console.error('Login error:', err);
       setError('Erro ao realizar login. Por favor, tente novamente.');
@@ -41,79 +54,128 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email" className="flex items-center gap-1">
-            <Mail className="h-4 w-4" />
-            Email
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="seu-email@exemplo.com"
-            autoComplete="email"
-            disabled={isSubmitting}
-            required
-          />
-        </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-5">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center gap-2 text-sky-800 font-medium">
+                <Mail className="h-4 w-4" />
+                Email
+              </FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="email"
+                  className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 transition-colors"
+                  placeholder="seu-email@exemplo.com"
+                  autoComplete="email"
+                  disabled={isSubmitting}
+                  aria-invalid={!!form.formState.errors.email}
+                />
+              </FormControl>
+              <FormMessage className="text-sm text-destructive flex items-center gap-1">
+                {form.formState.errors.email && (
+                  <>
+                    <AlertTriangle className="h-3 w-3" />
+                    {form.formState.errors.email.message}
+                  </>
+                )}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
         
-        <div className="space-y-2">
-          <Label htmlFor="password" className="flex items-center gap-1">
-            <Lock className="h-4 w-4" />
-            Senha
-          </Label>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Sua senha"
-            autoComplete="current-password"
-            disabled={isSubmitting}
-            required
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center gap-2 text-sky-800 font-medium">
+                <Lock className="h-4 w-4" />
+                Senha
+              </FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="password"
+                  className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 transition-colors"
+                  placeholder="Sua senha"
+                  autoComplete="current-password"
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormMessage className="text-sm text-destructive flex items-center gap-1">
+                {form.formState.errors.password && (
+                  <>
+                    <AlertTriangle className="h-3 w-3" />
+                    {form.formState.errors.password.message}
+                  </>
+                )}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
         
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="remember"
-              className="rounded border-gray-300 text-sky-600 focus:ring-sky-500"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
+            <FormField
+              control={form.control}
+              name="rememberMe"
+              render={({ field }) => (
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    checked={field.value}
+                    onChange={field.onChange}
+                    className="rounded border-sky-300 text-sky-600 focus:ring-sky-500"
+                  />
+                  <Label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">
+                    Lembrar-me
+                  </Label>
+                </div>
+              )}
             />
-            <Label htmlFor="remember" className="text-sm text-muted-foreground">
-              Lembrar-me
-            </Label>
           </div>
           
-          <a href="#" className="text-sm text-sky-600 hover:text-sky-800">
+          <a href="#" className="text-sm text-sky-600 hover:text-sky-800 hover:underline transition-colors">
             Esqueceu a senha?
           </a>
         </div>
         
         {error && (
-          <div className="bg-red-50 text-red-700 p-3 rounded-md flex items-center gap-2">
+          <div className="bg-red-50 text-red-700 p-3 rounded-md flex items-center gap-2 animate-fade-in">
             <AlertTriangle className="h-4 w-4" />
             <p className="text-sm">{error}</p>
           </div>
         )}
-      </div>
+        
+        {form.formState.isValid && form.formState.isDirty && !error && (
+          <div className="bg-green-50 text-green-700 p-3 rounded-md flex items-center gap-2 animate-fade-in">
+            <CheckCircle2 className="h-4 w-4" />
+            <p className="text-sm">Dados válidos! Pronto para entrar.</p>
+          </div>
+        )}
       
-      <div className="mt-6">
         <Button 
           type="submit" 
-          className="w-full bg-sky-600 hover:bg-sky-700" 
-          disabled={isSubmitting}
+          className="w-full bg-sky-600 hover:bg-sky-700 transition-colors shadow" 
+          disabled={isSubmitting || !form.formState.isValid}
         >
-          {isSubmitting ? "Entrando..." : "Entrar"}
+          {isSubmitting ? (
+            <>
+              <span className="animate-pulse mr-2">●</span>
+              Entrando...
+            </>
+          ) : (
+            "Entrar"
+          )}
         </Button>
-      </div>
-    </form>
+      </form>
+    </Form>
   );
 };
 
