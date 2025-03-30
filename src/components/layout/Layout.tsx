@@ -5,8 +5,6 @@ import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -45,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <AnimatePresence mode="wait">
             <motion.div 
               className={`h-full transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'w-20' : 'w-72'}`}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
@@ -57,9 +55,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Main content */}
         <motion.div 
           className="flex flex-col flex-grow overflow-hidden"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
+          transition={{ duration: 0.4 }}
         >
           <Header toggleSidebar={toggleSidebar} />
           
@@ -67,11 +65,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {mounted && (
               <motion.main 
                 className="flex-grow overflow-auto p-6 bg-white/50"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+                exit={{ opacity: 0, y: -10 }}
                 transition={{ 
-                  duration: 0.4,
+                  duration: 0.3,
                   ease: [0.25, 0.1, 0.25, 1.0]
                 }}
               >

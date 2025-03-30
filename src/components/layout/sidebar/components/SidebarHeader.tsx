@@ -10,13 +10,12 @@ interface SidebarHeaderProps {
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({ collapsed }) => {
   return (
     <motion.div
-      initial={{ opacity: collapsed ? 0 : 1, width: collapsed ? 0 : "auto" }}
-      animate={{ opacity: collapsed ? 0 : 1, width: collapsed ? 0 : "auto" }}
-      exit={{ opacity: 0, width: 0 }}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className={`flex items-center space-x-2 ${collapsed && "hidden"}`}
+      className={`flex items-center justify-center p-4 ${collapsed ? 'justify-center' : 'justify-start'}`}
     >
-      <AnimatedLogo size="small" />
+      <AnimatedLogo size={collapsed ? "small" : "medium"} showText={!collapsed} />
     </motion.div>
   );
 };
