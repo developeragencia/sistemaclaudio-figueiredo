@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -15,6 +16,8 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import SiteEditor from "./components/admin/SiteEditor";
 import ClientsManagement from "./pages/ClientsManagement";
+import DataImport from "./pages/DataImport";
+import RetentionAudit from "./pages/RetentionAudit";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -49,6 +52,24 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
+              {/* Data Import - New Page */}
+              <Route path="/import" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <DataImport />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Retention Audit - New Page */}
+              <Route path="/retention-audit" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <RetentionAudit />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
               {/* Site Editor Route */}
               <Route path="/site-editor" element={
                 <ProtectedRoute>
@@ -58,7 +79,7 @@ const App = () => {
                 </ProtectedRoute>
               } />
               
-              {/* Client Management - Added new route */}
+              {/* Client Management */}
               <Route path="/clients-management" element={
                 <ProtectedRoute>
                   <Layout>
@@ -220,17 +241,6 @@ const App = () => {
                   <Layout>
                     <div className="p-6">
                       <h1 className="text-2xl font-bold">Site e Conteúdo</h1>
-                      <p className="text-gray-500">Página em desenvolvimento</p>
-                    </div>
-                  </Layout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/import" element={
-                <ProtectedRoute>
-                  <Layout>
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">Importação</h1>
                       <p className="text-gray-500">Página em desenvolvimento</p>
                     </div>
                   </Layout>
