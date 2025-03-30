@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -19,7 +18,7 @@ import ClientsManagement from "./pages/ClientsManagement";
 import DataImport from "./pages/DataImport";
 import RetentionAudit from "./pages/RetentionAudit";
 import Reports from "./pages/Reports";
-import SecuritySettings from "./pages/SecuritySettings";
+import SecuritySettingsPage from "./pages/SecuritySettings";
 import SuppliersManagement from "./pages/SuppliersManagement";
 import PaymentsManagement from "./pages/PaymentsManagement";
 import { TwoFactorAuth } from "./components/auth/TwoFactorAuth";
@@ -34,7 +33,7 @@ import TwoFactorAuthPage from "./pages/SecurityPages/TwoFactorAuthPage";
 import SessionExpirationPage from "./pages/SecurityPages/SessionExpirationPage";
 import AccessProtectionPage from "./pages/SecurityPages/AccessProtectionPage";
 import AuditTrailsPage from "./pages/SecurityPages/AuditTrailsPage";
-import UsersPermissionsPage from "./pages/SecurityPages/UsersPermissionsPage";
+import UsersPermissionsPage from "./pages/UsersPermissionsPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 
 // Import new settings pages
@@ -110,7 +109,7 @@ const App = () => {
               <Route path="/security" element={
                 <ProtectedRoute>
                   <Layout>
-                    <SecuritySettings />
+                    <SecuritySettingsPage />
                   </Layout>
                 </ProtectedRoute>
               } />

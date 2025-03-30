@@ -137,14 +137,14 @@ export const getSidebarItems = (): MenuItemType[] => {
       label: "Configurações", 
       to: "#",
       submenu: [
-        { label: "Perfil", to: "/settings/profile", icon: <User className="h-4 w-4" /> },
-        { label: "Conta", to: "/settings/account", icon: <Mail className="h-4 w-4" /> },
-        { label: "Segurança", to: "/settings/security", icon: <Lock className="h-4 w-4" /> },
-        { label: "Aparência", to: "/settings/appearance", icon: <Palette className="h-4 w-4" /> },
-        { label: "Sistema", to: "/settings/system", icon: <Settings className="h-4 w-4" /> },
-        { label: "Site", to: "/settings/site", icon: <Globe className="h-4 w-4" /> },
-        { label: "Banco de Dados", to: "/settings/database", icon: <Database className="h-4 w-4" /> },
-        { label: "Layout", to: "/settings/layout", icon: <Layout className="h-4 w-4" /> },
+        { label: "Perfil", to: "/settings/profile" },
+        { label: "Conta", to: "/settings/account" },
+        { label: "Segurança", to: "/settings/security" },
+        { label: "Aparência", to: "/settings/appearance" },
+        { label: "Sistema", to: "/settings/system" },
+        { label: "Site", to: "/settings/site" },
+        { label: "Banco de Dados", to: "/settings/database" },
+        { label: "Layout", to: "/settings/layout" },
       ]
     }
   ];
