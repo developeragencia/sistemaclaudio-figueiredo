@@ -8,11 +8,13 @@ interface StatCardProps {
   title: string;
   value: number | string;
   icon: React.ReactNode;
-  trend?: {
+  trend: {
     value: number;
     isPositive: boolean;
   };
+  trendLabel?: string;
   className?: string;
+  color?: string;
   iconClassName?: string;
 }
 
@@ -21,7 +23,9 @@ const StatCard: React.FC<StatCardProps> = ({
   value,
   icon,
   trend,
+  trendLabel,
   className = "",
+  color = "blue",
   iconClassName = "bg-muted"
 }) => {
   const formattedValue = typeof value === 'number' && title.includes('R$')
@@ -62,6 +66,7 @@ const StatCard: React.FC<StatCardProps> = ({
           <div className="mt-3">
             <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
             <p className="text-2xl font-bold mt-1">{formattedValue}</p>
+            {trendLabel && <p className="text-xs text-muted-foreground mt-1">{trendLabel}</p>}
           </div>
         </CardContent>
       </Card>

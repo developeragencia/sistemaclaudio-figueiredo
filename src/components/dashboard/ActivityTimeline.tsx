@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Activity } from '../../types';
 import { cn } from '@/lib/utils';
 
 interface ActivityTimelineProps {
   activities: Activity[];
+  limit?: number;
 }
 
 const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ activities }) => {
@@ -73,8 +73,6 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ activities }) => {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-medium">Atividades Recentes</h3>
-      
       <div className="space-y-6">
         {activities.map((activity) => (
           <div key={activity.id} className="flex gap-4">

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface ClientsTableProps {
   clients: Client[];
+  limit?: number;
 }
 
 const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {

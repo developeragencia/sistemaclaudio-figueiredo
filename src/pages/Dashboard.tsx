@@ -7,6 +7,102 @@ import ModuleGrid from '@/components/dashboard/ModuleGrid';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Calculator, FileText, ShieldCheck, Lightbulb, BarChart3, Receipt, CreditCard } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Activity, Client } from '@/types';
+
+// Mock data for clients
+const mockClients: Client[] = [
+  {
+    id: "1",
+    name: "Tech Solutions Ltda",
+    cnpj: "12.345.678/0001-90",
+    status: "active",
+    email: "contato@techsolutions.com",
+    phone: "(11) 97123-4567",
+    createdAt: new Date("2023-09-01"),
+    updatedAt: new Date("2023-10-15"),
+  },
+  {
+    id: "2",
+    name: "Inovação Digital S.A.",
+    cnpj: "98.765.432/0001-21",
+    status: "active",
+    email: "contato@inovacaodigital.com",
+    phone: "(11) 98765-4321",
+    createdAt: new Date("2023-10-05"),
+    updatedAt: new Date("2023-10-20"),
+  },
+  {
+    id: "3",
+    name: "Construções ABC Ltda",
+    cnpj: "45.678.901/0001-23",
+    status: "pending",
+    email: "financeiro@construcabc.com",
+    createdAt: new Date("2023-10-12"),
+    updatedAt: new Date("2023-10-12"),
+  },
+  {
+    id: "4",
+    name: "Distribuidora XYZ",
+    cnpj: "34.567.890/0001-12",
+    status: "inactive",
+    email: "contato@distxyz.com",
+    phone: "(21) 98888-7777",
+    createdAt: new Date("2023-06-30"),
+    updatedAt: new Date("2023-09-15"),
+  },
+  {
+    id: "5",
+    name: "Serviços Rápidos Ltda",
+    cnpj: "56.789.012/0001-34",
+    status: "active",
+    email: "atendimento@servicosrapidos.com",
+    createdAt: new Date("2023-10-22"),
+    updatedAt: new Date("2023-10-22"),
+  }
+];
+
+// Mock data for activities
+const mockActivities: Activity[] = [
+  {
+    id: "1",
+    userId: "user1",
+    clientId: "1",
+    type: "create_client",
+    description: "Cliente Tech Solutions Ltda foi cadastrado",
+    createdAt: new Date("2023-10-25T14:32:00"),
+  },
+  {
+    id: "2",
+    userId: "user1",
+    type: "login",
+    description: "Usuário fez login no sistema",
+    createdAt: new Date("2023-10-25T14:30:00"),
+  },
+  {
+    id: "3",
+    userId: "user2",
+    clientId: "2",
+    type: "update_client",
+    description: "Dados do cliente Inovação Digital foram atualizados",
+    createdAt: new Date("2023-10-25T13:45:00"),
+  },
+  {
+    id: "4",
+    userId: "user1",
+    clientId: "3",
+    type: "create_proposal",
+    description: "Nova proposta criada para Construções ABC",
+    createdAt: new Date("2023-10-25T11:22:00"),
+  },
+  {
+    id: "5",
+    userId: "user3",
+    clientId: "1",
+    type: "update_proposal",
+    description: "Proposta #12345 atualizada para Tech Solutions",
+    createdAt: new Date("2023-10-24T16:08:00"),
+  }
+];
 
 const Dashboard = () => {
   const mainModules = [
@@ -74,7 +170,7 @@ const Dashboard = () => {
         <StatCard 
           title="Total de Clientes" 
           value={15} 
-          trend={+2}
+          trend={{ value: 2, isPositive: true }}
           trendLabel="desde o mês passado"
           icon={<Users className="h-5 w-5 text-blue-600" />}
           color="blue"
@@ -82,7 +178,7 @@ const Dashboard = () => {
         <StatCard 
           title="Retenções Identificadas" 
           value="R$ 42.500" 
-          trend={+12.5}
+          trend={{ value: 12.5, isPositive: true }}
           trendLabel="crescimento"
           icon={<Calculator className="h-5 w-5 text-purple-600" />}
           color="purple"
@@ -90,7 +186,7 @@ const Dashboard = () => {
         <StatCard 
           title="Auditorias Realizadas" 
           value={24} 
-          trend={+5}
+          trend={{ value: 5, isPositive: true }}
           trendLabel="este mês"
           icon={<ShieldCheck className="h-5 w-5 text-emerald-600" />}
           color="emerald"
@@ -98,7 +194,7 @@ const Dashboard = () => {
         <StatCard 
           title="Recuperação Projetada" 
           value="R$ 156.300" 
-          trend={+8.2}
+          trend={{ value: 8.2, isPositive: true }}
           trendLabel="do esperado"
           icon={<Lightbulb className="h-5 w-5 text-amber-600" />}
           color="amber"
@@ -128,7 +224,7 @@ const Dashboard = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ClientsTable limit={5} />
+            <ClientsTable clients={mockClients.slice(0, 5)} />
           </CardContent>
         </Card>
         
@@ -140,7 +236,7 @@ const Dashboard = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ActivityTimeline limit={5} />
+            <ActivityTimeline activities={mockActivities.slice(0, 5)} />
           </CardContent>
         </Card>
       </div>
