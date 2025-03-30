@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserRole } from '../types';
 
@@ -27,6 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (storedLoggedIn === 'true' && storedEmail) {
       setIsLoggedIn(true);
       setUserEmail(storedEmail);
+      setCurrentUser(storedEmail);
       
       if (storedRole) {
         setUserRole(storedRole);

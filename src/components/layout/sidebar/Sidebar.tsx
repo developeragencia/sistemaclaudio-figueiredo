@@ -173,7 +173,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
                       </AvatarFallback>
                     </Avatar>
                     <div className="space-y-0.5">
-                      <p className="text-sm font-medium leading-none text-blue-900">{currentUser?.name || 'Admin User'}</p>
+                      <p className="text-sm font-medium leading-none text-blue-900">
+                        {typeof currentUser === 'string' ? currentUser : 'Admin User'}
+                      </p>
                       <p className="text-xs text-blue-500">{userRole === 'admin' ? 'Administrador' : 'Usuário'}</p>
                     </div>
                   </div>
@@ -229,10 +231,6 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ collapsed }) => {
       )}
     >
       <AnimatedLogo size="small" />
-      <div className="space-y-0.5">
-        <span className="font-semibold text-lg tracking-tight text-blue-900">TaxSystem</span>
-        <p className="text-xs text-blue-500">Admin Dashboard</p>
-      </div>
     </motion.div>
   );
 };

@@ -5,6 +5,8 @@ import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,36 +20,53 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Handle animation mounting
   useEffect(() => {
     setMounted(true);
+    
+    // Check for saved sidebar state in localStorage
+    const savedState = localStorage.getItem('sidebarCollapsed');
+    if (savedState) {
+      setSidebarCollapsed(savedState === 'true');
+    }
+    
     return () => setMounted(false);
   }, []);
   
   const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
+    const newState = !sidebarCollapsed;
+    setSidebarCollapsed(newState);
+    // Save preference to localStorage
+    localStorage.setItem('sidebarCollapsed', String(newState));
   };
 
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
-      <div className="flex h-screen overflow-hidden">
-        {/* Sidebar */}
-        <AnimatePresence mode="wait">
-          <motion.div 
-            className={`transition-all duration-300 relative ${sidebarCollapsed ? 'w-20' : 'w-72'}`}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
-          </motion.div>
-        </AnimatePresence>
+      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-white to-blue-50/30">
+        {/* Fixed Sidebar */}
+        <div className="relative h-screen">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              className={`h-full transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'w-20' : 'w-72'}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
         
         {/* Main content */}
-        <div className="flex flex-col flex-grow overflow-hidden">
+        <motion.div 
+          className="flex flex-col flex-grow overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+        >
           <Header toggleSidebar={toggleSidebar} />
           
           <AnimatePresence mode="wait">
             {mounted && (
               <motion.main 
-                className="flex-grow overflow-auto p-6 bg-gradient-to-br from-slate-50 to-blue-50/50"
+                className="flex-grow overflow-auto p-6 bg-white/50"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -62,7 +81,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </motion.main>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
     </ClientProvider>
   );
