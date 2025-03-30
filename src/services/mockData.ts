@@ -1,53 +1,120 @@
-
-import { Client, User, Proposal, Activity, DashboardStats } from '../types';
+import { Client, User, Proposal, Activity, DashboardStats, Supplier, Payment, TaxRate, AuditReport } from '../types';
 
 // Mock Clients
-export const clients: Client[] = [
+const clients: Client[] = [
   {
     id: '1',
-    name: 'Prefeitura de São Paulo',
-    cnpj: '45.741.079/0001-50',
+    name: 'Prefeitura Municipal de São Paulo',
+    cnpj: '45.877.221/0001-01',
     status: 'active',
-    email: 'contato@prefeiturasp.gov.br',
+    email: 'contato@prefeitura.sp.gov.br',
     phone: '(11) 3333-4444',
-    address: 'Viaduto do Chá, 15, Centro, São Paulo - SP',
-    createdAt: new Date('2023-01-15'),
-    updatedAt: new Date('2023-10-10')
+    address: 'Viaduto do Chá, 15 - Centro, São Paulo - SP, 01002-020',
+    createdAt: new Date('2022-01-15'),
+    updatedAt: new Date('2023-05-20')
   },
   {
     id: '2',
     name: 'Governo do Estado de Minas Gerais',
-    cnpj: '18.715.581/0001-03',
+    cnpj: '18.715.532/0001-70',
     status: 'active',
     email: 'contato@mg.gov.br',
-    phone: '(31) 3915-9000',
-    address: 'Cidade Administrativa, Belo Horizonte - MG',
-    createdAt: new Date('2023-02-20'),
-    updatedAt: new Date('2023-09-25')
+    phone: '(31) 3222-1000',
+    address: 'Cidade Administrativa - Rod. Papa João Paulo II, 4001 - Belo Horizonte, MG',
+    createdAt: new Date('2022-03-10'),
+    updatedAt: new Date('2023-04-15')
   },
   {
     id: '3',
-    name: 'Universidade Federal do Rio de Janeiro',
-    cnpj: '33.663.683/0001-16',
+    name: 'Tribunal Regional Federal',
+    cnpj: '03.401.842/0001-39',
     status: 'pending',
-    email: 'contato@ufrj.br',
-    phone: '(21) 3938-9600',
-    address: 'Av. Pedro Calmon, 550, Cidade Universitária, Rio de Janeiro - RJ',
-    createdAt: new Date('2023-05-10'),
-    updatedAt: new Date('2023-05-10')
+    email: 'contato@trf.jus.br',
+    phone: '(61) 3022-7070',
+    address: 'SAUS Quadra 2, Lote 7 - Brasília, DF, 70070-000',
+    createdAt: new Date('2022-07-05'),
+    updatedAt: new Date('2023-06-18')
   },
   {
     id: '4',
-    name: 'Tribunal Regional Federal da 3ª Região',
-    cnpj: '59.949.362/0001-76',
+    name: 'Instituto Federal de Educação',
+    cnpj: '10.791.831/0001-20',
     status: 'inactive',
-    email: 'contato@trf3.jus.br',
-    phone: '(11) 3848-1100',
-    address: 'Av. Paulista, 1842, Torre Sul, São Paulo - SP',
-    createdAt: new Date('2022-11-05'),
-    updatedAt: new Date('2023-04-15')
+    email: 'contato@ifsp.edu.br',
+    phone: '(11) 3775-4500',
+    address: 'Rua Pedro Vicente, 625 - Canindé, São Paulo - SP, 01109-010',
+    createdAt: new Date('2022-05-20'),
+    updatedAt: new Date('2022-11-30')
+  },
+  {
+    id: '5',
+    name: 'Universidade Estadual de Campinas',
+    cnpj: '46.168.086/0001-32',
+    status: 'active',
+    email: 'contato@unicamp.br',
+    phone: '(19) 3521-2121',
+    address: 'Cidade Universitária Zeferino Vaz - Barão Geraldo, Campinas - SP, 13083-970',
+    createdAt: new Date('2023-01-10'),
+    updatedAt: new Date('2023-06-05')
   }
 ];
+
+// Get Active Client
+export const getActiveClient = async (): Promise<Client | null> => {
+  // Simulating API delay
+  await new Promise(resolve => setTimeout(resolve, 800));
+  
+  // Return the first active client for demo purpose
+  return clients.find(client => client.status === 'active') || null;
+};
+
+// Get all clients
+export const getClientsList = async (): Promise<Client[]> => {
+  // Simulating API delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  return [...clients];
+};
+
+// Default dashboard stats
+const defaultStats: DashboardStats = {
+  totalClients: 5,
+  activeClients: 3,
+  pendingProposals: 8,
+  totalCredits: 250000,
+  recentActivities: [
+    {
+      id: '1',
+      userId: 'user1',
+      type: 'create_client',
+      description: 'Novo cliente cadastrado: Prefeitura de São Paulo',
+      createdAt: new Date('2023-06-10T14:30:00')
+    },
+    {
+      id: '2',
+      userId: 'user2',
+      clientId: '1',
+      type: 'create_proposal',
+      description: 'Proposta comercial criada para Prefeitura de São Paulo',
+      createdAt: new Date('2023-06-11T09:15:00')
+    },
+    {
+      id: '3',
+      userId: 'user3',
+      type: 'import_data',
+      description: 'Importação de dados concluída para Tribunal Regional Federal',
+      createdAt: new Date('2023-06-12T16:45:00')
+    }
+  ]
+};
+
+// Get dashboard stats
+export const getDashboardStats = async (): Promise<DashboardStats> => {
+  // Simulating API delay
+  await new Promise(resolve => setTimeout(resolve, 1200));
+  
+  return defaultStats;
+};
 
 // Mock Users
 export const users: User[] = [

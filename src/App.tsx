@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -15,6 +14,7 @@ import Favicon from "./components/ui/Favicon";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import SiteEditor from "./components/admin/SiteEditor";
+import ClientsManagement from "./pages/ClientsManagement";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -54,6 +54,15 @@ const App = () => {
                 <ProtectedRoute>
                   <Layout>
                     <SiteEditor />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Client Management - Added new route */}
+              <Route path="/clients-management" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ClientsManagement />
                   </Layout>
                 </ProtectedRoute>
               } />

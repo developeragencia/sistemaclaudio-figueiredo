@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Bell, Search, Menu, X, LogOut, Sun, Moon, Settings } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -8,7 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import AnimatedLogo from '@/components/ui/AnimatedLogo';
+import ClientSwitcher from '@/components/client/ClientSwitcher';
+import { useClient } from '@/contexts/ClientContext';
 import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -17,7 +19,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { userEmail, logout } = useAuth();
+  const { userEmail, logout, userRole } = useAuth();
+  const { clients, availableClients, activeClient } = useClient();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [darkMode, setDarkMode] = useState(false);
@@ -61,8 +64,25 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         </div>
       </div>
 
+      {/* Center section - Active Client */}
+      {userEmail && (
+        <div className="hidden md:flex items-center">
+          <ClientSwitcher clients={availableClients} />
+        </div>
+      )}
+
       {/* Right section - notifications and user menu */}
       <div className="flex items-center space-x-4">
+        {/* Role Badge */}
+        {userRole && (
+          <Badge variant="outline" className="hidden md:flex">
+            {userRole === 'admin' && 'Administrador'}
+            {userRole === 'office_staff' && 'Equipe do Escritório'}
+            {userRole === 'client' && 'Cliente'}
+            {userRole === 'sales_rep' && 'Rep. Comercial'}
+          </Badge>
+        )}
+
         {/* Mobile search icon */}
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setSearchOpen(true)}>
           <Search className="h-5 w-5" />
@@ -192,6 +212,19 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Mobile client switcher */}
+      {userEmail && activeClient && (
+        <div className="md:hidden fixed bottom-4 left-0 right-0 mx-auto z-50 flex justify-center">
+          <Button 
+            variant="default" 
+            className="shadow-lg flex items-center gap-2 px-4 py-2 rounded-full bg-primary"
+            onClick={() => navigate('/clients-management')}
+          >
+            {activeClient.name}
+          </Button>
         </div>
       )}
     </header>

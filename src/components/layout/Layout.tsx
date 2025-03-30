@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { userRole } = useAuth();
   
   // Handle animation mounting
   useEffect(() => {
@@ -24,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <ClientProvider>
+    <ClientProvider initialRole={userRole || 'admin'}>
       <div className="flex h-screen bg-gradient-to-br from-background to-background/95 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div 
