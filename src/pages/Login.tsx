@@ -13,7 +13,7 @@ import { motion } from 'framer-motion';
 import AnimatedLogo from '@/components/ui/AnimatedLogo';
 
 function Login() {
-  const [email, setEmail] = useState<string>('admin@example.com');
+  const [email, setEmail] = useState<string>('admin@claudiofigueiredo.com');
   const [password, setPassword] = useState<string>('password');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(true);
