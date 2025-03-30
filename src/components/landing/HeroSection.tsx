@@ -200,21 +200,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
                   </Button>
                 </Link>
               </motion.div>
-              
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="w-full sm:w-auto bg-white/70 backdrop-blur-sm border-sky-200 text-sky-700 hover:bg-sky-50/80 hover:border-sky-300 transition-all duration-300 group"
-                  onClick={scrollToCarousel}
-                >
-                  Conheça os recursos
-                  <ArrowUpRight className="ml-2 h-4 w-4 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </motion.div>
             </div>
           </motion.div>
           
