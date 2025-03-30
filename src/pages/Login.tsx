@@ -2,13 +2,15 @@
 import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { UserRole } from '@/types';
 import LoginHeader from '@/components/auth/LoginHeader';
 import LoginForm from '@/components/auth/LoginForm';
 import LoginFooter from '@/components/auth/LoginFooter';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 function Login() {
   const { login } = useAuth();
@@ -76,6 +78,19 @@ function Login() {
             <LoginFooter />
           </CardFooter>
         </Card>
+        
+        {/* Return to Home button moved below the card */}
+        <div className="mt-6 flex justify-center">
+          <Link to="/">
+            <Button 
+              variant="outline" 
+              className="text-sky-600 border-sky-200 hover:bg-sky-50 hover:text-sky-700 flex items-center gap-2"
+            >
+              <ArrowLeft size={16} />
+              Voltar para Home
+            </Button>
+          </Link>
+        </div>
         
         {/* Developer attribution */}
         <div className="text-center mt-6 text-sm text-gray-500">
