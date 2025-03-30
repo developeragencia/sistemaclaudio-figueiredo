@@ -18,6 +18,8 @@ import SiteEditor from "./components/admin/SiteEditor";
 import ClientsManagement from "./pages/ClientsManagement";
 import DataImport from "./pages/DataImport";
 import RetentionAudit from "./pages/RetentionAudit";
+import Reports from "./pages/Reports";
+import SecuritySettings from "./pages/SecuritySettings";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -66,6 +68,24 @@ const App = () => {
                 <ProtectedRoute>
                   <Layout>
                     <RetentionAudit />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Reports - New Page */}
+              <Route path="/reports" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Reports />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Security Settings - New Page */}
+              <Route path="/security" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SecuritySettings />
                   </Layout>
                 </ProtectedRoute>
               } />

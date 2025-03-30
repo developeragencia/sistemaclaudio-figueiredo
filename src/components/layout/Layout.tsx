@@ -45,7 +45,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <AnimatePresence mode="wait">
             {mounted && (
               <motion.main 
-                className="flex-grow overflow-auto p-6 bg-background/50"
+                className="flex-grow overflow-auto p-6 bg-sky-50/30"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
