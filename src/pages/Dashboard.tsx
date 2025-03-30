@@ -1,8 +1,8 @@
-
 import React from 'react';
 import StatCard from '@/components/dashboard/StatCard';
 import ActivityTimeline from '@/components/dashboard/ActivityTimeline';
 import ClientsTable from '@/components/dashboard/ClientsTable';
+import ModuleGrid from '@/components/dashboard/ModuleGrid';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Users, 
@@ -129,141 +129,131 @@ const mockActivities: Activity[] = [
 ];
 
 const Dashboard = () => {
-  // All application modules in a grid format
-  const allModules = [
-    {
-      title: "Voltar para Home",
-      description: "Retornar para a página inicial do site",
-      icon: ArrowLeft,
-      to: "/",
-      color: "from-blue-600 to-blue-700"
-    },
+  // Define the modules for the system
+  const systemModules = [
     {
       title: "Gestão de Clientes",
       description: "Gerencie todos os dados de clientes, contratos e histórico de interações.",
       icon: Users,
       to: "/clients-management",
-      color: "from-sky-600 to-sky-700"
     },
     {
       title: "Créditos Tributários",
       description: "Gerenciamento de créditos e recuperação tributária.",
       icon: CreditCard,
       to: "/tax-credits",
-      color: "from-purple-600 to-indigo-700"
     },
     {
       title: "Calculadora Avançada",
       description: "Ferramentas para cálculos de IRRF e identificação de créditos tributários.",
       icon: Calculator,
       to: "/advanced-calculator",
-      color: "from-rose-600 to-pink-700"
     },
     {
       title: "Cálculos IRRF",
       description: "Cálculos específicos para Imposto de Renda Retido na Fonte.",
       icon: Calculator,
       to: "/irrf-calculations",
-      color: "from-amber-600 to-orange-700"
     },
     {
       title: "Recuperação IRRF/PJ",
       description: "Ferramentas para recuperação de IRRF para Pessoas Jurídicas.",
       icon: FileCheck,
       to: "/irrf-recovery",
-      color: "from-emerald-600 to-green-700"
     },
     {
       title: "Identificação de Créditos",
       description: "Analisar e identificar créditos tributários disponíveis.",
       icon: Lightbulb,
       to: "/credits-identification",
-      color: "from-cyan-600 to-teal-700"
     },
+  ];
+  
+  const reportModules = [
     {
       title: "Relatórios Detalhados",
       description: "Relatórios personalizados e detalhados para análise tributária.",
       icon: FileText,
       to: "/detailed-reports",
-      color: "from-violet-600 to-purple-700"
     },
     {
       title: "Comprovantes de Retenção",
       description: "Gerenciamento de comprovantes de retenção tributária.",
       icon: Receipt,
       to: "/retention-receipts",
-      color: "from-blue-600 to-indigo-700"
     },
     {
       title: "Relatórios Fiscais",
       description: "Relatórios específicos para obrigações fiscais.",
       icon: FileBarChart,
       to: "/fiscal-reports",
-      color: "from-red-600 to-rose-700"
-    },
+    }
+  ];
+  
+  const operationalModules = [
     {
       title: "Painel Interativo",
       description: "Dashboard interativo com métricas e indicadores importantes.",
       icon: Gauge,
       to: "/interactive-dashboard",
-      color: "from-green-600 to-emerald-700"
     },
     {
       title: "Propostas Comerciais",
       description: "Gestão de propostas para clientes e prospects.",
       icon: Handshake,
       to: "/commercial-proposals",
-      color: "from-teal-600 to-cyan-700"
     },
     {
       title: "Compensação Tributária",
       description: "Ferramentas para simulação e gestão de compensações tributárias.",
       icon: Clipboard,
       to: "/tax-compensation",
-      color: "from-orange-600 to-amber-700"
     },
     {
       title: "Gestão de Auditorias",
       description: "Controle e acompanhamento de processos de auditoria tributária.",
       icon: ShieldCheck,
       to: "/audit-management",
-      color: "from-indigo-600 to-blue-700"
-    },
-    {
-      title: "Segurança & Auditoria",
-      description: "Central de segurança e ferramentas de auditoria do sistema.",
-      icon: Shield,
-      to: "/security-hub",
-      color: "from-pink-600 to-rose-700"
     },
     {
       title: "Operacional",
       description: "Gestão operacional do sistema.",
       icon: Database,
       to: "/operational-dashboard",
-      color: "from-yellow-600 to-orange-700"
+    }
+  ];
+  
+  const systemSettingsModules = [
+    {
+      title: "Segurança & Auditoria",
+      description: "Central de segurança e ferramentas de auditoria do sistema.",
+      icon: Shield,
+      to: "/security-hub",
     },
     {
       title: "Sistema",
       description: "Configurações do sistema e personalização.",
       icon: Globe,
       to: "/site-editor",
-      color: "from-purple-600 to-violet-700"
     },
     {
       title: "Suporte",
       description: "Acesso ao suporte e documentação.",
       icon: LifeBuoy,
       to: "/support",
-      color: "from-sky-600 to-blue-700"
     },
     {
       title: "Configurações",
       description: "Acesse as configurações do sistema.",
       icon: Cog,
       to: "/settings/profile",
-      color: "from-slate-600 to-gray-700"
     },
+    {
+      title: "Voltar para Home",
+      description: "Retornar para a página inicial do site",
+      icon: ArrowLeft,
+      to: "/",
+    }
   ];
 
   // Animation variants
@@ -370,46 +360,39 @@ const Dashboard = () => {
         </motion.div>
       </motion.div>
 
-      {/* Main Modules Grid */}
+      {/* Main Modules Section */}
       <motion.div variants={itemVariants}>
-        <Card className="border-none shadow-lg overflow-hidden bg-gradient-to-br from-white to-blue-50">
-          <CardHeader className="pb-3 border-b">
-            <CardTitle className="text-lg text-blue-800 flex items-center">
-              <Layout className="mr-2 h-5 w-5 text-blue-600" />
+        <Card className="border-none shadow-xl overflow-hidden backdrop-blur-sm bg-white/80">
+          <CardHeader className="pb-4 border-b border-blue-100/50 bg-gradient-to-r from-blue-50 to-indigo-50/50">
+            <CardTitle className="text-2xl text-blue-800 flex items-center">
+              <Layout className="mr-3 h-7 w-7 text-blue-600" />
               Módulos do Sistema
             </CardTitle>
-            <CardDescription>
-              Acesse todas as funcionalidades do sistema
+            <CardDescription className="text-blue-600/80 text-base">
+              Gerencie todos os aspectos do sistema através destes módulos
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {allModules.map((module, index) => (
-                <motion.div
-                  key={module.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  whileHover={{ 
-                    y: -5,
-                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
-                  }}
-                  className={`rounded-xl border transition-all duration-300 h-full overflow-hidden shadow-md bg-gradient-to-r ${module.color} border-${module.color.split('-')[1]}-500/20`}
-                >
-                  <Link to={module.to} className="flex flex-col h-full">
-                    <div className="px-4 py-4">
-                      <div className="flex items-center mb-2">
-                        <div className="p-2 rounded-full bg-white/20 mr-3">
-                          <module.icon className="w-5 h-5 text-white" />
-                        </div>
-                        <h3 className="font-bold text-sm text-white">{module.title}</h3>
-                      </div>
-                      
-                      <p className="text-white/80 text-xs mb-2 line-clamp-2">{module.description}</p>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
+          <CardContent className="pt-6 pb-8">
+            <div className="space-y-10">
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-blue-500 pl-3">Principais Módulos</h3>
+                <ModuleGrid modules={systemModules} />
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-purple-500 pl-3">Relatórios e Análises</h3>
+                <ModuleGrid modules={reportModules} />
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-emerald-500 pl-3">Operações</h3>
+                <ModuleGrid modules={operationalModules} />
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800 mb-4 border-l-4 border-amber-500 pl-3">Sistema e Suporte</h3>
+                <ModuleGrid modules={systemSettingsModules} />
+              </div>
             </div>
           </CardContent>
         </Card>

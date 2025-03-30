@@ -28,7 +28,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-white via-sky-50/10 to-blue-50/20">
+      {/* Background with subtle gradient and pattern */}
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-indigo-50/30 to-white z-0 pointer-events-none">
+        <div className="absolute inset-0 opacity-5" style={{ 
+          backgroundImage: `radial-gradient(circle, rgba(59, 130, 246, 0.2) 1px, transparent 1px)`, 
+          backgroundSize: '30px 30px' 
+        }}></div>
+      </div>
+      
+      <div className="flex h-screen overflow-hidden relative z-10">
         {/* Main content - full width without sidebar */}
         <motion.div 
           className="flex flex-col flex-grow overflow-hidden w-full"
@@ -41,7 +49,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <AnimatePresence mode="wait">
             {mounted && (
               <motion.main 
-                className="flex-grow overflow-auto p-6 bg-white/50 backdrop-blur-sm"
+                className="flex-grow overflow-auto p-6 backdrop-blur-sm"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
