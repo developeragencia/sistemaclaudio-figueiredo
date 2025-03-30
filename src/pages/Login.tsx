@@ -18,40 +18,49 @@ function Login() {
   const { toast } = useToast();
 
   const handleLogin = async (email: string, password: string) => {
-    // Simulate network request
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const isAdminUser = email.includes('admin');
-    
-    // Determine user role
-    const userRole: UserRole = email.includes('admin') 
-      ? 'admin' 
-      : email.includes('client') 
-        ? 'client' 
-        : email.includes('sales') 
-          ? 'sales_rep' 
-          : 'office_staff';
+    try {
+      // Simulate network request
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const isAdminUser = email.includes('admin');
+      
+      // Determine user role
+      const userRole: UserRole = email.includes('admin') 
+        ? 'admin' 
+        : email.includes('client') 
+          ? 'client' 
+          : email.includes('sales') 
+            ? 'sales_rep' 
+            : 'office_staff';
 
-    // Check if the user requires 2FA (no longer required for admin users)
-    if (!isAdminUser && email.includes('client')) {
-      // Only redirect to 2FA for non-admin users
+      // Check if the user requires 2FA (no longer required for admin users)
+      if (!isAdminUser && email.includes('client')) {
+        // Only redirect to 2FA for non-admin users
+        toast({
+          title: "Verificação adicional necessária",
+          description: "Por favor, complete a autenticação de dois fatores.",
+        });
+        login(email, userRole); // Store login info for the 2FA component
+        navigate('/2fa');
+      } else {
+        // For admin users or other roles, log in directly
+        login(email, userRole);
+        
+        toast({
+          title: "Login realizado com sucesso",
+          description: `Bem-vindo de volta${isAdminUser ? ', Administrador' : ''}!`,
+          variant: "default",
+        });
+        
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       toast({
-        title: "Verificação adicional necessária",
-        description: "Por favor, complete a autenticação de dois fatores.",
+        title: "Erro de login",
+        description: "Não foi possível realizar o login. Verifique suas credenciais.",
+        variant: "destructive",
       });
-      login(email, userRole); // Store login info for the 2FA component
-      navigate('/2fa');
-    } else {
-      // For admin users or other roles, log in directly
-      login(email, userRole);
-      
-      toast({
-        title: "Login realizado com sucesso",
-        description: `Bem-vindo de volta${isAdminUser ? ', Administrador' : ''}!`,
-        variant: "default",
-      });
-      
-      navigate('/dashboard');
     }
   };
 

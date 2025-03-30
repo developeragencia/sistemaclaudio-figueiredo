@@ -37,7 +37,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       email: '',
       password: '',
       rememberMe: false
-    }
+    },
+    mode: 'onChange' // Validate on change for better user experience
   });
 
   // Load remembered credentials on mount if they exist
@@ -95,7 +96,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                   placeholder="seu-email@exemplo.com"
                   autoComplete="email"
                   disabled={isSubmitting}
-                  aria-invalid={!!form.formState.errors.email}
                 />
               </FormControl>
               <FormMessage className="text-sm text-destructive flex items-center gap-1">
@@ -152,7 +152,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                     type="checkbox"
                     id="remember"
                     checked={field.value}
-                    onChange={field.onChange}
+                    onChange={(e) => field.onChange(e.target.checked)}
                     className="rounded border-sky-300 text-sky-600 focus:ring-sky-500"
                   />
                   <Label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">
@@ -188,7 +188,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         <Button 
           type="submit" 
           className="w-full bg-sky-600 hover:bg-sky-700 transition-colors shadow" 
-          disabled={isSubmitting || !form.formState.isValid}
+          disabled={isSubmitting || (!form.formState.isValid && form.formState.isDirty)}
         >
           {isSubmitting ? (
             <>
