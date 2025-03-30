@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { AlertCircle, Check, KeyRound, Smartphone } from 'lucide-react';
+import { AlertCircle, KeyRound, Smartphone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const TwoFactorAuth = () => {
@@ -16,6 +16,18 @@ export const TwoFactorAuth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { userEmail } = useAuth();
+
+  // Check if user is admin (admin@example.com) and redirect to dashboard if so
+  useEffect(() => {
+    if (userEmail?.includes('admin')) {
+      toast({
+        title: "Autenticação simplificada",
+        description: "Usuários administradores não necessitam de 2FA.",
+        variant: "default",
+      });
+      navigate('/dashboard');
+    }
+  }, [userEmail, navigate, toast]);
 
   // In a real app, this would verify against an actual 2FA service
   const verifyCode = async (code: string) => {
@@ -75,18 +87,16 @@ export const TwoFactorAuth = () => {
           
           <div className="space-y-2">
             <Label htmlFor="verificationCode">Código de Verificação</Label>
-            <Input
-              id="verificationCode"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={6}
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-              placeholder="000000"
-              className="text-center text-lg tracking-widest"
-              autoComplete="one-time-code"
-            />
+            <InputOTP maxLength={6} value={verificationCode} onChange={setVerificationCode}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
           </div>
           
           {error && (
@@ -100,7 +110,7 @@ export const TwoFactorAuth = () => {
           <Button 
             type="submit" 
             className="w-full bg-sky-600 hover:bg-sky-700" 
-            disabled={isLoading}
+            disabled={isLoading || verificationCode.length < 6}
           >
             {isLoading ? "Verificando..." : "Verificar"}
           </Button>

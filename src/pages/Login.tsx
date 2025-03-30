@@ -37,18 +37,9 @@ function Login() {
       // Simulate network request
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check if the user requires 2FA (for demo, we'll assume admin users require 2FA)
-      if (email.includes('admin')) {
-        // Instead of logging in directly, redirect to 2FA
-        toast({
-          title: "Verificação adicional necessária",
-          description: "Por favor, complete a autenticação de dois fatores.",
-        });
-        navigate('/2fa');
-        return;
-      }
+      const isAdminUser = email.includes('admin');
       
-      // For non-admin users, log in directly
+      // Determine user role
       const userRole: UserRole = email.includes('admin') 
         ? 'admin' 
         : email.includes('client') 
@@ -56,16 +47,28 @@ function Login() {
           : email.includes('sales') 
             ? 'sales_rep' 
             : 'office_staff';
-            
-      login(email, userRole);
-      
-      toast({
-        title: "Login realizado com sucesso",
-        description: `Bem-vindo de volta, ${email}!`,
-        variant: "default",
-      });
-      
-      navigate('/dashboard');
+
+      // Check if the user requires 2FA (no longer required for admin users)
+      if (!isAdminUser && email.includes('client')) {
+        // Only redirect to 2FA for non-admin users
+        toast({
+          title: "Verificação adicional necessária",
+          description: "Por favor, complete a autenticação de dois fatores.",
+        });
+        login(email, userRole); // Store login info for the 2FA component
+        navigate('/2fa');
+      } else {
+        // For admin users or other roles, log in directly
+        login(email, userRole);
+        
+        toast({
+          title: "Login realizado com sucesso",
+          description: `Bem-vindo de volta${isAdminUser ? ', Administrador' : ''}!`,
+          variant: "default",
+        });
+        
+        navigate('/dashboard');
+      }
       
     } catch (err) {
       console.error('Login error:', err);
