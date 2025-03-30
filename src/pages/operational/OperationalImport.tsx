@@ -18,10 +18,10 @@ const OperationalImport = () => {
     { id: 3, name: 'Comprovantes_Marco_2024.xlsx', date: '2024-03-22', status: 'completed', records: 56 }
   ]);
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = (e: React.FormEvent) => {
     e.preventDefault();
-    const fileInput = document.getElementById('file-upload');
-    if (fileInput.files.length > 0) {
+    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
       setUploading(true);
       
       // Simulate upload progress
@@ -101,7 +101,7 @@ const OperationalImport = () => {
                     />
                     <Button 
                       type="button" 
-                      onClick={() => document.getElementById('file-upload').click()}
+                      onClick={() => document.getElementById('file-upload')?.click()}
                       disabled={uploading}
                     >
                       Selecionar Arquivo
