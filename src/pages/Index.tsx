@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,13 @@ import {
   Database,
   LayoutDashboard,
   FileSearch,
-  Shield
+  Shield,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Instagram,
+  Linkedin
 } from "lucide-react";
 import {
   Carousel,
@@ -28,7 +33,6 @@ const Index: React.FC = () => {
     carousel: false
   });
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -49,7 +53,6 @@ const Index: React.FC = () => {
     }
   };
 
-  // Handle scroll for animations
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -66,7 +69,6 @@ const Index: React.FC = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Trigger once on mount to check initial positions
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
@@ -74,7 +76,6 @@ const Index: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header with hover effect */}
       <header className="bg-white border-b sticky top-0 z-50 shadow-sm">
         <motion.div 
           initial={{ y: -20, opacity: 0 }}
@@ -96,7 +97,6 @@ const Index: React.FC = () => {
         </motion.div>
       </header>
 
-      {/* Enhanced Hero Section with parallax effect */}
       <section className="py-20 md:py-32 bg-white relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-gradient-to-b from-sky-50/40 to-white pointer-events-none"
@@ -106,7 +106,6 @@ const Index: React.FC = () => {
           }}
         ></div>
         
-        {/* Animated background elements */}
         <motion.div 
           className="absolute top-1/4 left-1/5 w-32 h-32 rounded-full bg-sky-100/30 filter blur-xl"
           animate={{ 
@@ -223,7 +222,6 @@ const Index: React.FC = () => {
             </motion.div>
           </div>
           
-          {/* Animated scroll indicator */}
           <motion.div 
             className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
             initial={{ opacity: 0 }}
@@ -244,7 +242,6 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Enhanced Feature Carousel Section */}
       <motion.section 
         id="carousel-section"
         className="py-16 bg-gradient-to-br from-sky-100 to-sky-50/80 relative overflow-hidden"
@@ -252,7 +249,6 @@ const Index: React.FC = () => {
         animate={isVisible.carousel ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.8 }}
       >
-        {/* Animated background elements */}
         <motion.div 
           className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-sky-200/30 filter blur-3xl"
           animate={{ 
@@ -303,7 +299,6 @@ const Index: React.FC = () => {
             </motion.p>
           </motion.div>
           
-          {/* Enhanced carousel with 3D effects */}
           <div className="max-w-6xl mx-auto">
             <Carousel
               opts={{
@@ -379,7 +374,6 @@ const Index: React.FC = () => {
             </Carousel>
           </div>
           
-          {/* Carousel indicators */}
           <div className="carousel-dots mt-8 flex justify-center items-center gap-2">
             {[...Array(5)].map((_, i) => (
               <motion.div 
@@ -396,79 +390,199 @@ const Index: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* Enhanced Footer with animation */}
-      <footer className="bg-gradient-to-br from-lawyer-800 to-lawyer-900 text-white py-16 relative overflow-hidden">
-        {/* Animated particles */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-white/10 rounded-full"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -100],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 8,
-              repeat: Infinity,
-              delay: i * 2,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-        
-        <div className="container mx-auto px-4">
-          <motion.div 
-            className="flex flex-col md:flex-row justify-between items-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+      <footer className="bg-gradient-to-br from-lawyer-900 to-sky-900 text-white pt-20 pb-10 relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(20)].map((_, i) => (
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="mb-6 md:mb-0"
+              key={i}
+              className="absolute w-1 h-1 md:w-2 md:h-2 bg-white/10 rounded-full"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+              }}
+              initial={{ opacity: 0 }}
+              animate={{
+                y: [0, -100],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 8,
+                repeat: Infinity,
+                delay: i * 0.3,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-4"
             >
-              <Link to="/" className="flex items-center">
+              <div className="mb-4">
                 <AnimatedLogo size="medium" />
-                <span className="ml-2 text-xl font-bold">Advogados Associados</span>
-              </Link>
-              <p className="text-lawyer-200 mt-3 max-w-md">
-                Soluções jurídicas especializadas em direito tributário, recuperação de créditos e consultoria fiscal para empresas.
+              </div>
+              <p className="text-sky-200 max-w-xs">
+                Soluções jurídicas especializadas em direito tributário, recuperação de créditos 
+                e consultoria fiscal para empresas de todos os portes.
               </p>
+              <div className="pt-4 flex space-x-4">
+                <motion.a 
+                  href="#" 
+                  className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center hover:bg-sky-700 transition-colors duration-300"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Facebook size={18} />
+                </motion.a>
+                <motion.a 
+                  href="#" 
+                  className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center hover:bg-sky-700 transition-colors duration-300"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Instagram size={18} />
+                </motion.a>
+                <motion.a 
+                  href="#" 
+                  className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center hover:bg-sky-700 transition-colors duration-300"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Linkedin size={18} />
+                </motion.a>
+              </div>
             </motion.div>
             
-            <div className="flex flex-col items-end">
-              <p className="text-lawyer-200 mb-3">
-                Desenvolvido por <a href="https://alexdesenvolvedor.com.br" target="_blank" rel="noopener noreferrer" className="text-white hover:text-sky-300 transition-colors font-medium">Alex Developer</a>
-              </p>
-              <div className="flex space-x-4">
-                {socialIcons.map((social, index) => (
-                  <motion.a 
-                    key={index}
-                    href="#" 
-                    className="text-lawyer-400 hover:text-white transition-colors"
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    {social.icon}
-                  </motion.a>
-                ))}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="space-y-6"
+            >
+              <h3 className="text-xl font-semibold border-b border-sky-700/50 pb-2 mb-4">Entre em Contato</h3>
+              <div className="space-y-4">
+                <motion.div 
+                  className="flex items-center space-x-3"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <div className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center">
+                    <Phone size={18} />
+                  </div>
+                  <div>
+                    <p className="text-sky-100">(11) 99999-9999</p>
+                    <p className="text-sky-400 text-xs">Suporte Técnico</p>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="flex items-center space-x-3"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <div className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center">
+                    <Mail size={18} />
+                  </div>
+                  <div>
+                    <p className="text-sky-100">contato@advogados.com.br</p>
+                    <p className="text-sky-400 text-xs">Atendimento em até 24h</p>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="flex items-center space-x-3"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <div className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center">
+                    <MapPin size={18} />
+                  </div>
+                  <div>
+                    <p className="text-sky-100">Av. Paulista, 1000</p>
+                    <p className="text-sky-400 text-xs">São Paulo - SP</p>
+                  </div>
+                </motion.div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="space-y-6"
+            >
+              <h3 className="text-xl font-semibold border-b border-sky-700/50 pb-2 mb-4">Links Rápidos</h3>
+              <ul className="space-y-3">
+                {["Home", "Sobre Nós", "Serviços", "Contato", "Política de Privacidade"].map((item, index) => (
+                  <motion.li 
+                    key={index}
+                    whileHover={{ x: 5, color: "#7dd3fc" }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <a href="#" className="text-sky-200 hover:text-sky-300 transition-colors flex items-center">
+                      <span className="mr-2">›</span> {item}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="space-y-6"
+            >
+              <h3 className="text-xl font-semibold border-b border-sky-700/50 pb-2 mb-4">Newsletter</h3>
+              <p className="text-sky-200 mb-4">Receba novidades e atualizações sobre direito tributário.</p>
+              
+              <div className="relative">
+                <input 
+                  type="email" 
+                  placeholder="Seu e-mail" 
+                  className="w-full py-3 px-4 bg-sky-900/50 border border-sky-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-sky-100 placeholder:text-sky-400"
+                />
+                <Button 
+                  className="absolute right-1 top-1 bg-sky-600 hover:bg-sky-700 h-9" 
+                  size="sm"
+                >
+                  Assinar
+                </Button>
+              </div>
+            </motion.div>
+          </div>
           
           <motion.div 
-            className="mt-10 pt-10 border-t border-lawyer-700 text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="border-t border-sky-800/40 pt-8 mt-8"
           >
-            <p className="text-lawyer-300">
-              © {new Date().getFullYear()} Advogados Associados. Todos os direitos reservados.
-            </p>
+            <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+              <p className="text-sky-300 text-sm">
+                © {new Date().getFullYear()} Advogados Associados. Todos os direitos reservados.
+              </p>
+              <div className="mt-4 md:mt-0">
+                <p className="text-sky-400 text-sm">
+                  Desenvolvido por{" "}
+                  <a 
+                    href="https://alexdesenvolvedor.com.br" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sky-300 hover:text-sky-100 font-medium transition-colors duration-300"
+                  >
+                    Alex Developer
+                  </a>
+                </p>
+              </div>
+            </div>
+            
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-sky-900/0 via-sky-400/50 to-sky-900/0"></div>
           </motion.div>
         </div>
       </footer>
@@ -476,7 +590,6 @@ const Index: React.FC = () => {
   );
 };
 
-// Carousel items data
 const carouselItems = [
   {
     title: "Painel Administrador",
@@ -520,7 +633,6 @@ const carouselItems = [
   }
 ];
 
-// Social icons
 const socialIcons = [
   {
     icon: <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
