@@ -19,7 +19,8 @@ import {
   ShieldCheck,
   Lightbulb,
   LayoutDashboard,
-  Check
+  Check,
+  ArrowLeft
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedLogo from '../ui/AnimatedLogo';
@@ -41,6 +42,7 @@ interface SidebarItemProps {
   isSubmenuOpen?: boolean;
   toggleSubmenu?: () => void;
   badge?: number | string;
+  className?: string;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ 
@@ -52,7 +54,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   hasSubmenu = false,
   isSubmenuOpen = false,
   toggleSubmenu,
-  badge
+  badge,
+  className
 }) => {
   if (collapsed) {
     return (
@@ -61,14 +64,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           <Link 
             to={to} 
             className={cn(
-              "flex items-center p-3 rounded-lg mb-1 hover:bg-sidebar-accent transition-all ease-in-out duration-200",
-              isActive && "bg-sidebar-accent text-sidebar-accent-foreground shadow-md"
+              "flex items-center p-3 rounded-lg mb-1 hover:bg-white/20 transition-all ease-in-out duration-200",
+              isActive && "bg-white/20 text-white shadow-md",
+              className
             )}
             onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
           >
             <div className="w-full flex justify-center relative">
               {React.cloneElement(icon as React.ReactElement, { 
-                className: cn("h-5 w-5", isActive && "text-sidebar-accent-foreground") 
+                className: cn("h-5 w-5", isActive && "text-white") 
               })}
               
               {badge && (
@@ -79,7 +83,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             </div>
           </Link>
         </TooltipTrigger>
-        <TooltipContent side="right" className="border-sidebar-accent">
+        <TooltipContent side="right" className="border-white/20">
           {label}
         </TooltipContent>
       </Tooltip>
@@ -91,19 +95,20 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       to={hasSubmenu ? "#" : to}
       onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
       className={cn(
-        "flex items-center justify-between px-4 py-3 rounded-lg mb-1 transition-all duration-200 hover:bg-sidebar-accent group",
-        isActive && "bg-sidebar-accent/80 text-sidebar-accent-foreground shadow-md"
+        "flex items-center justify-between px-4 py-3 rounded-lg mb-1 transition-all duration-200 hover:bg-white/20 group",
+        isActive && "bg-white/15 text-white shadow-md",
+        className
       )}
     >
       <div className="flex items-center">
         {React.cloneElement(icon as React.ReactElement, { 
           className: cn("h-5 w-5 mr-3", 
-            isActive ? "text-sidebar-accent-foreground" : "text-sidebar-foreground/80") 
+            isActive ? "text-white" : "text-white/80") 
         })}
         <span className={cn(
           "font-medium text-sm transition-all", 
-          isActive ? "text-sidebar-accent-foreground" : "text-sidebar-foreground/80",
-          "group-hover:text-sidebar-accent-foreground"
+          isActive ? "text-white" : "text-white/80",
+          "group-hover:text-white"
         )}>
           {label}
         </span>
@@ -148,7 +153,7 @@ const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapse
     <AnimatePresence>
       {isOpen && (
         <motion.div 
-          className="ml-7 mt-1 space-y-1 border-l border-sidebar-border pl-3"
+          className="ml-7 mt-1 space-y-1 border-l border-white/20 pl-3"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
@@ -161,8 +166,8 @@ const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapse
               className={cn(
                 "flex items-center justify-between py-2 pl-2 pr-4 text-sm rounded-md transition-colors",
                 location.pathname === item.to 
-                  ? "text-sidebar-accent-foreground bg-sidebar-accent/50" 
-                  : "text-sidebar-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent/30"
+                  ? "text-white bg-white/10" 
+                  : "text-white/70 hover:text-white hover:bg-white/10"
               )}
             >
               <span>{item.label}</span>
@@ -231,7 +236,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   return (
     <motion.aside 
       className={cn(
-        "h-screen fixed z-30 bg-gradient-to-b from-sky-800 to-sky-900 border-r border-sky-700 transition-all flex flex-col shadow-lg",
+        "h-screen fixed z-30 bg-gradient-to-b from-sky-950 to-indigo-950 border-r border-indigo-900/30 transition-all flex flex-col shadow-xl",
         collapsed ? "w-16" : "w-64"
       )}
       variants={sidebarVariants}
@@ -239,13 +244,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       animate={collapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      <div className="flex items-center h-16 border-b border-sky-700 px-3">
+      <div className="flex items-center h-16 border-b border-white/10 px-3">
         {!collapsed ? (
           <div className="w-full flex items-center justify-between">
             <AnimatedLogo size="small" />
             <button 
               onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-sky-700 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
             >
               <ChevronRight className="h-4 w-4 text-white" />
             </button>
@@ -254,7 +259,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           <div className="w-full flex justify-center">
             <button 
               onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-sky-700 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
             >
               <AnimatedLogo size="small" showText={false} />
             </button>
@@ -263,6 +268,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       </div>
       
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        {/* Back to Home Button */}
+        <SidebarItem 
+          icon={<ArrowLeft />} 
+          label="Voltar para Home" 
+          to="/" 
+          isActive={location.pathname === "/"} 
+          collapsed={collapsed} 
+          className="mb-4 bg-gradient-to-r from-indigo-600/50 to-sky-600/50 hover:from-indigo-600/70 hover:to-sky-600/70"
+        />
+        
         {/* Dashboard */}
         <SidebarItem 
           icon={<LayoutDashboard />} 
@@ -275,7 +290,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         {/* Módulos Principais */}
         <div className={cn("pt-4 pb-2", !collapsed && "px-1")}>
           {!collapsed && (
-            <div className="ml-2 text-xs text-sky-300 font-medium uppercase border-b border-sky-700/50 pb-1">
+            <div className="ml-2 text-xs text-indigo-300 font-medium uppercase border-b border-indigo-800/50 pb-1">
               Módulos Principais
             </div>
           )}
@@ -351,7 +366,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         {/* Sistema */}
         <div className={cn("pt-4 pb-2", !collapsed && "px-1")}>
           {!collapsed && (
-            <div className="ml-2 text-xs text-sky-300 font-medium uppercase border-b border-sky-700/50 pb-1">
+            <div className="ml-2 text-xs text-indigo-300 font-medium uppercase border-b border-indigo-800/50 pb-1">
               Sistema
             </div>
           )}
@@ -392,13 +407,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       
       {/* Footer with status */}
       {!collapsed && (
-        <div className="border-t border-sky-700 px-3 py-2">
+        <div className="border-t border-white/10 px-3 py-2 bg-indigo-950/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-              <span className="text-xs text-sky-200/80">Sistema operacional</span>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></div>
+              <span className="text-xs text-indigo-200/80">Sistema operacional</span>
             </div>
-            <span className="text-xs text-sky-200/60">v1.2.0</span>
+            <span className="text-xs text-indigo-200/60">v1.2.0</span>
           </div>
         </div>
       )}

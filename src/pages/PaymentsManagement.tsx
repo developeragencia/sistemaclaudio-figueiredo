@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -70,7 +71,8 @@ export default function PaymentsManagement() {
     const matchesSearch = payment.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         payment.description?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesDateRange = payment.date >= dateRange.from && payment.date <= dateRange.to;
+    const matchesDateRange = payment.date >= (dateRange.from || new Date(0)) && 
+                             payment.date <= (dateRange.to || new Date());
     
     const matchesSupplier = filterSupplier === 'all' || payment.supplierId === filterSupplier;
     
@@ -104,7 +106,7 @@ export default function PaymentsManagement() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="col-span-1 md:col-span-3">
+        <Card className="col-span-1 md:col-span-3 border-none shadow-lg">
           <CardHeader className="bg-sky-50/50 pb-4">
             <div className="flex flex-wrap gap-4 items-center justify-between">
               <div className="flex items-center gap-2">
@@ -150,7 +152,7 @@ export default function PaymentsManagement() {
           </CardContent>
         </Card>
         
-        <Card className="col-span-1 md:col-span-2">
+        <Card className="col-span-1 md:col-span-2 border-none shadow-lg">
           <Tabs defaultValue="details">
             <CardHeader className="bg-sky-50/50 pb-2">
               <div className="flex items-center justify-between">
@@ -201,7 +203,7 @@ export default function PaymentsManagement() {
           </Tabs>
         </Card>
         
-        <Card className="col-span-1">
+        <Card className="col-span-1 border-none shadow-lg">
           <CardHeader className="bg-sky-50/50">
             <CardTitle className="text-lg text-sky-800">Resumo</CardTitle>
             <CardDescription>
