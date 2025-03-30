@@ -1,5 +1,5 @@
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,7 @@ interface LoginFormProps {
 const formSchema = z.object({
   email: z.string().email("Por favor, insira um email válido.").min(1, "Email é obrigatório."),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres."),
-  rememberMe: z.boolean().default(true)
+  rememberMe: z.boolean().default(false)
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -34,16 +34,38 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: 'admin@claudiofigueiredo.com',
-      password: 'password',
-      rememberMe: true
+      email: '',
+      password: '',
+      rememberMe: false
     }
   });
+
+  // Load remembered credentials on mount if they exist
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    const rememberedPassword = localStorage.getItem('rememberedPassword');
+    
+    if (rememberedEmail && rememberedPassword) {
+      form.setValue('email', rememberedEmail);
+      form.setValue('password', rememberedPassword);
+      form.setValue('rememberMe', true);
+    }
+  }, [form]);
   
   const handleFormSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
       setError(null);
+      
+      // Store or remove credentials based on rememberMe
+      if (data.rememberMe) {
+        localStorage.setItem('rememberedEmail', data.email);
+        localStorage.setItem('rememberedPassword', data.password);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+        localStorage.removeItem('rememberedPassword');
+      }
+      
       await onSubmit(data.email, data.password);
     } catch (err) {
       console.error('Login error:', err);
