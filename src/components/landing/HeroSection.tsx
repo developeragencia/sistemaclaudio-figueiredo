@@ -259,7 +259,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
                 />
                 
                 <motion.div 
-                  className="absolute -bottom-4 -left-4 flex items-center bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg"
+                  className="absolute -bottom-6 -left-4 flex items-center bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg"
                   initial={{ scale: 0, rotate: -5 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 1, type: "spring", stiffness: 100 }}
