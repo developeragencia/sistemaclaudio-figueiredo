@@ -35,8 +35,9 @@ import AccessProtectionPage from "./pages/SecurityPages/AccessProtectionPage";
 import AuditTrailsPage from "./pages/SecurityPages/AuditTrailsPage";
 import UsersPermissionsPage from "./pages/SecurityPages/UsersPermissionsPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
+import ProfilePage from "./pages/ProfilePage";
 
-// Import new settings pages
+// Import settings pages
 import SettingsLayout from "./pages/settings/SettingsLayout";
 import ProfileSettings from "./pages/settings/ProfileSettings";
 import AccountSettings from "./pages/settings/AccountSettings";
@@ -243,8 +244,15 @@ const App = () => {
                   </Layout>
                 </ProtectedRoute>
               } />
-
-              {/* New Settings Routes */}
+              
+              {/* Profile Page Route */}
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              } />
+              
+              {/* Settings Routes */}
               <Route path="/settings" element={
                 <ProtectedRoute>
                   <Layout>
