@@ -2,6 +2,29 @@ import { supabase } from '../lib/supabaseClient';
 import { CNPJWSService } from './cnpjws.service';
 import type { Fornecedor, Pagamento, AliquotaRetencao, Auditoria } from '../types/database.types';
 
+interface FiltrosAuditoria {
+  dataInicio?: string;
+  dataFim?: string;
+  fornecedorId?: string;
+  tipoServico?: string;
+  valorMinimo?: number;
+  valorMaximo?: number;
+}
+
+interface ResultadoAuditoria {
+  auditorias: Auditoria[];
+  fornecedores: Record<string, {
+    razao_social: string;
+    cnpj: string;
+    atividade_principal: string;
+  }>;
+  pagamentos: Record<string, {
+    data_pagamento: string;
+    numero_nota: string;
+    tipo_servico: string;
+  }>;
+}
+
 export class AuditoriaService {
   private static instance: AuditoriaService;
   private cnpjService: CNPJWSService;
@@ -17,16 +40,39 @@ export class AuditoriaService {
     return AuditoriaService.instance;
   }
 
-  async processarPagamentosCliente(clienteId: string): Promise<Auditoria[]> {
+  async processarPagamentosCliente(clienteId: string, filtros?: FiltrosAuditoria): Promise<ResultadoAuditoria> {
     try {
-      // Busca todos os pagamentos do cliente
-      const { data: pagamentos, error: pagamentosError } = await supabase
+      // Construir query base
+      let query = supabase
         .from('pagamentos')
         .select('*')
         .eq('cliente_id', clienteId);
 
+      // Aplicar filtros
+      if (filtros?.dataInicio) {
+        query = query.gte('data_pagamento', filtros.dataInicio);
+      }
+      if (filtros?.dataFim) {
+        query = query.lte('data_pagamento', filtros.dataFim);
+      }
+      if (filtros?.fornecedorId) {
+        query = query.eq('fornecedor_id', filtros.fornecedorId);
+      }
+      if (filtros?.tipoServico) {
+        query = query.eq('tipo_servico', filtros.tipoServico);
+      }
+      if (filtros?.valorMinimo) {
+        query = query.gte('valor', filtros.valorMinimo);
+      }
+      if (filtros?.valorMaximo) {
+        query = query.lte('valor', filtros.valorMaximo);
+      }
+
+      // Executar query
+      const { data: pagamentos, error: pagamentosError } = await query;
+
       if (pagamentosError) throw pagamentosError;
-      if (!pagamentos?.length) return [];
+      if (!pagamentos?.length) return { auditorias: [], fornecedores: {}, pagamentos: {} };
 
       // Coleta todos os CNPJs dos fornecedores únicos
       const fornecedoresIds = [...new Set(pagamentos.map(p => p.fornecedor_id))];
@@ -43,6 +89,8 @@ export class AuditoriaService {
       const fornecedoresNovos = fornecedoresIds.filter(
         id => !fornecedoresExistentes?.find(f => f.id === id)
       );
+
+      let todosFornecedores = fornecedoresExistentes || [];
 
       // Consulta novos fornecedores na API do CNPJ.ws
       if (fornecedoresNovos.length) {
@@ -69,11 +117,15 @@ export class AuditoriaService {
           status: 'ativo'
         }));
 
-        const { error: insertError } = await supabase
+        const { data: fornecedoresInseridos, error: insertError } = await supabase
           .from('fornecedores')
-          .insert(novosFornecedores);
+          .insert(novosFornecedores)
+          .select();
 
         if (insertError) throw insertError;
+        if (fornecedoresInseridos) {
+          todosFornecedores = [...todosFornecedores, ...fornecedoresInseridos];
+        }
       }
 
       // Processa cada pagamento
@@ -81,7 +133,30 @@ export class AuditoriaService {
         pagamentos.map(pagamento => this.processarPagamento(pagamento))
       );
 
-      return auditorias;
+      // Prepara os dados para retorno
+      const fornecedoresMap = todosFornecedores.reduce((acc, f) => ({
+        ...acc,
+        [f.id]: {
+          razao_social: f.razao_social,
+          cnpj: f.cnpj,
+          atividade_principal: f.atividade_principal
+        }
+      }), {});
+
+      const pagamentosMap = pagamentos.reduce((acc, p) => ({
+        ...acc,
+        [p.id]: {
+          data_pagamento: p.data_pagamento,
+          numero_nota: p.numero_nota,
+          tipo_servico: p.tipo_servico
+        }
+      }), {});
+
+      return {
+        auditorias,
+        fornecedores: fornecedoresMap,
+        pagamentos: pagamentosMap
+      };
     } catch (error) {
       throw new Error(`Erro ao processar pagamentos: ${error.message}`);
     }
@@ -160,5 +235,35 @@ export class AuditoriaService {
       valor_iss,
       valor_liquido
     };
+  }
+
+  async buscarFornecedores(clienteId: string): Promise<Fornecedor[]> {
+    const { data, error } = await supabase
+      .from('pagamentos')
+      .select('fornecedor_id')
+      .eq('cliente_id', clienteId)
+      .then(async ({ data: pagamentos, error }) => {
+        if (error) throw error;
+        if (!pagamentos?.length) return { data: [] };
+
+        const fornecedoresIds = [...new Set(pagamentos.map(p => p.fornecedor_id))];
+        return await supabase
+          .from('fornecedores')
+          .select('*')
+          .in('id', fornecedoresIds);
+      });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  async buscarTiposServico(clienteId: string): Promise<string[]> {
+    const { data, error } = await supabase
+      .from('pagamentos')
+      .select('tipo_servico')
+      .eq('cliente_id', clienteId);
+
+    if (error) throw error;
+    return [...new Set(data?.map(p => p.tipo_servico).filter(Boolean) || [])];
   }
 } 

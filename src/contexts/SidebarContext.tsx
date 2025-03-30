@@ -1,18 +1,20 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 
 interface SidebarContextData {
   isCompact: boolean;
   toggleCompact: () => void;
   expandedItems: string[];
   toggleExpanded: (itemLabel: string) => void;
-  theme: 'light' | 'dark';
+  theme: string;
   toggleTheme: () => void;
 }
 
 const SidebarContext = createContext<SidebarContextData>({} as SidebarContextData);
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
-  // Recupera estado do localStorage
+  const { theme: currentTheme, setTheme } = useTheme();
+  
   const [isCompact, setIsCompact] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('@SistemaAuditoria:sidebar-compact');
@@ -29,15 +31,6 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
     return [];
   });
 
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('@SistemaAuditoria:theme');
-      return (saved as 'light' | 'dark') || 'light';
-    }
-    return 'light';
-  });
-
-  // Persiste alterações no localStorage
   useEffect(() => {
     localStorage.setItem('@SistemaAuditoria:sidebar-compact', JSON.stringify(isCompact));
   }, [isCompact]);
@@ -45,11 +38,6 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem('@SistemaAuditoria:sidebar-expanded', JSON.stringify(expandedItems));
   }, [expandedItems]);
-
-  useEffect(() => {
-    localStorage.setItem('@SistemaAuditoria:theme', theme);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
 
   const toggleCompact = () => setIsCompact(state => !state);
 
@@ -61,7 +49,9 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const toggleTheme = () => setTheme(state => state === 'light' ? 'dark' : 'light');
+  const toggleTheme = () => {
+    setTheme(currentTheme === 'light' ? 'dark' : 'light');
+  };
 
   return (
     <SidebarContext.Provider 
@@ -70,7 +60,7 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
         toggleCompact,
         expandedItems,
         toggleExpanded,
-        theme,
+        theme: currentTheme || 'light',
         toggleTheme
       }}
     >
