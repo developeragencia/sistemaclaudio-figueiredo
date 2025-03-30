@@ -257,34 +257,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
                     ease: "easeInOut"
                   }}
                 />
-                
-                <motion.div 
-                  className="absolute -bottom-6 -left-4 flex items-center bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg"
-                  initial={{ scale: 0, rotate: -5 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 1, type: "spring", stiffness: 100 }}
-                  whileHover={{ 
-                    y: -3, 
-                    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                  }}
-                >
-                  <motion.span 
-                    className="mr-2"
-                    animate={{ 
-                      rotate: [0, 15, -15, 0],
-                    }}
-                    transition={{ 
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut", 
-                      repeatDelay: 1
-                    }}
-                  >
-                    <BarChart2 className="h-5 w-5" />
-                  </motion.span>
-                  <span>Recuperação de Impostos</span>
-                </motion.div>
               </motion.div>
+            </motion.div>
+            
+            {/* Moved the "Recuperação de Impostos" button lower and separated from the card */}
+            <motion.div 
+              className="absolute -bottom-2 left-1/4 flex items-center bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg mt-6"
+              initial={{ scale: 0, rotate: -5 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 1, type: "spring", stiffness: 100 }}
+              whileHover={{ 
+                y: -3, 
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+              }}
+            >
+              <motion.span 
+                className="mr-2"
+                animate={{ 
+                  rotate: [0, 15, -15, 0],
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut", 
+                  repeatDelay: 1
+                }}
+              >
+                <BarChart2 className="h-5 w-5" />
+              </motion.span>
+              <span>Recuperação de Impostos</span>
             </motion.div>
           </motion.div>
         </div>
