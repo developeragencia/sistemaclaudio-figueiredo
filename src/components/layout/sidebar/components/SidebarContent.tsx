@@ -13,6 +13,9 @@ interface SidebarContentProps {
   toggleSubmenu: (label: string) => void;
   location: any;
   hasBorder?: boolean;
+  onMenuMouseEnter?: (label: string) => void;
+  onMenuMouseLeave?: (label: string) => void;
+  hoveredItem?: string | null;
 }
 
 const SidebarContent: React.FC<SidebarContentProps> = ({ 
@@ -22,7 +25,10 @@ const SidebarContent: React.FC<SidebarContentProps> = ({
   openMenus, 
   toggleSubmenu, 
   location,
-  hasBorder = false
+  hasBorder = false,
+  onMenuMouseEnter,
+  onMenuMouseLeave,
+  hoveredItem
 }) => {
   return (
     <div className={cn("p-3", hasBorder && "border-t border-blue-100/70 pt-5")}>
@@ -45,13 +51,16 @@ const SidebarContent: React.FC<SidebarContentProps> = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
+          onMouseEnter={() => onMenuMouseEnter && onMenuMouseEnter(item.label)}
+          onMouseLeave={() => onMenuMouseLeave && onMenuMouseLeave(item.label)}
         >
           <SidebarItem 
             item={item}
             collapsed={collapsed}
             isActive={location.pathname === item.to}
-            isOpen={!!openMenus[item.label]}
+            isOpen={!!openMenus[item.label] || hoveredItem === item.label}
             toggleSubmenu={() => toggleSubmenu(item.label)}
+            showArrows={false} 
           />
         </motion.div>
       ))}

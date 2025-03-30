@@ -19,6 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   const { userRole, currentUser } = useAuth();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [openMenus, setOpenMenus] = useState<{[key: string]: boolean}>({});
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Get grouped sidebar items
@@ -43,17 +44,31 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
     }
   }, [location.pathname, mainItems, moduleItems, systemItems]);
   
-  // Handle submenu toggle
-  const toggleSubmenu = (label: string) => {
+  // Handle submenu hover for auto-expand
+  const handleMenuMouseEnter = (label: string) => {
+    setHoveredItem(label);
     if (collapsed) {
-      setOpenMenus({});
-      return;
+      // When collapsed, show submenu on hover
+      setOpenMenus(prev => ({ ...prev, [label]: true }));
     }
-    
-    setOpenMenus(prev => ({
-      ...prev,
-      [label]: !prev[label]
-    }));
+  };
+
+  const handleMenuMouseLeave = (label: string) => {
+    setHoveredItem(null);
+    if (collapsed) {
+      // When collapsed, hide submenu when not hovering
+      setOpenMenus(prev => ({ ...prev, [label]: false }));
+    }
+  };
+
+  // Handle submenu toggle (manual click)
+  const toggleSubmenu = (label: string) => {
+    if (!collapsed) {
+      setOpenMenus(prev => ({
+        ...prev,
+        [label]: !prev[label]
+      }));
+    }
   };
 
   // Mobile toggle
@@ -80,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         />
       )}
 
-      {/* Main sidebar */}
+      {/* Main sidebar - now fixed and doesn't close automatically */}
       <motion.aside
         className={cn(
           "fixed top-0 left-0 z-40 h-full",
@@ -100,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
           "bg-white shadow-xl rounded-r-xl",
           "text-blue-900 border-r border-blue-100"
         )}>
-          {/* Sidebar header */}
+          {/* Sidebar header with toggle button */}
           <div className="flex items-center justify-between px-4 py-5 border-b border-blue-100">
             <SidebarHeader collapsed={collapsed} />
             <SidebarToggleButton collapsed={collapsed} toggleCollapse={toggleCollapse} />
@@ -115,6 +130,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
               openMenus={openMenus}
               toggleSubmenu={toggleSubmenu}
               location={location}
+              onMenuMouseEnter={handleMenuMouseEnter}
+              onMenuMouseLeave={handleMenuMouseLeave}
+              hoveredItem={hoveredItem}
             />
             
             <SidebarContent 
@@ -125,6 +143,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
               toggleSubmenu={toggleSubmenu}
               location={location}
               hasBorder={true}
+              onMenuMouseEnter={handleMenuMouseEnter}
+              onMenuMouseLeave={handleMenuMouseLeave}
+              hoveredItem={hoveredItem}
             />
             
             <SidebarContent 
@@ -135,6 +156,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
               toggleSubmenu={toggleSubmenu}
               location={location}
               hasBorder={true}
+              onMenuMouseEnter={handleMenuMouseEnter}
+              onMenuMouseLeave={handleMenuMouseLeave}
+              hoveredItem={hoveredItem}
             />
           </div>
           

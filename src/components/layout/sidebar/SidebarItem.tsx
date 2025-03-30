@@ -1,267 +1,161 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { SidebarItemProps } from './types';
-import { Badge } from '@/components/ui/badge';
+import { MenuItemType } from './types';
+import { ChevronDown } from 'lucide-react';
+
+interface SidebarItemProps {
+  item: MenuItemType;
+  collapsed: boolean;
+  isActive: boolean;
+  isOpen: boolean;
+  toggleSubmenu: () => void;
+  showArrows?: boolean;
+}
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ 
   item, 
   collapsed, 
   isActive, 
-  isOpen,
-  toggleSubmenu 
+  isOpen, 
+  toggleSubmenu,
+  showArrows = false 
 }) => {
-  const hasSubmenu = item.submenu && item.submenu.length > 0;
   const location = useLocation();
-  const [isHovered, setIsHovered] = useState(false);
+  const hasSubmenu = item.submenu && item.submenu.length > 0;
   
   // Check if any submenu item is active
-  const isSubmenuActive = hasSubmenu && item.submenu?.some(
-    subitem => subitem.to === location.pathname
+  const isSubmenuActive = hasSubmenu && item.submenu!.some(
+    submenuItem => submenuItem.to === location.pathname
   );
-  
-  // Combine active states
-  const isItemActive = isActive || isSubmenuActive;
-  
-  // Determine badge color - use light green for "Novo", red for others
-  const getBadgeVariant = (badgeText: string | number) => {
-    return String(badgeText) === "Novo" ? "outline" : "destructive";
-  };
-  
-  // Determine badge style - use light green for "Novo", red for others
-  const getBadgeStyle = (badgeText: string | number) => {
-    return String(badgeText) === "Novo" 
-      ? "bg-green-100 text-green-700 border border-green-200" 
-      : "";
-  };
-  
-  // Animation variants for the menu items
-  const menuItemVariants = {
-    initial: { opacity: 0, y: 5 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -5 }
-  };
 
-  // Handler for mouse enter
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (hasSubmenu) {
-      // Automatically open submenu on hover if not collapsed
-      if (!collapsed) {
-        toggleSubmenu();
-      }
+  // Use either the active submenu item or the parent item itself
+  const activeItem = isSubmenuActive ? 
+    item.submenu!.find(submenuItem => submenuItem.to === location.pathname) : 
+    isActive ? item : null;
+  
+  // Variants for animations
+  const submenuVariants = {
+    hidden: { opacity: 0, height: 0 },
+    visible: { 
+      opacity: 1, 
+      height: 'auto',
+      transition: { duration: 0.3 }
+    },
+    exit: {
+      opacity: 0,
+      height: 0,
+      transition: { duration: 0.2 }
     }
   };
 
-  // Handler for mouse leave
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-  
-  if (collapsed) {
-    return (
-      <Tooltip delayDuration={0}>
-        <TooltipTrigger asChild>
-          <div className="mb-1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {hasSubmenu ? (
-              <motion.button
-                onClick={toggleSubmenu}
-                className={cn(
-                  "w-full p-2 flex justify-center rounded-lg transition-all",
-                  isItemActive 
-                    ? "bg-blue-500 shadow-md shadow-blue-200 text-white" 
-                    : "text-blue-600 hover:bg-blue-50"
-                )}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <div className="relative">
-                  {React.cloneElement(item.icon as React.ReactElement, { 
-                    size: 20,
-                    className: cn(isItemActive ? "text-white" : "text-blue-600") 
-                  })}
-                  
-                  {item.badge && (
-                    <span className={cn(
-                      "absolute -top-1 -right-1 text-[10px] rounded-full w-4 h-4 flex items-center justify-center",
-                      item.badge === "Novo" 
-                        ? "bg-green-100 text-green-700 border border-green-200" 
-                        : "bg-red-500 text-white"
-                    )}>
-                      {item.badge === "Novo" ? "N" : item.badge}
+  return (
+    <div className="mb-1">
+      {/* Main menu item */}
+      {hasSubmenu ? (
+        <button
+          onClick={toggleSubmenu}
+          className={cn(
+            "flex items-center w-full px-3 py-2 rounded-md",
+            "transition-all duration-150",
+            (isActive || isSubmenuActive) && !collapsed
+              ? "bg-blue-100 text-blue-700 font-medium"
+              : "text-blue-800 hover:bg-blue-50",
+            collapsed && "justify-center"
+          )}
+        >
+          {item.icon && (
+            <span className={cn("text-blue-600", collapsed && "text-lg")}>
+              <item.icon />
+            </span>
+          )}
+          
+          {!collapsed && (
+            <>
+              <span className="ml-3 flex-grow text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                {item.label}
+              </span>
+              
+              {hasSubmenu && showArrows && (
+                <motion.span
+                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </motion.span>
+              )}
+            </>
+          )}
+        </button>
+      ) : (
+        <Link
+          to={item.to || "#"}
+          className={cn(
+            "flex items-center w-full px-3 py-2 rounded-md",
+            "transition-all duration-150",
+            isActive
+              ? "bg-blue-100 text-blue-700 font-medium"
+              : "text-blue-800 hover:bg-blue-50",
+            collapsed && "justify-center"
+          )}
+        >
+          {item.icon && (
+            <span className={cn("text-blue-600", collapsed && "text-lg")}>
+              <item.icon />
+            </span>
+          )}
+          
+          {!collapsed && (
+            <span className="ml-3 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+              {item.label}
+            </span>
+          )}
+        </Link>
+      )}
+
+      {/* Submenu items */}
+      {hasSubmenu && (
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              key="submenu"
+              variants={submenuVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className={cn(
+                "pl-3 pr-1 overflow-hidden",
+                collapsed && "absolute left-full top-0 bg-white shadow-lg rounded-md border border-blue-100 min-w-[200px] mt-0 pl-2 pr-2 py-2 ml-2"
+              )}
+            >
+              {item.submenu!.map((submenuItem, index) => (
+                <Link
+                  key={index}
+                  to={submenuItem.to || "#"}
+                  className={cn(
+                    "flex items-center px-2 py-1.5 my-1 text-sm rounded-md",
+                    "transition-colors duration-150",
+                    !collapsed && "pl-4",
+                    location.pathname === submenuItem.to
+                      ? "bg-blue-100 text-blue-700 font-medium"
+                      : "text-blue-800 hover:bg-blue-50"
+                  )}
+                >
+                  {submenuItem.icon && (
+                    <span className="text-blue-600 mr-2">
+                      <submenuItem.icon className="h-4 w-4" />
                     </span>
                   )}
-                </div>
-              </motion.button>
-            ) : (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link
-                  to={item.to}
-                  className={cn(
-                    "w-full p-2 flex justify-center rounded-lg transition-all",
-                    isItemActive 
-                      ? "bg-blue-500 shadow-md shadow-blue-200 text-white" 
-                      : "text-blue-600 hover:bg-blue-50"
-                  )}
-                >
-                  <div className="relative">
-                    {React.cloneElement(item.icon as React.ReactElement, { 
-                      size: 20,
-                      className: cn(isItemActive ? "text-white" : "text-blue-600") 
-                    })}
-                    
-                    {item.badge && (
-                      <span className={cn(
-                        "absolute -top-1 -right-1 text-[10px] rounded-full w-4 h-4 flex items-center justify-center",
-                        item.badge === "Novo" 
-                          ? "bg-green-100 text-green-700 border border-green-200" 
-                          : "bg-red-500 text-white"
-                      )}>
-                        {item.badge === "Novo" ? "N" : item.badge}
-                      </span>
-                    )}
-                  </div>
+                  <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+                    {submenuItem.label}
+                  </span>
                 </Link>
-              </motion.div>
-            )}
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="right" className="bg-white border-blue-100 text-blue-900">
-          {item.label}
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
-  
-  return (
-    <div 
-      className="mb-1.5" 
-      onMouseEnter={handleMouseEnter} 
-      onMouseLeave={handleMouseLeave}
-    >
-      {hasSubmenu ? (
-        <div>
-          <motion.button
-            onClick={toggleSubmenu}
-            className={cn(
-              "w-full p-3 flex items-center justify-between rounded-lg transition-all",
-              isItemActive 
-                ? "bg-gradient-to-r from-blue-500 to-blue-600 shadow-md shadow-blue-200/50 text-white" 
-                : "text-blue-700 hover:bg-blue-50 hover:text-blue-800"
-            )}
-            whileHover={{ x: 3 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="flex items-center space-x-3">
-              {React.cloneElement(item.icon as React.ReactElement, { 
-                size: 18,
-                className: cn(isItemActive ? "text-white" : "text-blue-600") 
-              })}
-              <span className="text-sm font-medium">{item.label}</span>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              {item.badge && (
-                <Badge 
-                  variant={getBadgeVariant(item.badge)} 
-                  className={cn(
-                    "h-5 min-w-[20px] px-1.5 font-medium",
-                    getBadgeStyle(item.badge)
-                  )}
-                >
-                  {item.badge}
-                </Badge>
-              )}
-            </div>
-          </motion.button>
-          
-          <AnimatePresence initial={false}>
-            {(isOpen || isHovered) && hasSubmenu && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="ml-4 pl-4 border-l border-blue-200 mt-1 space-y-1"
-              >
-                {item.submenu?.map((subitem) => (
-                  <motion.div
-                    key={subitem.label}
-                    variants={menuItemVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    transition={{ duration: 0.15 }}
-                  >
-                    <Link
-                      to={subitem.to}
-                      className={cn(
-                        "flex items-center justify-between py-2.5 px-3 my-1 rounded-md text-sm transition-all",
-                        location.pathname === subitem.to 
-                          ? "bg-blue-100 text-blue-700 font-medium" 
-                          : "text-blue-600 hover:bg-blue-50 hover:text-blue-800"
-                      )}
-                    >
-                      <span>{subitem.label}</span>
-                      {subitem.badge && (
-                        <Badge 
-                          variant={getBadgeVariant(subitem.badge)} 
-                          className={cn(
-                            "h-5 min-w-[20px] px-1.5 font-medium",
-                            getBadgeStyle(subitem.badge)
-                          )}
-                        >
-                          {subitem.badge}
-                        </Badge>
-                      )}
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      ) : (
-        <motion.div
-          whileHover={{ x: 3 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Link
-            to={item.to}
-            className={cn(
-              "w-full p-3 flex items-center justify-between rounded-lg transition-all",
-              isItemActive 
-                ? "bg-gradient-to-r from-blue-500 to-blue-600 shadow-md shadow-blue-200/50 text-white" 
-                : "text-blue-700 hover:bg-blue-50 hover:text-blue-800"
-            )}
-          >
-            <div className="flex items-center space-x-3">
-              {React.cloneElement(item.icon as React.ReactElement, { 
-                size: 18,
-                className: cn(isItemActive ? "text-white" : "text-blue-600") 
-              })}
-              <span className="text-sm font-medium">{item.label}</span>
-            </div>
-            
-            {item.badge && (
-              <Badge 
-                variant={getBadgeVariant(item.badge)} 
-                className={cn(
-                  "h-5 min-w-[20px] px-1.5 font-medium",
-                  getBadgeStyle(item.badge)
-                )}
-              >
-                {item.badge}
-              </Badge>
-            )}
-          </Link>
-        </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
     </div>
   );

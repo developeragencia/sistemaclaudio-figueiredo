@@ -38,21 +38,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
       <div className="flex h-screen overflow-hidden bg-gradient-to-br from-white to-blue-50/30">
-        {/* Fixed Sidebar */}
+        {/* Fixed Sidebar - always visible, doesn't close automatically */}
         <div className="relative h-screen">
-          <AnimatePresence mode="wait">
-            <motion.div 
-              className={`h-full transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'w-20' : 'w-72'}`}
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
-            </motion.div>
-          </AnimatePresence>
+          <motion.div 
+            className={`h-full transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'w-20' : 'w-72'}`}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
+          </motion.div>
         </div>
         
-        {/* Main content */}
+        {/* Main content - adjusted to work with fixed sidebar */}
         <motion.div 
           className="flex flex-col flex-grow overflow-hidden"
           initial={{ opacity: 1 }}
