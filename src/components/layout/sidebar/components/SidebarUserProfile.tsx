@@ -62,7 +62,7 @@ const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
         <div className="mt-3 pt-3 border-t border-blue-100/50 text-xs text-center text-blue-400">
           <div className="flex items-center justify-center space-x-2">
             <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></div>
-            <span>Sistema v1.2.0</span>
+            <span>Sistema Claudio Figueiredo v1.0</span>
           </div>
         </div>
       )}
