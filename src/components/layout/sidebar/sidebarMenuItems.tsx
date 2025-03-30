@@ -15,7 +15,14 @@ import {
   BarChart4,
   Clipboard,
   FileCheck,
-  Import
+  Import,
+  CreditCard,
+  Gauge,
+  Receipt,
+  FileBarChart,
+  Handshake,
+  BookOpen,
+  Table
 } from 'lucide-react';
 import { MenuItemType } from './types';
 
@@ -36,6 +43,16 @@ export const getSidebarItems = (): MenuItemType[] => {
       label: "Gestão de Clientes", 
       to: "/clients-management",
       badge: "2" 
+    },
+    { 
+      icon: <CreditCard />, 
+      label: "Créditos Tributários", 
+      to: "/tax-credits" 
+    },
+    { 
+      icon: <Calculator />, 
+      label: "Calculadora Avançada", 
+      to: "/advanced-calculator" 
     },
     { 
       icon: <Calculator />, 
@@ -61,7 +78,7 @@ export const getSidebarItems = (): MenuItemType[] => {
         { label: "Relatórios Detalhados", to: "/detailed-reports" },
         { label: "Comprovantes de Retenção", to: "/retention-receipts", badge: "3" },
         { label: "Relatórios Fiscais", to: "/fiscal-reports" },
-        { label: "Dashboard Interativo", to: "/interactive-dashboard" },
+        { label: "Painel Interativo", to: "/interactive-dashboard" },
       ]
     },
     { 
@@ -111,9 +128,10 @@ export const getSidebarItems = (): MenuItemType[] => {
 // Helper function to group items by category
 export const getGroupedSidebarItems = () => {
   const sidebarItems = getSidebarItems();
+  
   return {
     mainItems: sidebarItems.slice(0, 2),
-    moduleItems: sidebarItems.slice(2, 8),
-    systemItems: sidebarItems.slice(8)
+    moduleItems: sidebarItems.slice(2, 10), // Adjusted to include all module items (index 2-9)
+    systemItems: sidebarItems.slice(10)     // Adjusted to start from index 10
   };
 };

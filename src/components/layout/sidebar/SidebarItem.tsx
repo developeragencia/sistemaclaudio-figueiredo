@@ -27,13 +27,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   const isItemActive = isActive || isSubmenuActive;
   
   // Determine badge color - use light green for "Novo", red for others
-  const getBadgeVariant = (badgeText: string) => {
-    return badgeText === "Novo" ? "outline" : "destructive";
+  const getBadgeVariant = (badgeText: string | number) => {
+    return String(badgeText) === "Novo" ? "outline" : "destructive";
   };
   
   // Determine badge style - use light green for "Novo", red for others
-  const getBadgeStyle = (badgeText: string) => {
-    return badgeText === "Novo" 
+  const getBadgeStyle = (badgeText: string | number) => {
+    return String(badgeText) === "Novo" 
       ? "bg-green-100 text-green-700 border border-green-200" 
       : "";
   };
