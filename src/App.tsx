@@ -37,6 +37,17 @@ import AuditTrailsPage from "./pages/SecurityPages/AuditTrailsPage";
 import UsersPermissionsPage from "./pages/SecurityPages/UsersPermissionsPage";
 import PasswordResetPage from "./pages/PasswordResetPage";
 
+// Import new settings pages
+import SettingsLayout from "./pages/settings/SettingsLayout";
+import ProfileSettings from "./pages/settings/ProfileSettings";
+import AccountSettings from "./pages/settings/AccountSettings";
+import SecuritySettings from "./pages/settings/SecuritySettings";
+import AppearanceSettings from "./pages/settings/AppearanceSettings";
+import SystemSettings from "./pages/settings/SystemSettings";
+import SiteSettings from "./pages/settings/SiteSettings";
+import DatabaseSettings from "./pages/settings/DatabaseSettings";
+import LayoutSettings from "./pages/settings/LayoutSettings";
+
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
 
@@ -233,6 +244,25 @@ const App = () => {
                   </Layout>
                 </ProtectedRoute>
               } />
+
+              {/* New Settings Routes */}
+              <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SettingsLayout />
+                  </Layout>
+                </ProtectedRoute>
+              }>
+                <Route path="profile" element={<ProfileSettings />} />
+                <Route path="account" element={<AccountSettings />} />
+                <Route path="security" element={<SecuritySettings />} />
+                <Route path="appearance" element={<AppearanceSettings />} />
+                <Route path="system" element={<SystemSettings />} />
+                <Route path="site" element={<SiteSettings />} />
+                <Route path="database" element={<DatabaseSettings />} />
+                <Route path="layout" element={<LayoutSettings />} />
+                <Route index element={<ProfileSettings />} />
+              </Route>
               
               {/* Placeholder routes */}
               <Route path="/irrf-calculations" element={
@@ -350,17 +380,6 @@ const App = () => {
                   <Layout>
                     <div className="p-6">
                       <h1 className="text-2xl font-bold">Suporte</h1>
-                      <p className="text-gray-500">Página em desenvolvimento</p>
-                    </div>
-                  </Layout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/settings" element={
-                <ProtectedRoute>
-                  <Layout>
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">Configurações</h1>
                       <p className="text-gray-500">Página em desenvolvimento</p>
                     </div>
                   </Layout>

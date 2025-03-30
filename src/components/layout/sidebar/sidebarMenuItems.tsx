@@ -26,7 +26,12 @@ import {
   Shield,
   Clock,
   KeyRound,
-  UserCheck
+  UserCheck,
+  Settings,
+  User,
+  Mail,
+  Palette,
+  Layout
 } from 'lucide-react';
 import { MenuItemType } from './types';
 
@@ -130,7 +135,17 @@ export const getSidebarItems = (): MenuItemType[] => {
     { 
       icon: <Cog />, 
       label: "Configurações", 
-      to: "/settings" 
+      to: "#",
+      submenu: [
+        { label: "Perfil", to: "/settings/profile", icon: <User className="h-4 w-4" /> },
+        { label: "Conta", to: "/settings/account", icon: <Mail className="h-4 w-4" /> },
+        { label: "Segurança", to: "/settings/security", icon: <Lock className="h-4 w-4" /> },
+        { label: "Aparência", to: "/settings/appearance", icon: <Palette className="h-4 w-4" /> },
+        { label: "Sistema", to: "/settings/system", icon: <Settings className="h-4 w-4" /> },
+        { label: "Site", to: "/settings/site", icon: <Globe className="h-4 w-4" /> },
+        { label: "Banco de Dados", to: "/settings/database", icon: <Database className="h-4 w-4" /> },
+        { label: "Layout", to: "/settings/layout", icon: <Layout className="h-4 w-4" /> },
+      ]
     }
   ];
 };
@@ -141,7 +156,7 @@ export const getGroupedSidebarItems = () => {
   
   return {
     mainItems: sidebarItems.slice(0, 2),
-    moduleItems: sidebarItems.slice(2, 11), // Updated to include the new Security & Audit item
-    systemItems: sidebarItems.slice(11)     // Updated to start from the correct index
+    moduleItems: sidebarItems.slice(2, 11),
+    systemItems: sidebarItems.slice(11)
   };
 };
