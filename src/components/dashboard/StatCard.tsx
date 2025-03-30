@@ -37,20 +37,51 @@ const StatCard: React.FC<StatCardProps> = ({
     ? `${trend.isPositive ? '+' : '-'}${trend.value}%`
     : null;
 
+  // Get color based on the color prop
+  const getBgGradient = () => {
+    switch (color) {
+      case 'blue':
+        return 'hover:bg-gradient-to-br hover:from-blue-50 hover:to-indigo-50';
+      case 'purple':
+        return 'hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50';
+      case 'emerald':
+        return 'hover:bg-gradient-to-br hover:from-emerald-50 hover:to-green-50';
+      case 'amber':
+        return 'hover:bg-gradient-to-br hover:from-amber-50 hover:to-yellow-50';
+      default:
+        return 'hover:bg-gradient-to-br hover:from-slate-50 hover:to-blue-50';
+    }
+  };
+
+  const getTextColor = () => {
+    switch (color) {
+      case 'blue':
+        return 'text-blue-800';
+      case 'purple':
+        return 'text-purple-800';
+      case 'emerald':
+        return 'text-emerald-800';
+      case 'amber':
+        return 'text-amber-800';
+      default:
+        return 'text-slate-800';
+    }
+  };
+
   return (
     <motion.div 
       whileHover={{ y: -5 }} 
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
     >
-      <Card className={`overflow-hidden border transition-all duration-300 hover:shadow-lg ${className}`}>
+      <Card className={`overflow-hidden border transition-all duration-300 hover:shadow-lg ${getBgGradient()} ${className}`}>
         <CardContent className="p-6">
           <div className="flex justify-between">
-            <div className={`p-2 rounded-lg ${iconClassName}`}>
+            <div className={`p-2.5 rounded-lg shadow-sm ${iconClassName}`}>
               {icon}
             </div>
             
             {trend && (
-              <div className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+              <div className={`flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                 trend.isPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
               }`}>
                 {trend.isPositive ? (
@@ -63,10 +94,10 @@ const StatCard: React.FC<StatCardProps> = ({
             )}
           </div>
           
-          <div className="mt-3">
-            <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
-            <p className="text-2xl font-bold mt-1">{formattedValue}</p>
-            {trendLabel && <p className="text-xs text-muted-foreground mt-1">{trendLabel}</p>}
+          <div className="mt-4">
+            <h3 className="text-sm font-medium text-slate-600">{title}</h3>
+            <p className={`text-2xl font-bold mt-1 ${getTextColor()}`}>{formattedValue}</p>
+            {trendLabel && <p className="text-xs text-slate-500 mt-1">{trendLabel}</p>}
           </div>
         </CardContent>
       </Card>

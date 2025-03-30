@@ -1,18 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight, ChevronLeft } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Menu, X, ChevronRight, ChevronLeft, LogOut } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import AnimatedLogo from '@/components/ui/AnimatedLogo';
 import SidebarItem from './SidebarItem';
 import { getGroupedSidebarItems } from './sidebarMenuItems';
 import { SidebarProps } from './types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
   const location = useLocation();
-  const { userRole } = useAuth();
+  const { userRole, user } = useAuth();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [openMenus, setOpenMenus] = useState<{[key: string]: boolean}>({});
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -61,18 +62,23 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
     <>
       {/* Mobile menu button */}
       <div className="fixed top-4 left-4 z-50 md:hidden">
-        <button 
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white shadow-lg"
+        <motion.button 
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
           onClick={handleMobileToggle}
+          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.1 }}
         >
           {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        </motion.button>
       </div>
 
       {/* Sidebar overlay for mobile */}
       {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+        <motion.div 
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -82,43 +88,45 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         className={cn(
           "fixed top-0 left-0 z-40 h-full",
           "transition-all duration-300 ease-in-out",
-          collapsed ? "w-20" : "w-64",
+          collapsed ? "w-20" : "w-72",
           !isMobileMenuOpen && "hidden md:block"
         )}
         initial={false}
         animate={{ 
-          width: collapsed ? "80px" : "256px",
+          width: collapsed ? "80px" : "288px",
           x: isMobileMenuOpen ? 0 : (collapsed ? 0 : 0)
         }}
         transition={{ duration: 0.3 }}
       >
         <div className={cn(
           "flex flex-col h-full overflow-hidden",
-          "bg-gradient-to-b from-indigo-900 to-indigo-950",
-          "text-white shadow-xl"
+          "bg-gradient-to-b from-slate-900 to-slate-800",
+          "text-white shadow-xl rounded-r-xl"
         )}>
           {/* Sidebar header */}
-          <div className="flex items-center justify-between px-4 py-5 border-b border-indigo-800">
+          <div className="flex items-center justify-between px-4 py-5 border-b border-slate-700/50">
             <SidebarHeader collapsed={collapsed} />
             
-            <button 
+            <motion.button 
               onClick={toggleCollapse}
               className={cn(
                 "w-8 h-8 flex items-center justify-center",
-                "rounded-full hover:bg-indigo-800 transition-colors",
+                "rounded-full hover:bg-slate-700/60 transition-colors",
                 collapsed && "mx-auto"
               )}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               {collapsed ? (
                 <ChevronRight className="h-5 w-5" />
               ) : (
                 <ChevronLeft className="h-5 w-5" />
               )}
-            </button>
+            </motion.button>
           </div>
           
           {/* Sidebar content */}
-          <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-800">
+          <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800">
             <SidebarContent 
               items={mainItems} 
               title="Navegação Principal" 
@@ -149,21 +157,54 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
             />
           </div>
           
-          {/* Sidebar footer */}
-          {!collapsed && (
-            <div className="p-4 border-t border-indigo-800 bg-indigo-900/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse mr-2"></div>
-                  <span className="text-xs text-indigo-300">Sistema online</span>
-                </div>
-                <span className="text-xs text-indigo-400">v1.2.0</span>
-              </div>
-              <div className="text-xs text-indigo-400 mt-2 text-center">
-                <span>{userRole === 'admin' ? 'Administrador' : 'Usuário'}</span>
-              </div>
+          {/* Sidebar user profile */}
+          <div className="p-4 border-t border-slate-700/50 bg-slate-800/50">
+            <div className={cn(
+              "flex items-center",
+              collapsed ? "justify-center" : "justify-between"
+            )}>
+              {!collapsed ? (
+                <>
+                  <div className="flex items-center space-x-3">
+                    <Avatar className="h-8 w-8 ring-2 ring-blue-500/50">
+                      <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
+                      <AvatarFallback className="bg-blue-600">
+                        {userRole?.substring(0, 1).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium leading-none">{user?.name || 'Admin User'}</p>
+                      <p className="text-xs text-slate-400">{userRole === 'admin' ? 'Administrador' : 'Usuário'}</p>
+                    </div>
+                  </div>
+                  
+                  <motion.button 
+                    className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-slate-700/60"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <LogOut size={16} className="text-slate-400" />
+                  </motion.button>
+                </>
+              ) : (
+                <Avatar className="h-10 w-10 ring-2 ring-blue-500/50">
+                  <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
+                  <AvatarFallback className="bg-blue-600">
+                    {userRole?.substring(0, 1).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              )}
             </div>
-          )}
+            
+            {!collapsed && (
+              <div className="mt-3 pt-3 border-t border-slate-700/30 text-xs text-center text-slate-400">
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                  <span>Sistema v1.2.0</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </motion.aside>
     </>
@@ -188,7 +229,10 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ collapsed }) => {
       )}
     >
       <AnimatedLogo size="small" />
-      <span className="font-semibold truncate">Admin Panel</span>
+      <div className="space-y-0.5">
+        <span className="font-semibold text-lg tracking-tight">TaxSystem</span>
+        <p className="text-xs text-blue-300">Admin Dashboard</p>
+      </div>
     </motion.div>
   );
 };
@@ -213,29 +257,35 @@ const SidebarContent: React.FC<SidebarContentProps> = ({
   hasBorder = false
 }) => {
   return (
-    <div className={cn("p-3", hasBorder && "border-t border-indigo-800/50")}>
+    <div className={cn("p-3", hasBorder && "border-t border-slate-700/30 pt-5")}>
       {!collapsed && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="mb-2 px-3"
+          className="mb-3 px-3"
         >
-          <span className="text-xs text-indigo-400 uppercase font-semibold">
+          <span className="text-xs uppercase font-semibold tracking-wider text-blue-300">
             {title}
           </span>
         </motion.div>
       )}
       
       {items.map((item) => (
-        <SidebarItem 
+        <motion.div
           key={item.label}
-          item={item}
-          collapsed={collapsed}
-          isActive={location.pathname === item.to}
-          isOpen={!!openMenus[item.label]}
-          toggleSubmenu={() => toggleSubmenu(item.label)}
-        />
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <SidebarItem 
+            item={item}
+            collapsed={collapsed}
+            isActive={location.pathname === item.to}
+            isOpen={!!openMenus[item.label]}
+            toggleSubmenu={() => toggleSubmenu(item.label)}
+          />
+        </motion.div>
       ))}
     </div>
   );

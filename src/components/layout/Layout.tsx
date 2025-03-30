@@ -27,10 +27,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
-      <div className="flex h-screen bg-gradient-to-br from-gray-50 to-sky-50 overflow-hidden">
+      <div className="flex h-screen overflow-hidden">
+        {/* Sidebar */}
         <AnimatePresence mode="wait">
           <motion.div 
-            className={`transition-all duration-300 relative ${sidebarCollapsed ? 'w-16' : 'w-64'}`}
+            className={`transition-all duration-300 relative ${sidebarCollapsed ? 'w-20' : 'w-72'}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
@@ -39,13 +40,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </motion.div>
         </AnimatePresence>
         
+        {/* Main content */}
         <div className="flex flex-col flex-grow overflow-hidden">
           <Header toggleSidebar={toggleSidebar} />
           
           <AnimatePresence mode="wait">
             {mounted && (
               <motion.main 
-                className="flex-grow overflow-auto p-6 bg-gradient-to-br from-sky-50 to-indigo-50"
+                className="flex-grow overflow-auto p-6 bg-gradient-to-br from-slate-50 to-blue-50/50"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}

@@ -3,6 +3,7 @@ import React from 'react';
 import { Client } from '../../types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { motion } from 'framer-motion';
 
 interface ClientsTableProps {
   clients: Client[];
@@ -15,11 +16,11 @@ const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {
       case 'active':
         return 'bg-green-100 text-green-800 hover:bg-green-200';
       case 'inactive':
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+        return 'bg-slate-100 text-slate-800 hover:bg-slate-200';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
+        return 'bg-amber-100 text-amber-800 hover:bg-amber-200';
       default:
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+        return 'bg-slate-100 text-slate-800 hover:bg-slate-200';
     }
   };
 
@@ -27,21 +28,52 @@ const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {
     return new Intl.DateTimeFormat('pt-BR').format(date);
   };
 
+  // Animation variants
+  const tableVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05
+      }
+    }
+  };
+  
+  const rowVariants = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="rounded-md border">
+    <motion.div 
+      className="rounded-md border overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-slate-50">
           <TableRow>
-            <TableHead>Nome do Cliente</TableHead>
-            <TableHead>CNPJ</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Data de Cadastro</TableHead>
-            <TableHead>Última Atualização</TableHead>
+            <TableHead className="font-medium">Nome do Cliente</TableHead>
+            <TableHead className="font-medium">CNPJ</TableHead>
+            <TableHead className="font-medium">Status</TableHead>
+            <TableHead className="font-medium">Data de Cadastro</TableHead>
+            <TableHead className="font-medium">Última Atualização</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {clients.map((client) => (
-            <TableRow key={client.id} className="hover:bg-gray-50 cursor-pointer">
+        <motion.tbody
+          variants={tableVariants}
+          initial="hidden"
+          animate="show"
+        >
+          {clients.map((client, index) => (
+            <motion.tr 
+              key={client.id} 
+              className="hover:bg-slate-50 cursor-pointer border-b last:border-0 transition-colors"
+              variants={rowVariants}
+              custom={index}
+              whileHover={{ backgroundColor: "rgba(241, 245, 249, 0.9)" }}
+            >
               <TableCell className="font-medium">{client.name}</TableCell>
               <TableCell>{client.cnpj}</TableCell>
               <TableCell>
@@ -52,11 +84,11 @@ const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {
               </TableCell>
               <TableCell>{formatDate(client.createdAt)}</TableCell>
               <TableCell>{formatDate(client.updatedAt)}</TableCell>
-            </TableRow>
+            </motion.tr>
           ))}
-        </TableBody>
+        </motion.tbody>
       </Table>
-    </div>
+    </motion.div>
   );
 };
 
