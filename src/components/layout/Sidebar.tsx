@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, 
@@ -20,404 +21,526 @@ import {
   Lightbulb,
   LayoutDashboard,
   Check,
-  ArrowLeft
+  ArrowLeft,
+  Menu,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedLogo from '../ui/AnimatedLogo';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SidebarProps {
   collapsed: boolean;
   toggleCollapse: () => void;
 }
 
-interface SidebarItemProps {
+interface MenuItemType {
   icon: React.ReactNode;
   label: string;
   to: string;
-  isActive?: boolean;
-  collapsed?: boolean;
-  hasSubmenu?: boolean;
-  isSubmenuOpen?: boolean;
-  toggleSubmenu?: () => void;
   badge?: number | string;
-  className?: string;
+  submenu?: {
+    label: string;
+    to: string;
+    badge?: number | string;
+  }[];
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
+  const location = useLocation();
+  const { userRole } = useAuth();
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const [openMenus, setOpenMenus] = useState<{[key: string]: boolean}>({});
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Update active item based on current location
+  useEffect(() => {
+    const path = location.pathname;
+    const currentItem = sidebarItems.find(item => 
+      item.to === path || 
+      item.submenu?.some(subitem => subitem.to === path)
+    );
+    
+    if (currentItem) {
+      setActiveItem(currentItem.label);
+      // Auto-expand menu if a submenu item is active
+      if (currentItem.submenu && currentItem.submenu.some(subitem => subitem.to === path)) {
+        setOpenMenus(prev => ({ ...prev, [currentItem.label]: true }));
+      }
+    }
+  }, [location.pathname]);
+  
+  // Handle submenu toggle
+  const toggleSubmenu = (label: string) => {
+    if (collapsed) {
+      setOpenMenus({});
+      return;
+    }
+    
+    setOpenMenus(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
+  };
+
+  // Sidebar items configuration
+  const sidebarItems: MenuItemType[] = [
+    { 
+      icon: <ArrowLeft />, 
+      label: "Voltar para Home", 
+      to: "/" 
+    },
+    { 
+      icon: <LayoutDashboard />, 
+      label: "Dashboard", 
+      to: "/dashboard" 
+    },
+    { 
+      icon: <Users />, 
+      label: "Gestão de Clientes", 
+      to: "/clients-management",
+      badge: "2" 
+    },
+    { 
+      icon: <Calculator />, 
+      label: "Cálculos e Recuperação", 
+      to: "#",
+      submenu: [
+        { label: "Cálculos IRRF", to: "/irrf-calculations" },
+        { label: "Recuperação IRRF/PJ", to: "/irrf-recovery" },
+        { label: "Identificação de Créditos", to: "/credits-identification" },
+      ]
+    },
+    { 
+      icon: <ShieldCheck />, 
+      label: "Auditoria Tributária", 
+      to: "/tax-audit" 
+    },
+    { 
+      icon: <FileText />, 
+      label: "Relatórios", 
+      to: "#",
+      badge: "3",
+      submenu: [
+        { label: "Relatórios Detalhados", to: "/detailed-reports" },
+        { label: "Comprovantes de Retenção", to: "/retention-receipts", badge: "3" },
+        { label: "Relatórios Fiscais", to: "/fiscal-reports" },
+        { label: "Dashboard Interativo", to: "/interactive-dashboard" },
+      ]
+    },
+    { 
+      icon: <BarChart3 />, 
+      label: "Gestão", 
+      to: "#",
+      badge: "5",
+      submenu: [
+        { label: "Propostas Comerciais", to: "/commercial-proposals", badge: "5" },
+        { label: "Compensação Tributária", to: "/tax-compensation" },
+        { label: "Gestão de Auditorias", to: "/audit-management" },
+      ]
+    },
+    { 
+      icon: <Globe />, 
+      label: "Sistema", 
+      to: "#",
+      submenu: [
+        { label: "Segurança & Auditoria", to: "/security-audit" },
+        { label: "Operacional", to: "/operational" },
+        { label: "Site e Conteúdo", to: "/site-editor" },
+        { label: "Importação", to: "/import" },
+      ]
+    },
+    { 
+      icon: <LifeBuoy />, 
+      label: "Suporte", 
+      to: "/support" 
+    },
+    { 
+      icon: <Cog />, 
+      label: "Configurações", 
+      to: "/settings" 
+    }
+  ];
+  
+  // Group items by category
+  const mainItems = sidebarItems.slice(0, 2);
+  const moduleItems = sidebarItems.slice(2, 7);
+  const systemItems = sidebarItems.slice(7);
+
+  // Mobile toggle
+  const handleMobileToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  return (
+    <>
+      {/* Mobile menu button */}
+      <div className="fixed top-4 left-4 z-50 md:hidden">
+        <button 
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white shadow-lg"
+          onClick={handleMobileToggle}
+        >
+          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+
+      {/* Sidebar overlay for mobile */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Main sidebar */}
+      <motion.aside
+        className={cn(
+          "fixed top-0 left-0 z-40 h-full",
+          "transition-all duration-300 ease-in-out",
+          collapsed ? "w-20" : "w-64",
+          !isMobileMenuOpen && "hidden md:block"
+        )}
+        initial={false}
+        animate={{ 
+          width: collapsed ? "80px" : "256px",
+          x: isMobileMenuOpen ? 0 : (collapsed ? 0 : 0)
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className={cn(
+          "flex flex-col h-full overflow-hidden",
+          "bg-gradient-to-b from-indigo-900 to-indigo-950",
+          "text-white shadow-xl"
+        )}>
+          {/* Sidebar header */}
+          <div className="flex items-center justify-between px-4 py-5 border-b border-indigo-800">
+            <AnimatePresence>
+              {!collapsed && (
+                <motion.div
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center space-x-2"
+                >
+                  <AnimatedLogo size="small" />
+                  <span className="font-semibold truncate">Admin Panel</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
+            <button 
+              onClick={toggleCollapse}
+              className={cn(
+                "w-8 h-8 flex items-center justify-center",
+                "rounded-full hover:bg-indigo-800 transition-colors",
+                collapsed && "mx-auto"
+              )}
+            >
+              {collapsed ? (
+                <ChevronRight className="h-5 w-5" />
+              ) : (
+                <ChevronLeft className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          
+          {/* Sidebar content */}
+          <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-800">
+            {/* Main navigation */}
+            <div className="p-3">
+              <AnimatePresence>
+                {!collapsed && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-2 px-3"
+                  >
+                    <span className="text-xs text-indigo-400 uppercase font-semibold">
+                      Navegação Principal
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              {mainItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  item={item}
+                  collapsed={collapsed}
+                  isActive={location.pathname === item.to}
+                  isOpen={!!openMenus[item.label]}
+                  toggleSubmenu={() => toggleSubmenu(item.label)}
+                />
+              ))}
+            </div>
+            
+            {/* Module items */}
+            <div className="p-3 border-t border-indigo-800/50">
+              <AnimatePresence>
+                {!collapsed && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-2 px-3"
+                  >
+                    <span className="text-xs text-indigo-400 uppercase font-semibold">
+                      Módulos Principais
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              {moduleItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  item={item}
+                  collapsed={collapsed}
+                  isActive={location.pathname === item.to || activeItem === item.label}
+                  isOpen={!!openMenus[item.label]}
+                  toggleSubmenu={() => toggleSubmenu(item.label)}
+                />
+              ))}
+            </div>
+            
+            {/* System items */}
+            <div className="p-3 border-t border-indigo-800/50">
+              <AnimatePresence>
+                {!collapsed && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-2 px-3"
+                  >
+                    <span className="text-xs text-indigo-400 uppercase font-semibold">
+                      Sistema
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              {systemItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  item={item}
+                  collapsed={collapsed}
+                  isActive={location.pathname === item.to || activeItem === item.label}
+                  isOpen={!!openMenus[item.label]}
+                  toggleSubmenu={() => toggleSubmenu(item.label)}
+                />
+              ))}
+            </div>
+          </div>
+          
+          {/* Sidebar footer */}
+          {!collapsed && (
+            <div className="p-4 border-t border-indigo-800 bg-indigo-900/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse mr-2"></div>
+                  <span className="text-xs text-indigo-300">Sistema online</span>
+                </div>
+                <span className="text-xs text-indigo-400">v1.2.0</span>
+              </div>
+              <div className="text-xs text-indigo-400 mt-2 text-center">
+                <span>{userRole === 'admin' ? 'Administrador' : 'Usuário'}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.aside>
+    </>
+  );
+};
+
+// Sidebar Item Component
+interface SidebarItemProps {
+  item: MenuItemType;
+  collapsed: boolean;
+  isActive: boolean;
+  isOpen: boolean;
+  toggleSubmenu: () => void;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ 
-  icon, 
-  label, 
-  to, 
-  isActive = false, 
-  collapsed = false,
-  hasSubmenu = false,
-  isSubmenuOpen = false,
-  toggleSubmenu,
-  badge,
-  className
+  item, 
+  collapsed, 
+  isActive, 
+  isOpen,
+  toggleSubmenu 
 }) => {
+  const hasSubmenu = item.submenu && item.submenu.length > 0;
+  const location = useLocation();
+  
+  // Check if any submenu item is active
+  const isSubmenuActive = hasSubmenu && item.submenu?.some(
+    subitem => subitem.to === location.pathname
+  );
+  
+  // Combine active states
+  const isItemActive = isActive || isSubmenuActive;
+  
   if (collapsed) {
     return (
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
-          <Link 
-            to={to} 
-            className={cn(
-              "flex items-center justify-center p-3 rounded-xl mb-2 transition-all duration-300",
-              isActive 
-                ? "bg-white/20 text-white shadow-lg" 
-                : "hover:bg-white/10 text-white/70",
-              className
+          <div className="mb-1">
+            {hasSubmenu ? (
+              <button
+                onClick={toggleSubmenu}
+                className={cn(
+                  "w-full p-2 flex justify-center rounded-lg transition-colors",
+                  isItemActive 
+                    ? "bg-indigo-700 text-white" 
+                    : "text-indigo-200 hover:bg-indigo-800/60"
+                )}
+              >
+                <div className="relative">
+                  {React.cloneElement(item.icon as React.ReactElement, { 
+                    size: 20,
+                    className: cn(isItemActive ? "text-white" : "text-indigo-200") 
+                  })}
+                  
+                  {item.badge && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+              </button>
+            ) : (
+              <Link
+                to={item.to}
+                className={cn(
+                  "w-full p-2 flex justify-center rounded-lg transition-colors",
+                  isItemActive 
+                    ? "bg-indigo-700 text-white" 
+                    : "text-indigo-200 hover:bg-indigo-800/60"
+                )}
+              >
+                <div className="relative">
+                  {React.cloneElement(item.icon as React.ReactElement, { 
+                    size: 20,
+                    className: cn(isItemActive ? "text-white" : "text-indigo-200") 
+                  })}
+                  
+                  {item.badge && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+              </Link>
             )}
-            onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
-          >
-            <div className="relative">
-              {React.cloneElement(icon as React.ReactElement, { 
-                className: cn("h-5 w-5", isActive ? "text-white" : "text-white/70") 
-              })}
-              
-              {badge && (
-                <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                  {badge}
-                </span>
-              )}
-            </div>
-          </Link>
+          </div>
         </TooltipTrigger>
-        <TooltipContent side="right" className="border-none bg-gray-800/90">
-          {label}
+        <TooltipContent side="right" className="bg-indigo-900 text-white border-indigo-700">
+          {item.label}
         </TooltipContent>
       </Tooltip>
     );
   }
   
   return (
-    <Link
-      to={hasSubmenu ? "#" : to}
-      onClick={hasSubmenu && toggleSubmenu ? toggleSubmenu : undefined}
-      className={cn(
-        "flex items-center justify-between px-4 py-3 rounded-xl mb-2 transition-all duration-300",
-        isActive 
-          ? "bg-white/20 text-white shadow-lg" 
-          : "text-white/70 hover:bg-white/10 hover:text-white",
-        className
-      )}
-    >
-      <div className="flex items-center">
-        {React.cloneElement(icon as React.ReactElement, { 
-          className: cn("h-5 w-5 mr-3", 
-            isActive ? "text-white" : "text-white/70") 
-        })}
-        <span className={cn(
-          "font-medium text-sm",
-          isActive ? "text-white" : "text-white/80"
-        )}>
-          {label}
-        </span>
-      </div>
-      
-      <div className="flex items-center">
-        {badge && (
-          <span className="mr-2 bg-rose-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
-            {badge}
-          </span>
-        )}
-        
-        {hasSubmenu && (
-          <motion.div
-            animate={{ rotate: isSubmenuOpen ? 90 : 0 }}
-            transition={{ duration: 0.2 }}
+    <div className="mb-1">
+      {hasSubmenu ? (
+        <div>
+          <button
+            onClick={toggleSubmenu}
+            className={cn(
+              "w-full p-2 flex items-center justify-between rounded-lg transition-colors",
+              isItemActive 
+                ? "bg-indigo-700/80 text-white" 
+                : "text-indigo-200 hover:bg-indigo-800/40"
+            )}
           >
-            <ChevronRight className="h-4 w-4 text-white/70" />
-          </motion.div>
-        )}
-      </div>
-    </Link>
-  );
-};
-
-interface SidebarSubmenuProps {
-  items: {
-    label: string;
-    to: string;
-    badge?: number | string;
-  }[];
-  isOpen: boolean;
-  collapsed: boolean;
-}
-
-const SidebarSubmenu: React.FC<SidebarSubmenuProps> = ({ items, isOpen, collapsed }) => {
-  const location = useLocation();
-  
-  if (!isOpen || collapsed) return null;
-  
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div 
-          className="ml-5 mt-1 mb-3 space-y-1 border-l border-white/20 pl-3"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {items.map((item, index) => (
-            <Link
-              key={index}
-              to={item.to}
-              className={cn(
-                "flex items-center justify-between py-2 pl-2 pr-3 text-sm rounded-md transition-all duration-200",
-                location.pathname === item.to 
-                  ? "text-white bg-white/10 font-medium" 
-                  : "text-white/60 hover:text-white hover:bg-white/5"
-              )}
-            >
-              <span>{item.label}</span>
+            <div className="flex items-center space-x-3">
+              {React.cloneElement(item.icon as React.ReactElement, { 
+                size: 18,
+                className: cn(isItemActive ? "text-white" : "text-indigo-300") 
+              })}
+              <span className="text-sm font-medium">{item.label}</span>
+            </div>
+            
+            <div className="flex items-center space-x-2">
               {item.badge && (
-                <span className="bg-rose-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
+                <span className="bg-red-500 text-white text-xs rounded-md px-1.5 py-0.5 min-w-[20px] text-center">
                   {item.badge}
                 </span>
               )}
-            </Link>
-          ))}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
-
-const SidebarSection: React.FC<{title: string, collapsed: boolean}> = ({ title, collapsed }) => {
-  if (collapsed) return null;
-  
-  return (
-    <div className="px-4 py-2">
-      <h3 className="text-xs font-semibold uppercase text-white/50 tracking-wider">
-        {title}
-      </h3>
-    </div>
-  );
-};
-
-const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
-  const location = useLocation();
-  const [openMenus, setOpenMenus] = useState<{[key: string]: boolean}>({
-    calculations: false,
-    reports: false,
-    management: false,
-    system: false
-  });
-  
-  const toggleSubmenu = (menu: string) => {
-    if (collapsed) return;
-    setOpenMenus(prev => ({
-      ...prev,
-      [menu]: !prev[menu]
-    }));
-  };
-  
-  const calculationItems = [
-    { label: "Cálculos IRRF", to: "/irrf-calculations" },
-    { label: "Recuperação IRRF/PJ", to: "/irrf-recovery" },
-    { label: "Identificação de Créditos", to: "/credits-identification" },
-  ];
-  
-  const reportItems = [
-    { label: "Relatórios Detalhados", to: "/detailed-reports" },
-    { label: "Comprovantes de Retenção", to: "/retention-receipts", badge: "3" },
-    { label: "Relatórios Fiscais", to: "/fiscal-reports" },
-    { label: "Dashboard Interativo", to: "/interactive-dashboard" },
-  ];
-  
-  const managementItems = [
-    { label: "Propostas Comerciais", to: "/commercial-proposals", badge: "5" },
-    { label: "Compensação Tributária", to: "/tax-compensation" },
-    { label: "Gestão de Auditorias", to: "/audit-management" },
-  ];
-  
-  const systemItems = [
-    { label: "Segurança & Auditoria", to: "/security-audit" },
-    { label: "Operacional", to: "/operational" },
-    { label: "Site e Conteúdo", to: "/site-editor" },
-    { label: "Importação", to: "/import" },
-  ];
-
-  const sidebarVariants = {
-    expanded: { width: '260px' },
-    collapsed: { width: '80px' }
-  };
-
-  return (
-    <motion.aside 
-      className={cn(
-        "h-screen fixed z-30 transition-all flex flex-col",
-        "bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-md",
-        "shadow-xl border-r border-white/10",
-        collapsed ? "w-20" : "w-64"
-      )}
-      variants={sidebarVariants}
-      initial={collapsed ? "collapsed" : "expanded"}
-      animate={collapsed ? "collapsed" : "expanded"}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-    >
-      <div className={cn(
-        "flex items-center h-16 border-b border-white/10",
-        collapsed ? "justify-center px-2" : "px-4 justify-between"
-      )}>
-        {!collapsed ? (
-          <>
-            <AnimatedLogo size="small" />
-            <button 
-              onClick={toggleCollapse} 
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors"
-            >
-              <ChevronLeft className="h-4 w-4 text-white/80" />
-            </button>
-          </>
-        ) : (
-          <button 
-            onClick={toggleCollapse} 
-            className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors"
-          >
-            <AnimatedLogo size="small" showText={false} />
-          </button>
-        )}
-      </div>
-      
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-        <SidebarItem 
-          icon={<ArrowLeft />} 
-          label="Voltar para Home" 
-          to="/" 
-          isActive={location.pathname === "/"} 
-          collapsed={collapsed} 
-          className="mb-4 bg-gradient-to-r from-blue-600/70 to-indigo-600/70 hover:from-blue-600/80 hover:to-indigo-600/80"
-        />
-        
-        <SidebarItem 
-          icon={<LayoutDashboard />} 
-          label="Dashboard" 
-          to="/dashboard" 
-          isActive={location.pathname === "/dashboard"}
-          collapsed={collapsed} 
-        />
-        
-        <SidebarSection title="Módulos Principais" collapsed={collapsed} />
-        
-        <SidebarItem 
-          icon={<Users />} 
-          label="Gestão de Clientes" 
-          to="/clients-management"
-          isActive={location.pathname === "/clients-management"} 
-          collapsed={collapsed}
-          badge="2"
-        />
-        
-        <SidebarItem 
-          icon={<Calculator />} 
-          label="Cálculos e Recuperação" 
-          to="#" 
-          hasSubmenu={true}
-          isSubmenuOpen={openMenus.calculations}
-          toggleSubmenu={() => toggleSubmenu('calculations')}
-          collapsed={collapsed}
-        />
-        
-        <SidebarSubmenu 
-          items={calculationItems} 
-          isOpen={openMenus.calculations} 
-          collapsed={collapsed} 
-        />
-        
-        <SidebarItem 
-          icon={<ShieldCheck />} 
-          label="Auditoria Tributária" 
-          to="/tax-audit"
-          isActive={location.pathname === "/tax-audit"} 
-          collapsed={collapsed}
-        />
-        
-        <SidebarItem 
-          icon={<FileText />} 
-          label="Relatórios" 
-          to="#" 
-          hasSubmenu={true}
-          isSubmenuOpen={openMenus.reports}
-          toggleSubmenu={() => toggleSubmenu('reports')}
-          collapsed={collapsed}
-          badge="3"
-        />
-        
-        <SidebarSubmenu 
-          items={reportItems} 
-          isOpen={openMenus.reports} 
-          collapsed={collapsed} 
-        />
-        
-        <SidebarItem 
-          icon={<BarChart3 />} 
-          label="Gestão" 
-          to="#" 
-          hasSubmenu={true}
-          isSubmenuOpen={openMenus.management}
-          toggleSubmenu={() => toggleSubmenu('management')}
-          collapsed={collapsed}
-          badge="5"
-        />
-        
-        <SidebarSubmenu 
-          items={managementItems} 
-          isOpen={openMenus.management} 
-          collapsed={collapsed} 
-        />
-        
-        <SidebarSection title="Sistema" collapsed={collapsed} />
-        
-        <SidebarItem 
-          icon={<Globe />} 
-          label="Sistema" 
-          to="#" 
-          hasSubmenu={true}
-          isSubmenuOpen={openMenus.system}
-          toggleSubmenu={() => toggleSubmenu('system')}
-          collapsed={collapsed}
-        />
-        
-        <SidebarSubmenu 
-          items={systemItems} 
-          isOpen={openMenus.system} 
-          collapsed={collapsed} 
-        />
-        
-        <SidebarItem 
-          icon={<LifeBuoy />} 
-          label="Suporte" 
-          to="/support" 
-          isActive={location.pathname === "/support"}
-          collapsed={collapsed}
-        />
-        
-        <SidebarItem 
-          icon={<Cog />} 
-          label="Configurações" 
-          to="/settings" 
-          isActive={location.pathname === "/settings"}
-          collapsed={collapsed}
-        />
-      </div>
-      
-      {!collapsed && (
-        <div className="border-t border-white/10 px-4 py-3 bg-white/5 backdrop-blur-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></div>
-              <span className="text-xs text-white/70">Sistema operacional</span>
+              
+              <motion.div
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ChevronDown className="h-4 w-4 text-indigo-400" />
+              </motion.div>
             </div>
-            <span className="text-xs text-white/50">v1.2.0</span>
-          </div>
+          </button>
+          
+          <AnimatePresence initial={false}>
+            {isOpen && hasSubmenu && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="ml-4 pl-4 border-l border-indigo-700/50 mt-1"
+              >
+                {item.submenu?.map((subitem) => (
+                  <Link
+                    key={subitem.label}
+                    to={subitem.to}
+                    className={cn(
+                      "flex items-center justify-between py-2 px-3 my-1 rounded-md text-sm transition-colors",
+                      location.pathname === subitem.to 
+                        ? "bg-indigo-800/70 text-white" 
+                        : "text-indigo-300 hover:bg-indigo-800/40 hover:text-white"
+                    )}
+                  >
+                    <span>{subitem.label}</span>
+                    {subitem.badge && (
+                      <span className="bg-red-500 text-white text-xs rounded-md px-1.5 py-0.5 min-w-[20px] text-center">
+                        {subitem.badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
+      ) : (
+        <Link
+          to={item.to}
+          className={cn(
+            "w-full p-2 flex items-center justify-between rounded-lg transition-colors",
+            isItemActive 
+              ? "bg-indigo-700/80 text-white" 
+              : "text-indigo-200 hover:bg-indigo-800/40"
+          )}
+        >
+          <div className="flex items-center space-x-3">
+            {React.cloneElement(item.icon as React.ReactElement, { 
+              size: 18,
+              className: cn(isItemActive ? "text-white" : "text-indigo-300") 
+            })}
+            <span className="text-sm font-medium">{item.label}</span>
+          </div>
+          
+          {item.badge && (
+            <span className="bg-red-500 text-white text-xs rounded-md px-1.5 py-0.5 min-w-[20px] text-center">
+              {item.badge}
+            </span>
+          )}
+        </Link>
       )}
-    </motion.aside>
+    </div>
   );
 };
 

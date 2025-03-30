@@ -182,6 +182,21 @@ function Login() {
             </CardFooter>
           </form>
         </Card>
+        
+        {/* Developer attribution */}
+        <div className="text-center mt-6 text-sm text-gray-500">
+          <p>
+            Desenvolvido por{" "}
+            <a 
+              href="https://alexdesenvolvedor.com.br" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sky-600 hover:text-sky-800 font-medium"
+            >
+              Alex Developer
+            </a>
+          </p>
+        </div>
       </motion.div>
     </div>
   );
