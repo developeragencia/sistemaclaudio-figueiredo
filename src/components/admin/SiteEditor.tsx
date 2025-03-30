@@ -130,7 +130,7 @@ const SiteEditor: React.FC = () => {
       toast({
         title: "Conteúdo salvo",
         description: "As alterações foram salvas com sucesso.",
-        variant: "success"
+        variant: "default"
       });
     }, 1000);
   };
