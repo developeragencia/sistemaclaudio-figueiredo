@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useClient } from '@/contexts/ClientContext';
 import { Client } from '@/types';
@@ -19,6 +18,7 @@ import ClientExecution from '@/components/client/ClientExecution';
 import ClientTimeline from '@/components/client/ClientTimeline';
 import ClientDetailsPanel from '@/components/client/ClientDetailsPanel';
 import { motion } from 'framer-motion';
+import TaxCalculator from '@/components/calculator/TaxCalculator';
 
 // Import client mock data
 import { ClientDetailedInfo } from '@/types/client';

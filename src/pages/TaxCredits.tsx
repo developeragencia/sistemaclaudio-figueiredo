@@ -9,6 +9,7 @@ import TaxCreditsTable from '@/components/tax-credits/TaxCreditsTable';
 import TaxCreditsSummary from '@/components/tax-credits/TaxCreditsSummary';
 import TaxCreditsTimeline from '@/components/tax-credits/TaxCreditsTimeline';
 import TaxCreditSimulator from '@/components/tax-credits/TaxCreditSimulator';
+import TaxCreditsCalculator from '@/components/tax-credits/TaxCreditsCalculator';
 
 const TaxCredits = () => {
   return (
