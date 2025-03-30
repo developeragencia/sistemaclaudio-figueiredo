@@ -20,6 +20,9 @@ import DataImport from "./pages/DataImport";
 import RetentionAudit from "./pages/RetentionAudit";
 import Reports from "./pages/Reports";
 import SecuritySettings from "./pages/SecuritySettings";
+import SuppliersManagement from "./pages/SuppliersManagement";
+import PaymentsManagement from "./pages/PaymentsManagement";
+import { TwoFactorAuth } from "./components/auth/TwoFactorAuth";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -36,6 +39,7 @@ const App = () => {
               {/* Public Routes */}
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/2fa" element={<TwoFactorAuth />} />
 
               {/* Protected Routes */}
               <Route path="/dashboard" element={
@@ -104,6 +108,24 @@ const App = () => {
                 <ProtectedRoute>
                   <Layout>
                     <ClientsManagement />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Suppliers Management - New Page */}
+              <Route path="/suppliers-management" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SuppliersManagement />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Payments Management - New Page */}
+              <Route path="/payments-management" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <PaymentsManagement />
                   </Layout>
                 </ProtectedRoute>
               } />

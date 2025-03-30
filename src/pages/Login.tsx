@@ -1,135 +1,187 @@
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import AnimatedLogo from "@/components/ui/AnimatedLogo";
-import { ArrowLeft, LogIn, UserCircle, Key } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import React, { useState, FormEvent } from 'react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
+import { Check, AlertTriangle, Lock, Mail } from 'lucide-react';
+import { UserRole } from '@/types';
+import { motion } from 'framer-motion';
+import AnimatedLogo from '@/components/ui/AnimatedLogo';
 
-// Admin credentials (in real app, these would be stored securely)
-const ADMIN_EMAIL = "admin@sistemasclaudiofigueiredo.com.br";
-const ADMIN_PASSWORD = "admin123";
-
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+function Login() {
+  const [email, setEmail] = useState<string>('admin@example.com');
+  const [password, setPassword] = useState<string>('password');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { login } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     
-    // Simulate API call delay
-    setTimeout(() => {
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-        // Successful login
+    if (!email || !password) {
+      setError('Por favor, preencha todos os campos.');
+      return;
+    }
+    
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      
+      // Simulate network request
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Check if the user requires 2FA (for demo, we'll assume admin users require 2FA)
+      if (email.includes('admin')) {
+        // Instead of logging in directly, redirect to 2FA
         toast({
-          title: "Login bem-sucedido",
-          description: "Bem-vindo ao sistema de gerenciamento.",
-          variant: "default",
+          title: "Verificação adicional necessária",
+          description: "Por favor, complete a autenticação de dois fatores.",
         });
-        // Use the auth context to login
-        login(email);
-        navigate("/dashboard");
-      } else {
-        // Failed login
-        toast({
-          title: "Falha no login",
-          description: "Email ou senha incorretos.",
-          variant: "destructive",
-        });
+        navigate('/2fa');
+        return;
       }
-      setIsLoading(false);
-    }, 1000);
+      
+      // For non-admin users, log in directly
+      const userRole: UserRole = email.includes('admin') 
+        ? 'admin' 
+        : email.includes('client') 
+          ? 'client' 
+          : email.includes('sales') 
+            ? 'sales_rep' 
+            : 'office_staff';
+            
+      login(email, userRole);
+      
+      toast({
+        title: "Login realizado com sucesso",
+        description: `Bem-vindo de volta, ${email}!`,
+        variant: "default",
+      });
+      
+      navigate('/dashboard');
+      
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Erro ao realizar login. Por favor, tente novamente.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-sky-200/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute top-20 -right-20 w-60 h-60 bg-sky-300/10 rounded-full blur-3xl animate-pulse-slow delay-300"></div>
-        <div className="absolute -bottom-40 left-1/3 w-80 h-80 bg-sky-100/20 rounded-full blur-3xl animate-pulse-slow delay-600"></div>
-      </div>
-
-      {/* Return to Home */}
-      <div className="absolute top-6 left-6">
-        <Link to="/" className="flex items-center gap-2 text-sky-800 hover:text-sky-600 transition-colors animated-link">
-          <ArrowLeft size={20} />
-          <span>Voltar para a página inicial</span>
-        </Link>
-      </div>
-      
-      {/* Login Card with Animation */}
-      <div className="w-full max-w-md z-10 animate-scale-in">
-        <Card className="border-sky-200 shadow-xl backdrop-blur-sm bg-white/95">
-          <CardHeader className="space-y-1 flex flex-col items-center">
-            <div className="mb-2 transform hover:scale-105 transition-transform duration-300">
-              <AnimatedLogo size="large" />
-            </div>
-            <CardTitle className="text-2xl text-center text-sky-800">Acesso ao Sistema</CardTitle>
-            <CardDescription className="text-center text-sky-500">
-              Entre com suas credenciais para acessar o painel administrativo
-            </CardDescription>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 to-white p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-lg w-full"
+      >
+        <div className="text-center mb-8">
+          <AnimatedLogo size="large" showText={true} />
+          <p className="text-sky-700 mt-2">
+            Sistema de Auditoria e Gestão Tributária
+          </p>
+        </div>
+        
+        <Card className="shadow-lg border-sky-100">
+          <CardHeader className="bg-sky-50/50 space-y-1">
+            <CardTitle className="text-sky-800 text-2xl text-center">Acesso ao Sistema</CardTitle>
           </CardHeader>
-          <form onSubmit={handleLogin}>
-            <CardContent className="space-y-6">
+          
+          <form onSubmit={handleSubmit}>
+            <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
-                <div className="relative">
-                  <UserCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-500" />
-                  <Input
-                    className="pl-10 border-sky-300 focus:border-sky-800"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+                <Label htmlFor="email" className="flex items-center gap-1">
+                  <Mail className="h-4 w-4" />
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seu-email@exemplo.com"
+                  autoComplete="email"
+                  disabled={isSubmitting}
+                  required
+                />
               </div>
+              
               <div className="space-y-2">
-                <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-500" />
-                  <Input
-                    className="pl-10 border-sky-300 focus:border-sky-800"
-                    type="password"
-                    placeholder="Senha"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
+                <Label htmlFor="password" className="flex items-center gap-1">
+                  <Lock className="h-4 w-4" />
+                  Senha
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Sua senha"
+                  autoComplete="current-password"
+                  disabled={isSubmitting}
+                  required
+                />
               </div>
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    className="rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  <Label htmlFor="remember" className="text-sm text-muted-foreground">
+                    Lembrar-me
+                  </Label>
+                </div>
+                
+                <a href="#" className="text-sm text-sky-600 hover:text-sky-800">
+                  Esqueceu a senha?
+                </a>
+              </div>
+              
+              {error && (
+                <div className="bg-red-50 text-red-700 p-3 rounded-md flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4" />
+                  <p className="text-sm">{error}</p>
+                </div>
+              )}
             </CardContent>
-            <CardFooter>
+            
+            <CardFooter className="flex flex-col space-y-4">
               <Button 
-                className="w-full bg-sky-800 hover:bg-sky-700 text-white group"
-                disabled={isLoading}
-                type="submit"
+                type="submit" 
+                className="w-full bg-sky-600 hover:bg-sky-700" 
+                disabled={isSubmitting}
               >
-                {isLoading ? (
-                  "Entrando..."
-                ) : (
-                  <span className="flex items-center justify-center gap-2">
-                    Entrar 
-                    <LogIn className="inline-block transition-transform group-hover:translate-x-1" size={18} />
-                  </span>
-                )}
+                {isSubmitting ? "Entrando..." : "Entrar"}
               </Button>
+              
+              <p className="text-sm text-center text-muted-foreground">
+                Este é um sistema de acesso restrito para clientes e usuários autorizados.
+              </p>
+              
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">
+                  Precisa de ajuda? Entre em contato com o suporte.
+                </p>
+              </div>
             </CardFooter>
           </form>
         </Card>
-
-        <div className="mt-4 text-center text-sky-500 text-sm animate-fade-in" style={{ animationDelay: "300ms" }}>
-          © {new Date().getFullYear()} Advogados Associados. Todos os direitos reservados.
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
+
+export default Login;
