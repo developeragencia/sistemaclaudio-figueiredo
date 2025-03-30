@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import { ClientProvider } from '../../contexts/ClientContext';
@@ -27,11 +28,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
-      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-white to-blue-50/30">
+      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-white via-sky-50/10 to-blue-50/20">
         {/* Main content - full width without sidebar */}
         <motion.div 
           className="flex flex-col flex-grow overflow-hidden w-full"
-          initial={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
@@ -40,18 +41,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <AnimatePresence mode="wait">
             {mounted && (
               <motion.main 
-                className="flex-grow overflow-auto p-6 bg-white/50"
+                className="flex-grow overflow-auto p-6 bg-white/50 backdrop-blur-sm"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ 
-                  duration: 0.3,
+                  duration: 0.4,
                   ease: [0.25, 0.1, 0.25, 1.0]
                 }}
               >
-                <div className="container mx-auto">
+                <motion.div 
+                  className="container mx-auto"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1, duration: 0.5 }}
+                >
                   {children}
-                </div>
+                </motion.div>
               </motion.main>
             )}
           </AnimatePresence>
