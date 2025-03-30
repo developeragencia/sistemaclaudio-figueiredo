@@ -4,7 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
-import { FileArchive, FileSpreadsheet, FileJson, FilePdf, File, Upload, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { 
+  FileArchive, FileSpreadsheet, FileJson, FileText,
+  File, Upload, AlertTriangle, CheckCircle2, RotateCw
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
@@ -30,7 +33,7 @@ const FileUploader = () => {
     { extension: 'xlsx', icon: <FileSpreadsheet className="h-10 w-10 text-green-600" /> },
     { extension: 'json', icon: <FileJson className="h-10 w-10 text-blue-600" /> },
     { extension: 'xml', icon: <FileArchive className="h-10 w-10 text-amber-600" /> },
-    { extension: 'pdf', icon: <FilePdf className="h-10 w-10 text-red-600" /> },
+    { extension: 'pdf', icon: <FileText className="h-10 w-10 text-red-600" /> },
   ];
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -206,7 +209,7 @@ const FileUploader = () => {
                       animate={{ rotate: 360 }}
                       transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                     >
-                      <RefreshCcw className="h-8 w-8 text-primary" />
+                      <RotateCw className="h-8 w-8 text-primary" />
                     </motion.div>
                   ) : (
                     <Upload className="h-8 w-8 text-primary" />

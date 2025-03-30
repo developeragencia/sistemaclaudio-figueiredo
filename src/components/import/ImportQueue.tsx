@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Table, TableBody, TableCaption, TableCell, 
@@ -9,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { 
   Play, Pause, XCircle, AlertTriangle, 
-  CheckCircle, FileSpreadsheet, FileJson, FilePdf, Clock 
+  CheckCircle, FileSpreadsheet, FileJson, FileText, Clock 
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -91,7 +90,7 @@ const ImportQueue = () => {
       case 'xml':
         return <FileJson className="h-5 w-5 text-blue-600" />;
       case 'pdf':
-        return <FilePdf className="h-5 w-5 text-red-600" />;
+        return <FileText className="h-5 w-5 text-red-600" />;
       default:
         return <FileSpreadsheet className="h-5 w-5" />;
     }

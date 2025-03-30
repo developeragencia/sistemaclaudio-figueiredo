@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Table, TableBody, TableCaption, TableCell, 
@@ -7,7 +6,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  FileSpreadsheet, FileJson, FilePdf, CheckCircle, 
+  FileSpreadsheet, FileJson, FileText, CheckCircle, 
   XCircle, AlertTriangle, ArrowDownToLine, Eye, Calendar 
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -131,7 +130,7 @@ const ImportHistory = () => {
       case 'xml':
         return <FileJson className="h-5 w-5 text-blue-600" />;
       case 'pdf':
-        return <FilePdf className="h-5 w-5 text-red-600" />;
+        return <FileText className="h-5 w-5 text-red-600" />;
       default:
         return <FileSpreadsheet className="h-5 w-5" />;
     }
