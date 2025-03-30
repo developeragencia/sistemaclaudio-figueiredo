@@ -35,6 +35,7 @@ import SessionExpirationPage from "./pages/SecurityPages/SessionExpirationPage";
 import AccessProtectionPage from "./pages/SecurityPages/AccessProtectionPage";
 import AuditTrailsPage from "./pages/SecurityPages/AuditTrailsPage";
 import UsersPermissionsPage from "./pages/SecurityPages/UsersPermissionsPage";
+import PasswordResetPage from "./pages/PasswordResetPage";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -51,6 +52,7 @@ const App = () => {
               {/* Public Routes */}
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/reset-password" element={<PasswordResetPage />} />
               <Route path="/2fa" element={<TwoFactorAuth />} />
 
               {/* Protected Routes */}

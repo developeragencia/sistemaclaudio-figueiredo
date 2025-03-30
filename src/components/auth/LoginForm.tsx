@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { AlertTriangle, CheckCircle2, Lock, Mail } from 'lucide-react';
 import { UserRole } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -141,9 +141,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
             />
           </div>
           
-          <a href="#" className="text-sm text-sky-600 hover:text-sky-800 hover:underline transition-colors">
+          <Link to="/reset-password" className="text-sm text-sky-600 hover:text-sky-800 hover:underline transition-colors">
             Esqueceu a senha?
-          </a>
+          </Link>
         </div>
         
         {error && (
