@@ -141,7 +141,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
             />
           </div>
           
-          <Link to="/reset-password" className="text-sm text-sky-600 hover:text-sky-800 hover:underline transition-colors">
+          <Link 
+            to="/reset-password" 
+            className="text-sm font-medium text-sky-600 hover:text-sky-800 hover:underline transition-colors"
+          >
             Esqueceu a senha?
           </Link>
         </div>

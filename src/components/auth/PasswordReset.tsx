@@ -6,14 +6,17 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AlertTriangle, ArrowRight, CheckCircle2, Mail } from 'lucide-react';
+import { AlertTriangle, ArrowRight, CheckCircle2, Mail, RotateCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
-// Create a schema for form validation
+// Create a schema for form validation with more specific messages
 const formSchema = z.object({
-  email: z.string().email("Por favor, insira um email válido.").min(1, "Email é obrigatório."),
+  email: z.string()
+    .email("Por favor, insira um endereço de email válido.")
+    .min(1, "Email é obrigatório."),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -21,6 +24,7 @@ type FormData = z.infer<typeof formSchema>;
 const PasswordReset: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [attemptCount, setAttemptCount] = useState<number>(0);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -36,13 +40,16 @@ const PasswordReset: React.FC = () => {
     try {
       setIsSubmitting(true);
       
+      // Increment attempt counter for UX feedback
+      setAttemptCount(prev => prev + 1);
+      
       // Here we would integrate with the actual password reset API
       // For now, we'll simulate a successful password reset request
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       toast({
-        title: "Solicitação enviada",
-        description: "Instruções para redefinir sua senha foram enviadas para seu email.",
+        title: "Solicitação enviada com sucesso",
+        description: "Enviamos um email com instruções para redefinir sua senha.",
         variant: "success",
       });
       
@@ -50,8 +57,8 @@ const PasswordReset: React.FC = () => {
     } catch (err) {
       console.error('Password reset error:', err);
       toast({
-        title: "Erro",
-        description: "Não foi possível enviar as instruções de redefinição de senha. Por favor, tente novamente.",
+        title: "Erro na solicitação",
+        description: "Não foi possível processar sua solicitação. Por favor, tente novamente.",
         variant: "destructive",
       });
     } finally {
@@ -61,6 +68,11 @@ const PasswordReset: React.FC = () => {
 
   const handleBackToLogin = () => {
     navigate('/login');
+  };
+
+  const handleTryAgain = () => {
+    setEmailSent(false);
+    form.reset();
   };
 
   return (
@@ -94,6 +106,8 @@ const PasswordReset: React.FC = () => {
                         className="border-sky-200 focus:border-sky-400 focus:ring-sky-300 transition-colors"
                         placeholder="seu-email@exemplo.com"
                         disabled={isSubmitting}
+                        autoComplete="email"
+                        autoFocus
                       />
                     </FormControl>
                     <FormMessage className="text-sm text-destructive flex items-center gap-1">
@@ -108,6 +122,15 @@ const PasswordReset: React.FC = () => {
                 )}
               />
 
+              {attemptCount > 1 && (
+                <Alert className="bg-amber-50 text-amber-700 border-amber-200">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription>
+                    Você tentou redefinir sua senha várias vezes. Verifique sua caixa de spam se não recebeu o email anterior.
+                  </AlertDescription>
+                </Alert>
+              )}
+
               <div className="flex flex-col gap-3">
                 <Button 
                   type="submit" 
@@ -115,10 +138,10 @@ const PasswordReset: React.FC = () => {
                   disabled={isSubmitting || !form.formState.isValid}
                 >
                   {isSubmitting ? (
-                    <>
-                      <span className="animate-pulse mr-2">●</span>
+                    <span className="flex items-center">
+                      <RotateCw className="h-4 w-4 mr-2 animate-spin" />
                       Enviando...
-                    </>
+                    </span>
                   ) : (
                     <>
                       Enviar Instruções
@@ -146,6 +169,15 @@ const PasswordReset: React.FC = () => {
             <p className="text-muted-foreground">
               Se o email estiver cadastrado em nosso sistema, você receberá um link para redefinir sua senha em breve.
             </p>
+            <div className="flex flex-col mt-4 space-y-2">
+              <Button 
+                onClick={handleTryAgain}
+                variant="outline" 
+                className="border-sky-200 text-sky-700 hover:bg-sky-50"
+              >
+                Tentar com outro email
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>
