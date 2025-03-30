@@ -390,200 +390,32 @@ const Index: React.FC = () => {
         </div>
       </motion.section>
 
-      <footer className="bg-gradient-to-br from-lawyer-900 to-sky-900 text-white pt-20 pb-10 relative overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 md:w-2 md:h-2 bg-white/10 rounded-full"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-              }}
-              initial={{ opacity: 0 }}
-              animate={{
-                y: [0, -100],
-                opacity: [0, 1, 0],
-              }}
-              transition={{
-                duration: 4 + Math.random() * 8,
-                repeat: Infinity,
-                delay: i * 0.3,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
-        
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="space-y-4"
-            >
-              <div className="mb-4">
-                <AnimatedLogo size="medium" />
-              </div>
-              <p className="text-sky-200 max-w-xs">
-                Soluções jurídicas especializadas em direito tributário, recuperação de créditos 
-                e consultoria fiscal para empresas de todos os portes.
-              </p>
-              <div className="pt-4 flex space-x-4">
-                <motion.a 
-                  href="#" 
-                  className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center hover:bg-sky-700 transition-colors duration-300"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Facebook size={18} />
-                </motion.a>
-                <motion.a 
-                  href="#" 
-                  className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center hover:bg-sky-700 transition-colors duration-300"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Instagram size={18} />
-                </motion.a>
-                <motion.a 
-                  href="#" 
-                  className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center hover:bg-sky-700 transition-colors duration-300"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Linkedin size={18} />
-                </motion.a>
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-6"
-            >
-              <h3 className="text-xl font-semibold border-b border-sky-700/50 pb-2 mb-4">Entre em Contato</h3>
-              <div className="space-y-4">
-                <motion.div 
-                  className="flex items-center space-x-3"
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center">
-                    <Phone size={18} />
-                  </div>
-                  <div>
-                    <p className="text-sky-100">(11) 99999-9999</p>
-                    <p className="text-sky-400 text-xs">Suporte Técnico</p>
-                  </div>
-                </motion.div>
-                
-                <motion.div 
-                  className="flex items-center space-x-3"
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center">
-                    <Mail size={18} />
-                  </div>
-                  <div>
-                    <p className="text-sky-100">contato@advogados.com.br</p>
-                    <p className="text-sky-400 text-xs">Atendimento em até 24h</p>
-                  </div>
-                </motion.div>
-                
-                <motion.div 
-                  className="flex items-center space-x-3"
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-sky-800/60 flex items-center justify-center">
-                    <MapPin size={18} />
-                  </div>
-                  <div>
-                    <p className="text-sky-100">Av. Paulista, 1000</p>
-                    <p className="text-sky-400 text-xs">São Paulo - SP</p>
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="space-y-6"
-            >
-              <h3 className="text-xl font-semibold border-b border-sky-700/50 pb-2 mb-4">Links Rápidos</h3>
-              <ul className="space-y-3">
-                {["Home", "Sobre Nós", "Serviços", "Contato", "Política de Privacidade"].map((item, index) => (
-                  <motion.li 
-                    key={index}
-                    whileHover={{ x: 5, color: "#7dd3fc" }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <a href="#" className="text-sky-200 hover:text-sky-300 transition-colors flex items-center">
-                      <span className="mr-2">›</span> {item}
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="space-y-6"
-            >
-              <h3 className="text-xl font-semibold border-b border-sky-700/50 pb-2 mb-4">Newsletter</h3>
-              <p className="text-sky-200 mb-4">Receba novidades e atualizações sobre direito tributário.</p>
-              
-              <div className="relative">
-                <input 
-                  type="email" 
-                  placeholder="Seu e-mail" 
-                  className="w-full py-3 px-4 bg-sky-900/50 border border-sky-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-sky-100 placeholder:text-sky-400"
-                />
-                <Button 
-                  className="absolute right-1 top-1 bg-sky-600 hover:bg-sky-700 h-9" 
-                  size="sm"
-                >
-                  Assinar
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-          
+      {/* Simplified Footer */}
+      <footer className="bg-gradient-to-br from-lawyer-900 to-sky-900 text-white py-8 relative">
+        <div className="container mx-auto px-6 text-center">
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="border-t border-sky-800/40 pt-8 mt-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-              <p className="text-sky-300 text-sm">
-                © {new Date().getFullYear()} Advogados Associados. Todos os direitos reservados.
-              </p>
-              <div className="mt-4 md:mt-0">
-                <p className="text-sky-400 text-sm">
-                  Desenvolvido por{" "}
-                  <a 
-                    href="https://alexdesenvolvedor.com.br" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-sky-300 hover:text-sky-100 font-medium transition-colors duration-300"
-                  >
-                    Alex Developer
-                  </a>
-                </p>
-              </div>
-            </div>
-            
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-sky-900/0 via-sky-400/50 to-sky-900/0"></div>
+            <p className="text-sky-200 text-sm">
+              © 2025 Advogados Associados. Todos os direitos reservados.
+            </p>
+            <p className="text-sky-300 text-sm mt-2">
+              Desenvolvido por{" "}
+              <a 
+                href="https://alexdesenvolvedor.com.br" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sky-100 hover:text-white transition-colors duration-300"
+              >
+                Alex Developer
+              </a>
+            </p>
           </motion.div>
+          
+          {/* Subtle footer line */}
+          <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-sky-900/0 via-sky-400/30 to-sky-900/0"></div>
         </div>
       </footer>
     </div>
@@ -651,9 +483,4 @@ const socialIcons = [
   },
   {
     icon: <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-    </svg>
-  }
-];
-
-export default Index;
+      <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.2
