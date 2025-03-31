@@ -135,7 +135,7 @@ export const getSidebarItems = (): MenuItemType[] => {
     { 
       icon: Cog, 
       label: "Configurações", 
-      to: "#",
+      to: "/settings",
       submenu: [
         { label: "Perfil", to: "/settings/profile" },
         { label: "Conta", to: "/settings/account" },

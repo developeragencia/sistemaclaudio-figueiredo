@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   Building2,
@@ -57,7 +57,7 @@ interface SidebarItemProps {
 }
 
 function SidebarItem({ icon: Icon, label, href, isActive, isCollapsible, children, shortcut }: SidebarItemProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { isCompact, expandedItems, toggleExpanded } = useSidebar();
 
   const isExpanded = expandedItems.includes(label);
@@ -65,14 +65,14 @@ function SidebarItem({ icon: Icon, label, href, isActive, isCollapsible, childre
   // Registra atalhos de teclado
   useHotkeys(shortcut || '', () => {
     if (href) {
-      router.push(href);
+      navigate(href);
     }
-  }, [href, router]);
+  }, [href, navigate]);
 
   children?.forEach((child) => {
     useHotkeys(child.shortcut || '', () => {
-      router.push(child.href);
-    }, [router]);
+      navigate(child.href);
+    }, [navigate]);
   });
 
   const content = (
@@ -111,9 +111,9 @@ function SidebarItem({ icon: Icon, label, href, isActive, isCollapsible, childre
                           variant="ghost"
                           className={cn(
                             "w-full justify-start gap-2 px-2 hover:bg-accent hover:text-accent-foreground",
-                            router.pathname === item.href && "bg-accent"
+                            location.pathname === item.href && "bg-accent"
                           )}
-                          onClick={() => router.push(item.href)}
+                          onClick={() => navigate(item.href)}
                         >
                           <ChevronRight className="h-4 w-4" />
                           {item.label}
@@ -151,7 +151,7 @@ function SidebarItem({ icon: Icon, label, href, isActive, isCollapsible, childre
               "w-full justify-start px-2 hover:bg-accent hover:text-accent-foreground",
               isActive && "bg-accent"
             )}
-            onClick={() => href && router.push(href)}
+            onClick={() => href && navigate(href)}
           >
             {content}
           </Button>
@@ -168,7 +168,8 @@ function SidebarItem({ icon: Icon, label, href, isActive, isCollapsible, childre
 }
 
 export function Sidebar() {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { isCompact, toggleCompact, theme, toggleTheme } = useSidebar();
 
   // Registra atalhos globais
@@ -294,12 +295,12 @@ export function Sidebar() {
   return (
     <div 
       className={cn(
-        "flex h-screen flex-col border-r bg-background transition-all duration-300",
+        "fixed top-0 left-0 z-40 h-screen flex flex-col border-r bg-background transition-all duration-300",
         isCompact ? "w-16" : "w-64"
       )}
     >
       <div className="flex h-14 items-center justify-between border-b px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
+        <Link to="/" className="flex items-center gap-2 font-semibold">
           <FileSearch className="h-5 w-5" />
           {!isCompact && "Sistema Auditoria"}
         </Link>
@@ -312,7 +313,7 @@ export function Sidebar() {
               icon={item.icon}
               label={item.label}
               href={item.href}
-              isActive={item.href === router.pathname}
+              isActive={item.href === location.pathname}
               isCollapsible={item.isCollapsible}
               children={item.children}
               shortcut={item.shortcut}
@@ -371,7 +372,7 @@ export function Sidebar() {
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8"
-                  onClick={() => router.push('/atalhos')}
+                  onClick={() => navigate('/atalhos')}
                 >
                   <Keyboard className="h-4 w-4" />
                 </Button>
@@ -385,4 +386,4 @@ export function Sidebar() {
       </div>
     </div>
   );
-} 
+}

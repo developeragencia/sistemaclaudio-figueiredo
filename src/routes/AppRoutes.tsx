@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // Import route groups
 import { publicRoutes } from "./publicRoutes";

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 import {
   Building2,
   FileSearch,
@@ -25,7 +25,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 export function MainMenu() {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const menuModules = [
     {
@@ -229,7 +229,7 @@ export function MainMenu() {
               {module.items.map((item) => (
                 <DropdownMenuItem
                   key={item.href}
-                  onClick={() => router.push(item.href)}
+                  onClick={() => navigate(item.href)}
                   className="flex flex-col items-start"
                 >
                   <span className="font-medium">{item.label}</span>
@@ -261,7 +261,7 @@ export function MainMenu() {
                 {module.items.map((item) => (
                   <DropdownMenuItem
                     key={item.href}
-                    onClick={() => router.push(item.href)}
+                    onClick={() => navigate(item.href)}
                     className="flex flex-col items-start"
                   >
                     <span className="font-medium">{item.label}</span>
@@ -277,4 +277,4 @@ export function MainMenu() {
       </DropdownMenu>
     </nav>
   );
-} 
+}
