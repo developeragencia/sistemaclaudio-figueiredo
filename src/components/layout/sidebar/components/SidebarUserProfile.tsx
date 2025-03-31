@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import { UserRole } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 interface SidebarUserProfileProps {
   collapsed: boolean;
@@ -19,10 +21,21 @@ const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
   currentUser
 }) => {
   const auth = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Use the auth context if no currentUser is provided as prop
   const displayUser = currentUser || auth.currentUser;
   const displayRole = userRole || auth.userRole;
+
+  const handleLogout = () => {
+    auth.logout();
+    toast({
+      title: "Sessão encerrada",
+      description: "Você foi desconectado do sistema.",
+    });
+    navigate('/login');
+  };
 
   return (
     <div className="p-4 border-t border-blue-100 bg-blue-50/50">
@@ -51,6 +64,8 @@ const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
               className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-blue-100 text-blue-500"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              onClick={handleLogout}
+              aria-label="Logout"
             >
               <LogOut size={16} />
             </motion.button>
