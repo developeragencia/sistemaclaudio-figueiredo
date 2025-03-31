@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import SidebarMobileToggle from './sidebar/components/SidebarMobileToggle';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,8 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
-  const { userRole, isLoggedIn } = useAuth();
-  const navigate = useNavigate();
+  const { userRole } = useAuth();
   const location = useLocation();
   
   // Handle animation mounting
@@ -35,16 +34,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => setMounted(false);
   }, []);
 
-  // Redirect to login if not authenticated (except for public routes)
-  useEffect(() => {
-    const publicRoutes = ['/', '/login', '/reset-password', '/2fa'];
-    const isPublicRoute = publicRoutes.includes(location.pathname);
-    
-    if (!isLoggedIn && !isPublicRoute) {
-      navigate('/login');
-    }
-  }, [isLoggedIn, navigate, location.pathname]);
-
   // Toggle sidebar and save state
   const toggleSidebar = () => {
     const newState = !sidebarCollapsed;
@@ -56,11 +45,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const handleMobileToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
-  // Don't render layout for public routes
-  if (location.pathname === '/' || location.pathname === '/login') {
-    return <>{children}</>;
-  }
 
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
