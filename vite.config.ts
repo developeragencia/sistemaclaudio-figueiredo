@@ -11,7 +11,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    sourcemap: true,
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 1000,
+  },
   server: {
-    port: 8080
+    port: 8080,
+    open: true
   }
 });

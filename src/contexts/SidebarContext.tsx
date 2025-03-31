@@ -1,20 +1,21 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
 
-interface SidebarContextData {
+import React, { createContext, useState, useEffect } from 'react';
+
+interface SidebarContextType {
   isCompact: boolean;
   toggleCompact: () => void;
   expandedItems: string[];
   toggleExpanded: (itemLabel: string) => void;
-  theme: string;
-  toggleTheme: () => void;
 }
 
-const SidebarContext = createContext<SidebarContextData>({} as SidebarContextData);
+export const SidebarContext = createContext<SidebarContextType>({
+  isCompact: false,
+  toggleCompact: () => {},
+  expandedItems: [],
+  toggleExpanded: () => {},
+});
 
-export function SidebarProvider({ children }: { children: React.ReactNode }) {
-  const { theme: currentTheme, setTheme } = useTheme();
-  
+export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isCompact, setIsCompact] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('@SistemaAuditoria:sidebar-compact');
@@ -49,24 +50,18 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const toggleTheme = () => {
-    setTheme(currentTheme === 'light' ? 'dark' : 'light');
-  };
-
   return (
     <SidebarContext.Provider 
       value={{
         isCompact,
         toggleCompact,
         expandedItems,
-        toggleExpanded,
-        theme: currentTheme || 'light',
-        toggleTheme
+        toggleExpanded
       }}
     >
       {children}
     </SidebarContext.Provider>
   );
-}
+};
 
-export const useSidebar = () => useContext(SidebarContext); 
+export const useSidebar = () => React.useContext(SidebarContext);
