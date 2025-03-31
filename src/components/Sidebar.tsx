@@ -10,6 +10,7 @@ import {
   Keyboard,
   Menu,
   X,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -65,17 +66,21 @@ export function Sidebar() {
       {/* Sidebar */}
       <motion.div 
         className={cn(
-          "fixed top-0 left-0 z-40 h-screen transition-all duration-300 bg-gradient-to-b from-blue-900 to-indigo-900 border-r shadow-lg",
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          "fixed top-0 left-0 z-40 h-screen transition-all duration-300 bg-gradient-to-b from-blue-900 via-indigo-900 to-purple-900 border-r border-blue-800/20 shadow-2xl",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+          "overflow-hidden" // Ensure overflow is hidden for the glass effect
         )}
         variants={variants}
         animate={isCompact ? 'compact' : 'expanded'}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         data-test="sidebar"
       >
-        <div className="flex flex-col h-full">
+        {/* Glass overlay effect */}
+        <div className="absolute inset-0 bg-white/5 backdrop-filter backdrop-blur-sm" />
+        
+        <div className="flex flex-col h-full relative z-10"> {/* z-10 to appear above the glass overlay */}
           {/* Header */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-blue-800/50">
+          <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
             <AnimatePresence mode="wait">
               {!isCompact && (
                 <motion.div
@@ -85,7 +90,10 @@ export function Sidebar() {
                   transition={{ duration: 0.3 }}
                   className="flex items-center"
                 >
-                  <span className="text-lg font-semibold text-white">Sistema Admin</span>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-purple-300" />
+                    <span className="text-lg font-semibold text-white">Sistema Admin</span>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -93,7 +101,7 @@ export function Sidebar() {
               variant="ghost"
               size="icon"
               onClick={toggleCompact}
-              className="text-white hover:bg-blue-800/50"
+              className="text-white hover:bg-white/10 transition-colors"
               data-test="sidebar-toggle"
             >
               {isCompact ? 
@@ -126,8 +134,8 @@ export function Sidebar() {
                                 className={cn(
                                   "w-full justify-start",
                                   (isActive || item.submenu?.some(sub => sub.to === location.pathname)) 
-                                    ? "bg-blue-700/50 text-white hover:bg-blue-700/70" 
-                                    : "text-blue-100/80 hover:bg-blue-800/50 hover:text-white"
+                                    ? "bg-white/15 text-white hover:bg-white/20" 
+                                    : "text-blue-100/80 hover:bg-white/10 hover:text-white"
                                 )}
                               >
                                 <div className={cn("flex items-center", isCompact ? "justify-center w-full" : "")}>
@@ -154,7 +162,7 @@ export function Sidebar() {
                               </Button>
                             </CollapsibleTrigger>
                             {isCompact && (
-                              <TooltipContent side="right" className="bg-blue-900 text-white border-blue-700">
+                              <TooltipContent side="right" className="bg-indigo-900 text-white border-indigo-700">
                                 {item.label}
                               </TooltipContent>
                             )}
@@ -176,8 +184,8 @@ export function Sidebar() {
                                     className={cn(
                                       "w-full justify-start",
                                       location.pathname === subItem.to 
-                                        ? "bg-blue-700/30 text-white" 
-                                        : "text-blue-100/70 hover:bg-blue-800/30 hover:text-white"
+                                        ? "bg-white/10 text-purple-200" 
+                                        : "text-blue-100/70 hover:bg-white/10 hover:text-white"
                                     )}
                                     onClick={() => {
                                       navigate(subItem.to);
@@ -203,22 +211,25 @@ export function Sidebar() {
                         <Button
                           variant="ghost"
                           className={cn(
-                            "w-full",
+                            "w-full relative overflow-hidden group",
                             isCompact ? "justify-center" : "justify-start",
                             isActive 
-                              ? "bg-blue-700/50 text-white hover:bg-blue-700/70" 
-                              : "text-blue-100/80 hover:bg-blue-800/50 hover:text-white"
+                              ? "bg-white/15 text-white hover:bg-white/20" 
+                              : "text-blue-100/80 hover:bg-white/10 hover:text-white"
                           )}
                           onClick={() => {
                             navigate(item.to);
                             setIsMobileMenuOpen(false);
                           }}
                         >
-                          <Icon className="h-5 w-5" />
+                          {/* Hover animation */}
+                          <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                          
+                          <Icon className="h-5 w-5 relative z-10" />
                           <AnimatePresence>
                             {!isCompact && (
                               <motion.span 
-                                className="ml-3"
+                                className="ml-3 relative z-10"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
@@ -231,7 +242,7 @@ export function Sidebar() {
                         </Button>
                       </TooltipTrigger>
                       {isCompact && (
-                        <TooltipContent side="right" className="bg-blue-900 text-white border-blue-700">
+                        <TooltipContent side="right" className="bg-indigo-900 text-white border-indigo-700">
                           {item.label}
                         </TooltipContent>
                       )}
@@ -243,24 +254,27 @@ export function Sidebar() {
           </ScrollArea>
           
           {/* Footer */}
-          <div className="p-3 border-t border-blue-800/50">
+          <div className="p-3 border-t border-white/10">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
                     className={cn(
-                      "w-full h-10",
+                      "w-full h-10 relative overflow-hidden group",
                       isCompact ? "justify-center" : "justify-start",
-                      "text-blue-100/80 hover:bg-blue-800/50 hover:text-white"
+                      "text-blue-100/80 hover:bg-white/10 hover:text-white"
                     )}
                     onClick={() => navigate('/atalhos')}
                   >
-                    <Keyboard className="h-5 w-5" />
+                    {/* Hover animation */}
+                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                    
+                    <Keyboard className="h-5 w-5 relative z-10" />
                     <AnimatePresence>
                       {!isCompact && (
                         <motion.span 
-                          className="ml-3"
+                          className="ml-3 relative z-10"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
@@ -273,7 +287,7 @@ export function Sidebar() {
                   </Button>
                 </TooltipTrigger>
                 {isCompact && (
-                  <TooltipContent side="right" className="bg-blue-900 text-white border-blue-700">
+                  <TooltipContent side="right" className="bg-indigo-900 text-white border-indigo-700">
                     Atalhos de teclado
                   </TooltipContent>
                 )}

@@ -9,7 +9,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { isCompact } = useContext(SidebarContext);
   
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-slate-50">
       <Sidebar />
       <motion.div 
         className="flex-1"
@@ -29,6 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
+            className="max-w-full"
           >
             {children}
           </motion.div>
