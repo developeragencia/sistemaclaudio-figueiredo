@@ -26,14 +26,15 @@ const Index: React.FC = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
+    // Initialize visibility check
+    setTimeout(handleScroll, 100);
 
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">
           {/* Decorative circles and shapes */}
@@ -46,8 +47,12 @@ const Index: React.FC = () => {
       </div>
 
       <Header />
-      <HeroSection scrollY={scrollY} />
-      <FeaturesCarousel isVisible={isVisible.carousel} />
+      <div id="hero-section">
+        <HeroSection scrollY={scrollY} />
+      </div>
+      <div id="carousel-section">
+        <FeaturesCarousel isVisible={isVisible.carousel} />
+      </div>
       <Footer />
     </div>
   );

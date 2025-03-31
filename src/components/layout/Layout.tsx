@@ -5,6 +5,8 @@ import Sidebar from './sidebar/Sidebar';
 import { ClientProvider } from '../../contexts/ClientContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
+import SidebarMobileToggle from './sidebar/components/SidebarMobileToggle';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,6 +15,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [mounted, setMounted] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
   const { userRole } = useAuth();
   
   // Handle animation mounting
@@ -35,6 +39,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     localStorage.setItem('sidebar-collapsed', String(newState));
   };
 
+  // Mobile menu toggle
+  const handleMobileToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
       {/* Background with subtle gradient and pattern */}
@@ -45,9 +54,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         }}></div>
       </div>
       
+      {/* Mobile menu toggle button */}
+      {isMobile && (
+        <SidebarMobileToggle 
+          isMobileMenuOpen={isMobileMenuOpen} 
+          handleMobileToggle={handleMobileToggle} 
+        />
+      )}
+      
       <div className="flex h-screen overflow-hidden relative z-10">
-        {/* Sidebar */}
-        <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
+        {/* Sidebar - show based on mobile state */}
+        <Sidebar 
+          collapsed={sidebarCollapsed} 
+          toggleCollapse={toggleSidebar} 
+          isMobile={isMobile}
+          isMobileMenuOpen={isMobileMenuOpen}
+          closeMobileMenu={() => setIsMobileMenuOpen(false)}
+        />
         
         {/* Main content */}
         <motion.div 
@@ -55,7 +78,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           initial={{ opacity: 0 }}
           animate={{ 
             opacity: 1,
-            marginLeft: sidebarCollapsed ? "80px" : "288px"
+            marginLeft: isMobile ? "0px" : (sidebarCollapsed ? "80px" : "288px")
           }}
           transition={{ duration: 0.4 }}
         >
@@ -64,7 +87,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <AnimatePresence mode="wait">
             {mounted && (
               <motion.main 
-                className="flex-grow overflow-auto p-6 backdrop-blur-sm"
+                className="flex-grow overflow-auto p-4 sm:p-6 backdrop-blur-sm"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
