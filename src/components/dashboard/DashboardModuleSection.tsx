@@ -26,11 +26,11 @@ const DashboardModuleSection: React.FC<DashboardModuleSectionProps> = ({
     <div className="w-full">
       <div className="mb-5 flex items-center">
         <motion.div 
-          className={`h-1.5 w-1.5 rounded-full ${iconColor} mr-2`}
+          className={`h-2 w-2 rounded-full ${iconColor} mr-2`}
           animate={{ scale: [1, 1.5, 1] }}
           transition={{ duration: 2, delay, repeat: Infinity }}
         />
-        <h3 className={`text-lg font-medium ${iconColor.replace('bg-', 'text-').replace('-500', '-700')} dark:${iconColor.replace('bg-', 'text-').replace('-500', '-300')}`}>
+        <h3 className={`text-lg font-medium ${iconColor.replace('bg-', 'text-')}`}>
           {title}
         </h3>
       </div>

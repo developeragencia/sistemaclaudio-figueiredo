@@ -161,6 +161,7 @@ const Dashboard = () => {
     }
   ];
   
+  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -171,35 +172,43 @@ const Dashboard = () => {
     }
   };
   
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+  
   return (
-    <div className="w-full bg-gradient-to-br from-gray-50 to-blue-50 dark:from-slate-900 dark:to-blue-950">
+    <div className="w-full min-h-screen bg-slate-50 dark:bg-slate-900">
       <motion.div 
-        className="container mx-auto p-6 space-y-8 max-w-7xl"
+        className="container mx-auto px-4 py-8 max-w-7xl"
         variants={containerVariants}
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={{hidden: { opacity: 0 }, show: { opacity: 1 }}}>
+        {/* Hero Banner */}
+        <motion.div variants={itemVariants} className="mb-8">
           <DashboardHeroBanner />
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          {/* Left column - Main Sections */}
-          <div className="md:col-span-8 space-y-8">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left column - Main Modules */}
+          <motion.div variants={itemVariants} className="lg:col-span-8 space-y-8">
             <MainModulesSection 
               systemModules={systemModules}
               reportModules={reportModules}
               operationalModules={operationalModules}
             />
-          </div>
+          </motion.div>
           
-          {/* Right column - System & Support */}
-          <div className="md:col-span-4 space-y-8">
+          {/* Right column - Settings & Quick Access */}
+          <motion.div variants={itemVariants} className="lg:col-span-4 space-y-8">
             <SystemSettingsSection modules={systemSettingsModules} />
             <DashboardQuickAccess />
-          </div>
+          </motion.div>
         </div>
         
+        {/* Footer */}
         <DashboardFooter />
       </motion.div>
     </div>

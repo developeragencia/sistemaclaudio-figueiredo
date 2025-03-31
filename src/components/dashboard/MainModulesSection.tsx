@@ -31,20 +31,20 @@ const MainModulesSection: React.FC<MainModulesSectionProps> = ({
   operationalModules 
 }) => {
   return (
-    <Card className="w-full overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 dark:from-slate-800 dark:to-slate-900">
+    <Card className="w-full border-none rounded-xl overflow-hidden shadow-lg bg-white dark:bg-slate-800">
       <CardContent className="p-0">
-        <div className="p-6 border-b border-blue-100 dark:border-slate-700">
-          <h2 className="text-2xl font-semibold text-blue-900 dark:text-blue-300 flex items-center">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-700">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center">
             <Layout className="mr-3 h-6 w-6 text-blue-600 dark:text-blue-400" />
             Módulos do Sistema
           </h2>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-slate-500 dark:text-slate-400">
             Acesse as principais funcionalidades do sistema
           </p>
         </div>
         
         <div className="p-6">
-          <div className="space-y-10">
+          <div className="space-y-12">
             {/* Primary Modules Section */}
             <DashboardModuleSection 
               title="Principais Módulos" 
