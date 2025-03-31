@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
-import Sidebar from './sidebar/Sidebar';
+import SidebarWrapper from './Sidebar';
 import { ClientProvider } from '../../contexts/ClientContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
@@ -46,6 +46,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Don't render the sidebar on the login or index page
+  if (location.pathname === '/login' || location.pathname === '/') {
+    return (
+      <ClientProvider initialRole={userRole || 'admin'}>
+        <div className="min-h-screen w-full">
+          <AnimatePresence mode="wait">
+            {mounted && (
+              <motion.main 
+                className="flex-grow overflow-auto"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                {children}
+              </motion.main>
+            )}
+          </AnimatePresence>
+        </div>
+      </ClientProvider>
+    );
+  }
+
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
       {/* Background with subtle gradient and pattern */}
@@ -64,9 +87,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         />
       )}
       
-      <div className="flex h-screen overflow-hidden relative z-10">
+      <div className="flex h-screen overflow-hidden relative z-10 w-full">
         {/* Sidebar - show based on mobile state */}
-        <Sidebar 
+        <SidebarWrapper 
           collapsed={sidebarCollapsed} 
           toggleCollapse={toggleSidebar} 
           isMobile={isMobile}
@@ -95,7 +118,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-7xl mx-auto w-full">
                   {children}
                 </div>
               </motion.main>
