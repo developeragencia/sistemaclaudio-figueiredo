@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SidebarHeader from './components/SidebarHeader';
 import SidebarContent from './components/SidebarContent';
 import SidebarUserProfile from './components/SidebarUserProfile';
 import SidebarToggleButton from './components/SidebarToggleButton';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -23,6 +24,28 @@ const Sidebar: React.FC<SidebarProps> = ({
   closeMobileMenu = () => {},
 }) => {
   const location = useLocation();
+  const { userRole, currentUser } = useAuth();
+  
+  // State for sidebar menu management
+  const [openMenus, setOpenMenus] = useState<{[key: string]: boolean}>({});
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  
+  // Toggle submenu open/close state
+  const toggleSubmenu = (label: string) => {
+    setOpenMenus(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
+  };
+
+  // Handle hover effects for menu items
+  const handleMenuMouseEnter = (label: string) => {
+    setHoveredItem(label);
+  };
+  
+  const handleMenuMouseLeave = () => {
+    setHoveredItem(null);
+  };
   
   // Don't render the sidebar on the login or index page
   if (location.pathname === '/login' || location.pathname === '/') {
@@ -55,10 +78,19 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex flex-col h-full">
                 <SidebarHeader collapsed={false} />
                 <div className="flex-1 overflow-y-auto scrollbar-none">
-                  <SidebarContent collapsed={false} />
+                  <SidebarContent 
+                    collapsed={false} 
+                    openMenus={openMenus}
+                    toggleSubmenu={toggleSubmenu}
+                    location={location}
+                  />
                 </div>
                 <div className="mt-auto">
-                  <SidebarUserProfile collapsed={false} />
+                  <SidebarUserProfile 
+                    collapsed={false} 
+                    userRole={userRole}
+                    currentUser={currentUser}
+                  />
                 </div>
               </div>
             </motion.div>
@@ -84,11 +116,23 @@ const Sidebar: React.FC<SidebarProps> = ({
         <SidebarHeader collapsed={collapsed} />
         
         <div className="flex-1 w-full overflow-y-auto scrollbar-none">
-          <SidebarContent collapsed={collapsed} />
+          <SidebarContent 
+            collapsed={collapsed} 
+            openMenus={openMenus}
+            toggleSubmenu={toggleSubmenu}
+            location={location}
+            onMenuMouseEnter={handleMenuMouseEnter}
+            onMenuMouseLeave={handleMenuMouseLeave}
+            hoveredItem={hoveredItem}
+          />
         </div>
         
         <div className="mt-auto w-full">
-          <SidebarUserProfile collapsed={collapsed} />
+          <SidebarUserProfile 
+            collapsed={collapsed} 
+            userRole={userRole}
+            currentUser={currentUser}
+          />
           
           <div className={`py-4 px-2 ${collapsed ? 'flex justify-center' : ''}`}>
             <SidebarToggleButton

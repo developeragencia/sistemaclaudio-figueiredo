@@ -5,11 +5,12 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { UserRole } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SidebarUserProfileProps {
   collapsed: boolean;
   userRole?: UserRole | null;
-  currentUser: string | null;
+  currentUser?: string | null;
 }
 
 const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({ 
@@ -17,6 +18,12 @@ const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
   userRole,
   currentUser
 }) => {
+  const auth = useAuth();
+  
+  // Use the auth context if no currentUser is provided as prop
+  const displayUser = currentUser || auth.currentUser;
+  const displayRole = userRole || auth.userRole;
+
   return (
     <div className="p-4 border-t border-blue-100 bg-blue-50/50">
       <div className={cn(
@@ -29,14 +36,14 @@ const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
               <Avatar className="h-8 w-8 ring-2 ring-blue-500/30">
                 <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
                 <AvatarFallback className="bg-blue-600 text-white">
-                  {userRole?.substring(0, 1).toUpperCase()}
+                  {displayRole?.substring(0, 1).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-0.5">
                 <p className="text-sm font-medium leading-none text-blue-900">
-                  {typeof currentUser === 'string' ? currentUser : 'Admin User'}
+                  {typeof displayUser === 'string' ? displayUser : 'Admin User'}
                 </p>
-                <p className="text-xs text-blue-500">{userRole === 'admin' ? 'Administrador' : 'Usuário'}</p>
+                <p className="text-xs text-blue-500">{displayRole === 'admin' ? 'Administrador' : 'Usuário'}</p>
               </div>
             </div>
             
@@ -52,7 +59,7 @@ const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
           <Avatar className="h-10 w-10 ring-2 ring-blue-500/30">
             <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
             <AvatarFallback className="bg-blue-600 text-white">
-              {userRole?.substring(0, 1).toUpperCase()}
+              {displayRole?.substring(0, 1).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         )}

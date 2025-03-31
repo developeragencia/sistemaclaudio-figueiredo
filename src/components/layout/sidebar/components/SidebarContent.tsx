@@ -4,32 +4,65 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import SidebarItem from '../SidebarItem';
 import { MenuItemType } from '../types';
+import { useLocation } from 'react-router-dom';
+import { Home, Settings, PieChart, Users, FileText } from 'lucide-react';
 
 interface SidebarContentProps {
-  items: MenuItemType[];
-  title: string;
   collapsed: boolean;
-  openMenus: {[key: string]: boolean};
-  toggleSubmenu: (label: string) => void;
-  location: any;
+  items?: MenuItemType[];
+  title?: string;
+  openMenus?: {[key: string]: boolean};
+  toggleSubmenu?: (label: string) => void;
+  location?: any;
   hasBorder?: boolean;
   onMenuMouseEnter?: (label: string) => void;
   onMenuMouseLeave?: (label: string) => void;
   hoveredItem?: string | null;
 }
 
+// Default menu items if none provided
+const defaultItems: MenuItemType[] = [
+  {
+    icon: Home,
+    label: 'Dashboard',
+    to: '/dashboard',
+  },
+  {
+    icon: PieChart,
+    label: 'Tax Credits',
+    to: '/tax-credits',
+  },
+  {
+    icon: Users,
+    label: 'Clients',
+    to: '/clients',
+  },
+  {
+    icon: FileText,
+    label: 'Reports',
+    to: '/reports',
+  },
+  {
+    icon: Settings,
+    label: 'Settings',
+    to: '/settings',
+  },
+];
+
 const SidebarContent: React.FC<SidebarContentProps> = ({ 
-  items, 
-  title, 
   collapsed, 
-  openMenus, 
-  toggleSubmenu, 
-  location,
+  items = defaultItems,
+  title = "Navigation",
+  openMenus = {},
+  toggleSubmenu = () => {},
   hasBorder = false,
   onMenuMouseEnter,
   onMenuMouseLeave,
   hoveredItem
 }) => {
+  // Use the React Router location
+  const location = useLocation();
+  
   // Animation variants for staggered children
   const containerVariants = {
     hidden: { opacity: 0 },
