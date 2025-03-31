@@ -30,53 +30,31 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
       whileHover={{ 
         y: -5,
         scale: 1.02,
-        boxShadow: '0 15px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 15px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)'
       }}
       className={cn(
-        "rounded-xl border transition-all duration-500 h-full overflow-hidden shadow-md group",
+        "rounded-xl border transition-all duration-300 h-full overflow-hidden shadow-md group",
         colorClass
       )}
     >
       <Link to={to} className="flex flex-col h-full">
-        <div className="px-5 pt-6 pb-3 relative overflow-hidden">
-          {/* Animated background gradient with transparency */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/20 opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
-          
-          {/* Subtle animated pattern overlay */}
-          <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500"
-               style={{
-                 backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-                 backgroundSize: '15px 15px'
-               }} />
-          
-          <div className="relative z-10">
-            <motion.div 
-              initial={{ scale: 1 }}
-              whileHover={{ scale: 1.15, rotate: 5 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="p-3 rounded-full bg-white/30 mb-4 inline-flex shadow-md"
-            >
-              <Icon className="w-6 h-6 text-white" />
-            </motion.div>
-            
-            <h3 className="font-bold text-lg text-white mb-2">{title}</h3>
-            <p className="text-white/90 text-sm mb-4 line-clamp-2">{description}</p>
+        <div className="px-5 pt-5 pb-4">
+          <div className="mb-3">
+            <div className="p-2 rounded-lg bg-white/30 inline-flex shadow-sm">
+              <Icon className="w-5 h-5 text-white" />
+            </div>
           </div>
+          <h3 className="font-semibold text-base text-white mb-1">{title}</h3>
+          <p className="text-white/90 text-sm line-clamp-2">{description}</p>
         </div>
         
-        <div className="mt-auto bg-black/15 p-3 group-hover:bg-black/25 transition-all duration-300">
+        <div className="mt-auto bg-black/10 p-2 group-hover:bg-black/20 transition-all duration-300">
           <motion.div 
             whileHover={{ x: 5 }}
             className="inline-flex items-center text-white text-sm font-medium"
           >
             Acessar
-            <motion.span 
-              className="ml-2 transition-transform duration-300"
-              animate={{ x: [0, 5, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-            >
-              <ArrowRight className="w-4 h-4" />
-            </motion.span>
+            <ArrowRight className="ml-1 w-3.5 h-3.5" />
           </motion.div>
         </div>
       </Link>
@@ -93,14 +71,14 @@ interface ModuleGridProps {
   }[];
 }
 
-// Enhanced color classes with alternating light colors and improved gradients
+// Modern color classes with improved gradients
 const colorClasses = [
-  "bg-gradient-to-br from-blue-400/90 via-blue-500/80 to-blue-600/90 border-blue-300/30",
-  "bg-gradient-to-br from-indigo-400/90 via-indigo-500/80 to-indigo-600/90 border-indigo-300/30",
-  "bg-gradient-to-br from-purple-400/90 via-purple-500/80 to-purple-600/90 border-purple-300/30",
-  "bg-gradient-to-br from-teal-400/90 via-teal-500/80 to-teal-600/90 border-teal-300/30",
-  "bg-gradient-to-br from-emerald-400/90 via-emerald-500/80 to-emerald-600/90 border-emerald-300/30",
-  "bg-gradient-to-br from-sky-400/90 via-sky-500/80 to-sky-600/90 border-sky-300/30",
+  "bg-gradient-to-br from-blue-500 to-blue-600",
+  "bg-gradient-to-br from-indigo-500 to-indigo-600",
+  "bg-gradient-to-br from-purple-500 to-purple-600",
+  "bg-gradient-to-br from-teal-500 to-teal-600",
+  "bg-gradient-to-br from-emerald-500 to-emerald-600",
+  "bg-gradient-to-br from-sky-500 to-sky-600",
 ];
 
 const ModuleGrid: React.FC<ModuleGridProps> = ({ modules }) => {

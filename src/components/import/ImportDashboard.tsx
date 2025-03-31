@@ -91,226 +91,237 @@ const ImportDashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-xl font-semibold">Dashboard de Importações</h2>
-        
-        <div className="mt-2 sm:mt-0">
-          <Select defaultValue="30days" onValueChange={setPeriod}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Selecione o período" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7days">Últimos 7 dias</SelectItem>
-              <SelectItem value="30days">Últimos 30 dias</SelectItem>
-              <SelectItem value="90days">Últimos 90 dias</SelectItem>
-              <SelectItem value="year">Este ano</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      <Card className="border-none shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle className="text-xl font-semibold">Dashboard de Importações</CardTitle>
+              <CardDescription className="text-muted-foreground mt-1">
+                Visão geral das importações de dados do sistema
+              </CardDescription>
+            </div>
+            
+            <div className="mt-4 sm:mt-0">
+              <Select defaultValue="30days" onValueChange={setPeriod}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Selecione o período" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="7days">Últimos 7 dias</SelectItem>
+                  <SelectItem value="30days">Últimos 30 dias</SelectItem>
+                  <SelectItem value="90days">Últimos 90 dias</SelectItem>
+                  <SelectItem value="year">Este ano</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardHeader>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {summaryMetrics.map((metric, index) => (
-          <Card key={index}>
-            <CardContent className="pt-6">
-              <div className="flex flex-col">
-                <p className="text-sm font-medium text-muted-foreground">{metric.title}</p>
-                <div className="flex items-baseline justify-between mt-1">
-                  <h3 className="text-2xl font-bold">{metric.value}</h3>
-                  <div className={`text-sm flex items-center ${
-                    metric.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {metric.trend === 'up' ? (
-                      <ArrowUp className="h-4 w-4 mr-1" />
-                    ) : (
-                      <ArrowDown className="h-4 w-4 mr-1" />
-                    )}
-                    {metric.change}
+        {/* Summary Cards */}
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {summaryMetrics.map((metric, index) => (
+              <Card key={index} className="border shadow-sm">
+                <CardContent className="pt-6">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-medium text-muted-foreground">{metric.title}</p>
+                    <div className="flex items-baseline justify-between mt-1">
+                      <h3 className="text-2xl font-bold">{metric.value}</h3>
+                      <div className={`text-sm flex items-center ${
+                        metric.trend === 'up' ? 'text-green-600' : 'text-blue-600'
+                      }`}>
+                        {metric.trend === 'up' ? (
+                          <ArrowUp className="h-4 w-4 mr-1" />
+                        ) : (
+                          <ArrowDown className="h-4 w-4 mr-1" />
+                        )}
+                        {metric.change}
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Imports by Status */}
+            <Card className="border shadow-sm">
+              <CardHeader>
+                <CardTitle>Status das Importações</CardTitle>
+                <CardDescription>Distribuição por status de conclusão</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={importsByStatus}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {importsByStatus.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-2 mt-4">
+                  <div className="flex flex-col items-center p-2 rounded-md bg-muted/50">
+                    <div className="flex items-center">
+                      <CheckCircle2 className="h-4 w-4 text-green-600 mr-1" />
+                      <span className="text-sm font-medium">Sucesso</span>
+                    </div>
+                    <span className="text-lg font-bold">75%</span>
+                  </div>
+                  
+                  <div className="flex flex-col items-center p-2 rounded-md bg-muted/50">
+                    <div className="flex items-center">
+                      <AlertTriangle className="h-4 w-4 text-amber-600 mr-1" />
+                      <span className="text-sm font-medium">Parcial</span>
+                    </div>
+                    <span className="text-lg font-bold">15%</span>
+                  </div>
+                  
+                  <div className="flex flex-col items-center p-2 rounded-md bg-muted/50">
+                    <div className="flex items-center">
+                      <XCircle className="h-4 w-4 text-red-600 mr-1" />
+                      <span className="text-sm font-medium">Falha</span>
+                    </div>
+                    <span className="text-lg font-bold">10%</span>
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Imports by Status */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Status das Importações</CardTitle>
-            <CardDescription>Distribuição por status de conclusão</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={importsByStatus}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {importsByStatus.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+              </CardContent>
+            </Card>
             
-            <div className="grid grid-cols-3 gap-2 mt-4">
-              <div className="flex flex-col items-center p-2 rounded-md bg-muted/50">
-                <div className="flex items-center">
-                  <CheckCircle2 className="h-4 w-4 text-green-600 mr-1" />
-                  <span className="text-sm font-medium">Sucesso</span>
+            {/* Import Trend */}
+            <Card className="border shadow-sm">
+              <CardHeader>
+                <CardTitle>Tendência de Importações</CardTitle>
+                <CardDescription>Volume de importações ao longo do tempo</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={importTrend}
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        left: 0,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="count"
+                        stroke="#3b82f6"
+                        activeDot={{ r: 8 }}
+                        name="Importações"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
-                <span className="text-lg font-bold">75%</span>
-              </div>
-              
-              <div className="flex flex-col items-center p-2 rounded-md bg-muted/50">
-                <div className="flex items-center">
-                  <AlertTriangle className="h-4 w-4 text-amber-600 mr-1" />
-                  <span className="text-sm font-medium">Parcial</span>
-                </div>
-                <span className="text-lg font-bold">15%</span>
-              </div>
-              
-              <div className="flex flex-col items-center p-2 rounded-md bg-muted/50">
-                <div className="flex items-center">
-                  <XCircle className="h-4 w-4 text-red-600 mr-1" />
-                  <span className="text-sm font-medium">Falha</span>
-                </div>
-                <span className="text-lg font-bold">10%</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Import Trend */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Tendência de Importações</CardTitle>
-            <CardDescription>Volume de importações ao longo do tempo</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={importTrend}
-                  margin={{
-                    top: 20,
-                    right: 30,
-                    left: 0,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="count"
-                    stroke="#3b82f6"
-                    activeDot={{ r: 8 }}
-                    name="Importações"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* File Types */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Tipos de Arquivos</CardTitle>
-            <CardDescription>Distribuição por formato de arquivo</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={importsByFileType}
-                  layout="vertical"
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" />
-                  <YAxis dataKey="name" type="category" />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="value" name="Contagem" fill="#8b5cf6">
-                    {importsByFileType.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+              </CardContent>
+            </Card>
             
-            <div className="mt-4 grid grid-cols-5 gap-2">
-              {importsByFileType.map((type, index) => (
-                <div key={index} className="flex flex-col items-center">
-                  <div 
-                    className="w-3 h-3 rounded-full mb-1"
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  ></div>
-                  <span className="text-xs font-medium">{type.name}</span>
+            {/* File Types */}
+            <Card className="border shadow-sm">
+              <CardHeader>
+                <CardTitle>Tipos de Arquivos</CardTitle>
+                <CardDescription>Distribuição por formato de arquivo</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={importsByFileType}
+                      layout="vertical"
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis type="number" />
+                      <YAxis dataKey="name" type="category" />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="value" name="Contagem" fill="#8b5cf6">
+                        {importsByFileType.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Daily Imports */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Importações por Dia</CardTitle>
-            <CardDescription>Detalhamento diário das importações recentes</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={importStatsByDate}
-                  margin={{
-                    top: 20,
-                    right: 30,
-                    left: 0,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="success" name="Sucesso" stackId="a" fill="#10b981" />
-                  <Bar dataKey="partial" name="Parcial" stackId="a" fill="#f59e0b" />
-                  <Bar dataKey="failed" name="Falha" stackId="a" fill="#ef4444" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                
+                <div className="mt-4 grid grid-cols-5 gap-2">
+                  {importsByFileType.map((type, index) => (
+                    <div key={index} className="flex flex-col items-center">
+                      <div 
+                        className="w-3 h-3 rounded-full mb-1"
+                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                      ></div>
+                      <span className="text-xs font-medium">{type.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Daily Imports */}
+            <Card className="border shadow-sm">
+              <CardHeader>
+                <CardTitle>Importações por Dia</CardTitle>
+                <CardDescription>Detalhamento diário das importações recentes</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={importStatsByDate}
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        left: 0,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="success" name="Sucesso" stackId="a" fill="#10b981" />
+                      <Bar dataKey="partial" name="Parcial" stackId="a" fill="#f59e0b" />
+                      <Bar dataKey="failed" name="Falha" stackId="a" fill="#ef4444" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

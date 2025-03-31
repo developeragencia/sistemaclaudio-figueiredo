@@ -65,7 +65,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <ClientProvider initialRole={userRole || 'admin'}>
       {/* Background with subtle gradient and pattern */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-indigo-50/30 to-white z-0 pointer-events-none">
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 z-0 pointer-events-none">
         <div className="absolute inset-0 opacity-5" style={{ 
           backgroundImage: `radial-gradient(circle, rgba(59, 130, 246, 0.2) 1px, transparent 1px)`, 
           backgroundSize: '30px 30px' 
@@ -98,30 +98,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             opacity: 1,
             marginLeft: isMobile ? "0px" : (sidebarCollapsed ? "80px" : "288px")
           }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.3 }}
         >
           <Header toggleSidebar={toggleSidebar} />
           
           <AnimatePresence mode="wait">
             {mounted && (
               <motion.main 
-                className="flex-grow overflow-auto p-4 sm:p-6 backdrop-blur-sm"
+                className="flex-grow overflow-auto p-4 sm:p-6"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={{ 
-                  duration: 0.4,
-                  ease: [0.25, 0.1, 0.25, 1.0]
-                }}
+                transition={{ duration: 0.3 }}
               >
-                <motion.div 
-                  className="container mx-auto"
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1, duration: 0.5 }}
-                >
+                <div className="max-w-7xl mx-auto">
                   {children}
-                </motion.div>
+                </div>
               </motion.main>
             )}
           </AnimatePresence>

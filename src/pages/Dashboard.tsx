@@ -1,3 +1,4 @@
+
 import React from 'react';
 import StatCard from '@/components/dashboard/StatCard';
 import ActivityTimeline from '@/components/dashboard/ActivityTimeline';
@@ -280,40 +281,41 @@ const Dashboard = () => {
       animate="show"
     >
       <motion.div variants={itemVariants}>
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 mb-6 text-white shadow-lg shadow-blue-600/20 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20" />
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10" />
-          
-          <motion.div 
-            className="relative z-10"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <h1 className="text-3xl font-bold mb-2 flex items-center">
-              Painel Administrador
+        <Card className="overflow-hidden border-none shadow-lg mb-6 bg-gradient-to-r from-blue-600 to-indigo-700">
+          <CardContent className="p-8">
+            <div className="relative z-10">
               <motion.div 
-                className="w-2 h-2 bg-white rounded-full ml-2"
-                animate={{ 
-                  opacity: [1, 0.5, 1],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-            </h1>
-            <motion.p 
-              className="opacity-90 max-w-2xl text-blue-50"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              Bem-vindo ao painel de controle do sistema de gestão tributária. Acesse os módulos do sistema através dos cards abaixo.
-            </motion.p>
-          </motion.div>
-        </div>
+                className="max-w-3xl"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <h1 className="text-3xl font-bold mb-2 flex items-center text-white">
+                  Painel Administrador
+                  <motion.div 
+                    className="w-2 h-2 bg-white rounded-full ml-2"
+                    animate={{ 
+                      opacity: [1, 0.5, 1],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </h1>
+                <motion.p 
+                  className="text-blue-50 text-lg"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  Bem-vindo ao painel de controle do sistema de gestão tributária. Acesse os módulos do sistema através dos cards abaixo.
+                </motion.p>
+              </motion.div>
+            </div>
+          </CardContent>
+        </Card>
       </motion.div>
 
       <motion.div 
@@ -372,8 +374,8 @@ const Dashboard = () => {
       </motion.div>
 
       <motion.div variants={itemVariants}>
-        <Card className="border-none shadow-xl overflow-hidden backdrop-blur-sm bg-white/90 dark:bg-gray-900/80">
-          <CardHeader className="pb-4 border-b border-blue-100/50 bg-gradient-to-r from-blue-50 to-indigo-50/50 dark:from-blue-900/30 dark:to-indigo-900/30">
+        <Card className="shadow-lg overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900/20 border-b pb-4">
             <CardTitle className="text-2xl text-blue-800 dark:text-blue-300 flex items-center">
               <Layout className="mr-3 h-7 w-7 text-blue-600 dark:text-blue-400" />
               Módulos do Sistema
@@ -465,8 +467,8 @@ const Dashboard = () => {
           className="lg:col-span-2"
           variants={itemVariants}
         >
-          <Card className="border-none shadow-lg overflow-hidden">
-            <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-800/50 dark:to-blue-900/30">
+          <Card className="shadow-lg overflow-hidden">
+            <CardHeader className="border-b bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-800/50 dark:to-blue-900/30 pb-3">
               <CardTitle className="text-lg text-blue-800 dark:text-blue-300 flex items-center">
                 <Users className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
                 Clientes Recentes
@@ -481,11 +483,9 @@ const Dashboard = () => {
           </Card>
         </motion.div>
         
-        <motion.div 
-          variants={itemVariants}
-        >
-          <Card className="border-none shadow-lg overflow-hidden">
-            <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 to-purple-50 dark:from-slate-800/50 dark:to-purple-900/30">
+        <motion.div variants={itemVariants}>
+          <Card className="shadow-lg overflow-hidden">
+            <CardHeader className="border-b bg-gradient-to-r from-slate-50 to-purple-50 dark:from-slate-800/50 dark:to-purple-900/30 pb-3">
               <CardTitle className="text-lg text-purple-800 dark:text-purple-300 flex items-center">
                 <BarChart3 className="mr-2 h-5 w-5 text-purple-600 dark:text-purple-400" />
                 Atividades Recentes
