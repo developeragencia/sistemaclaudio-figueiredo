@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
+import Sidebar from './sidebar/Sidebar';
 import { ClientProvider } from '../../contexts/ClientContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,19 +12,27 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [mounted, setMounted] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { userRole } = useAuth();
   
   // Handle animation mounting
   useEffect(() => {
     setMounted(true);
+    
+    // Check for saved sidebar state in localStorage
+    const savedState = localStorage.getItem('sidebar-collapsed');
+    if (savedState) {
+      setSidebarCollapsed(savedState === 'true');
+    }
+    
     return () => setMounted(false);
   }, []);
 
-  // Add toggleSidebar function for Header component
+  // Toggle sidebar and save state
   const toggleSidebar = () => {
-    // This function is required by Header but since we removed the sidebar,
-    // we'll keep it as an empty function for now
-    console.log('Sidebar toggle requested, but sidebar has been removed');
+    const newState = !sidebarCollapsed;
+    setSidebarCollapsed(newState);
+    localStorage.setItem('sidebar-collapsed', String(newState));
   };
 
   return (
@@ -37,11 +46,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
       
       <div className="flex h-screen overflow-hidden relative z-10">
-        {/* Main content - full width without sidebar */}
+        {/* Sidebar */}
+        <Sidebar collapsed={sidebarCollapsed} toggleCollapse={toggleSidebar} />
+        
+        {/* Main content */}
         <motion.div 
           className="flex flex-col flex-grow overflow-hidden w-full"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={{ 
+            opacity: 1,
+            marginLeft: sidebarCollapsed ? "80px" : "288px"
+          }}
           transition={{ duration: 0.4 }}
         >
           <Header toggleSidebar={toggleSidebar} />

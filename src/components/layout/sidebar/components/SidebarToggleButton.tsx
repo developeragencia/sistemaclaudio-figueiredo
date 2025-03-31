@@ -19,7 +19,7 @@ const SidebarToggleButton: React.FC<SidebarToggleButtonProps> = ({ collapsed, to
             onClick={toggleCollapse}
             className={cn(
               "w-8 h-8 flex items-center justify-center",
-              "rounded-full hover:bg-blue-50 text-blue-500 transition-colors",
+              "rounded-full bg-blue-800/50 hover:bg-blue-700 text-blue-100 transition-colors",
               collapsed && "mx-auto"
             )}
             whileHover={{ scale: 1.1 }}

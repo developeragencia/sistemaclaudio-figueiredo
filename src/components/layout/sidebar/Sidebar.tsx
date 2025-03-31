@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
         />
       )}
 
-      {/* Main sidebar - now fixed and doesn't close automatically */}
+      {/* Main sidebar - now with glass effect and gradient */}
       <motion.aside
         className={cn(
           "fixed top-0 left-0 z-40 h-full",
@@ -112,17 +112,18 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleCollapse }) => {
       >
         <div className={cn(
           "flex flex-col h-full overflow-hidden",
-          "bg-white shadow-xl rounded-r-xl",
-          "text-blue-900 border-r border-blue-100"
+          "bg-gradient-to-b from-blue-900/95 via-blue-800/95 to-indigo-900/95 shadow-xl rounded-r-xl",
+          "text-blue-50 border-r border-blue-700/30",
+          "backdrop-blur-md"
         )}>
           {/* Sidebar header with toggle button */}
-          <div className="flex items-center justify-between px-4 py-5 border-b border-blue-100">
+          <div className="flex items-center justify-between px-4 py-5 border-b border-blue-700/30">
             <SidebarHeader collapsed={collapsed} />
             <SidebarToggleButton collapsed={collapsed} toggleCollapse={toggleCollapse} />
           </div>
           
           {/* Sidebar content */}
-          <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+          <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-transparent">
             <SidebarContent 
               items={mainItems} 
               title="Navegação Principal" 

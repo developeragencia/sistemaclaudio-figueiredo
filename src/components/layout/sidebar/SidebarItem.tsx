@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { MenuItemType, SubMenuItemType } from './types';
+import { MenuItemType } from './types';
 import { ChevronDown } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -27,13 +27,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   const hasSubmenu = item.submenu && item.submenu.length > 0;
   
   // Check if any submenu item is active
-  const isSubmenuActive = hasSubmenu && item.submenu!.some(
+  const isSubmenuActive = hasSubmenu && item.submenu?.some(
     submenuItem => submenuItem.to === location.pathname
   );
 
   // Use either the active submenu item or the parent item itself
   const activeItem = isSubmenuActive ? 
-    item.submenu!.find(submenuItem => submenuItem.to === location.pathname) : 
+    item.submenu?.find(submenuItem => submenuItem.to === location.pathname) : 
     isActive ? item : null;
   
   // Variants for animations
@@ -62,14 +62,18 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           className={cn(
             "flex items-center w-full px-3 py-2 rounded-md",
             "transition-all duration-150",
-            (isActive || isSubmenuActive) && !collapsed
-              ? "bg-blue-100 text-blue-700 font-medium"
-              : "text-blue-800 hover:bg-blue-50",
+            (isActive || isSubmenuActive) 
+              ? "bg-blue-700/50 text-white font-medium shadow-md"
+              : "text-blue-100 hover:bg-blue-700/30",
             collapsed && "justify-center"
           )}
         >
           {item.icon && (
-            <span className={cn("text-blue-600", collapsed && "text-lg")}>
+            <span className={cn(
+              "text-blue-200",
+              collapsed ? "text-lg" : "",
+              (isActive || isSubmenuActive) ? "text-white" : ""
+            )}>
               <Icon />
             </span>
           )}
@@ -88,36 +92,68 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                   <ChevronDown className="h-4 w-4" />
                 </motion.span>
               )}
+              
+              {item.badge && (
+                <span className="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-blue-500/80 text-white">
+                  {item.badge}
+                </span>
+              )}
             </>
+          )}
+          
+          {/* Show badges in collapsed mode */}
+          {collapsed && item.badge && (
+            <span className="absolute -right-1 top-0 px-1.5 py-0.5 text-xs font-medium rounded-full bg-blue-500/90 text-white">
+              {item.badge}
+            </span>
           )}
         </button>
       ) : (
         <Link
           to={item.to || "#"}
           className={cn(
-            "flex items-center w-full px-3 py-2 rounded-md",
+            "flex items-center w-full px-3 py-2 rounded-md relative",
             "transition-all duration-150",
             isActive
-              ? "bg-blue-100 text-blue-700 font-medium"
-              : "text-blue-800 hover:bg-blue-50",
+              ? "bg-blue-700/50 text-white font-medium shadow-md"
+              : "text-blue-100 hover:bg-blue-700/30",
             collapsed && "justify-center"
           )}
         >
           {item.icon && (
-            <span className={cn("text-blue-600", collapsed && "text-lg")}>
+            <span className={cn(
+              "text-blue-200", 
+              collapsed ? "text-lg" : "",
+              isActive ? "text-white" : ""
+            )}>
               <Icon />
             </span>
           )}
           
           {!collapsed && (
-            <span className="ml-3 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-              {item.label}
+            <>
+              <span className="ml-3 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                {item.label}
+              </span>
+              
+              {item.badge && (
+                <span className="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-blue-500/80 text-white">
+                  {item.badge}
+                </span>
+              )}
+            </>
+          )}
+          
+          {/* Show badges in collapsed mode */}
+          {collapsed && item.badge && (
+            <span className="absolute -right-1 top-0 px-1.5 py-0.5 text-xs font-medium rounded-full bg-blue-500/90 text-white">
+              {item.badge}
             </span>
           )}
         </Link>
       )}
 
-      {/* Submenu items */}
+      {/* Submenu items with enhanced styling */}
       {hasSubmenu && (
         <AnimatePresence initial={false}>
           {isOpen && (
@@ -128,31 +164,45 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
               animate="visible"
               exit="exit"
               className={cn(
-                "pl-3 pr-1 overflow-hidden",
-                collapsed && "absolute left-full top-0 bg-white shadow-lg rounded-md border border-blue-100 min-w-[200px] mt-0 pl-2 pr-2 py-2 ml-2"
+                "overflow-hidden",
+                collapsed 
+                  ? "absolute left-full top-0 bg-gradient-to-b from-blue-900/95 via-blue-800/95 to-indigo-900/95 shadow-lg rounded-md border border-blue-700/30 min-w-[200px] mt-0 pl-2 pr-2 py-2 ml-2 backdrop-blur-md" 
+                  : "pl-3 pr-1"
               )}
             >
-              {item.submenu!.map((submenuItem, index) => (
+              {item.submenu?.map((submenuItem, index) => (
                 <Link
                   key={index}
                   to={submenuItem.to || "#"}
                   className={cn(
-                    "flex items-center px-2 py-1.5 my-1 text-sm rounded-md",
-                    "transition-colors duration-150",
+                    "flex items-center px-2 py-1.5 my-1 text-sm rounded-md group",
+                    "transition-colors duration-150 relative",
                     !collapsed && "pl-4",
                     location.pathname === submenuItem.to
-                      ? "bg-blue-100 text-blue-700 font-medium"
-                      : "text-blue-800 hover:bg-blue-50"
+                      ? "bg-blue-600/40 text-white font-medium"
+                      : "text-blue-100 hover:bg-blue-700/20"
                   )}
                 >
                   {submenuItem.icon && (
-                    <span className="text-blue-600 mr-2">
+                    <span className="text-blue-300 mr-2 group-hover:text-blue-100">
                       {React.createElement(submenuItem.icon, { className: "h-4 w-4" })}
                     </span>
                   )}
                   <span className="whitespace-nowrap overflow-hidden text-ellipsis">
                     {submenuItem.label}
                   </span>
+                  
+                  {submenuItem.badge && (
+                    <span className="ml-2 px-1.5 py-0.5 text-xs font-medium rounded-full bg-blue-500/80 text-white">
+                      {submenuItem.badge}
+                    </span>
+                  )}
+                  
+                  {/* Hover effect - subtle glow */}
+                  <motion.span 
+                    className="absolute inset-0 rounded-md bg-blue-400/0"
+                    whileHover={{ backgroundColor: 'rgba(96, 165, 250, 0.05)' }}
+                  />
                 </Link>
               ))}
             </motion.div>
