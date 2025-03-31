@@ -15,7 +15,7 @@ interface SystemSettingsSectionProps {
 
 const SystemSettingsSection: React.FC<SystemSettingsSectionProps> = ({ modules }) => {
   return (
-    <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 dark:from-slate-800 dark:to-slate-900">
+    <Card className="w-full overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 dark:from-slate-800 dark:to-slate-900">
       <CardContent className="p-0">
         <div className="p-6 border-b border-blue-100 dark:border-slate-700">
           <h2 className="text-2xl font-semibold text-blue-900 dark:text-blue-300 flex items-center">

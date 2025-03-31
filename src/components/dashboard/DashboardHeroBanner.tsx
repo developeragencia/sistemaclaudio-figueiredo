@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 const DashboardHeroBanner = () => {
   return (
     <motion.div 
-      className="relative overflow-hidden rounded-2xl"
+      className="relative overflow-hidden rounded-2xl w-full"
       variants={{
         hidden: { opacity: 0 },
         show: { opacity: 1 }

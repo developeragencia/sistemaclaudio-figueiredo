@@ -23,7 +23,7 @@ const DashboardModuleSection: React.FC<DashboardModuleSectionProps> = ({
   delay = 0
 }) => {
   return (
-    <div>
+    <div className="w-full">
       <div className="mb-5 flex items-center">
         <motion.div 
           className={`h-1.5 w-1.5 rounded-full ${iconColor} mr-2`}

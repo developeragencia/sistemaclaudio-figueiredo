@@ -172,9 +172,9 @@ const Dashboard = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-slate-900 dark:to-blue-950">
+    <div className="w-full bg-gradient-to-br from-gray-50 to-blue-50 dark:from-slate-900 dark:to-blue-950">
       <motion.div 
-        className="p-6 space-y-8"
+        className="container mx-auto p-6 space-y-8 max-w-7xl"
         variants={containerVariants}
         initial="hidden"
         animate="show"

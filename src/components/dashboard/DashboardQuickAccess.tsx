@@ -6,7 +6,7 @@ import { Users, Shield, FileText } from 'lucide-react';
 
 const DashboardQuickAccess = () => {
   return (
-    <Card className="overflow-hidden bg-gradient-to-br from-indigo-500 to-indigo-600 text-white border-none shadow-lg">
+    <Card className="w-full overflow-hidden bg-gradient-to-br from-indigo-500 to-indigo-600 text-white border-none shadow-lg">
       <CardContent className="p-6">
         <h3 className="text-xl font-semibold mb-4">Acesso Rápido</h3>
         <ul className="space-y-3">
