@@ -33,7 +33,6 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Activity, Client } from '@/types';
 
-// Mock data for clients
 const mockClients: Client[] = [
   {
     id: "1",
@@ -85,7 +84,6 @@ const mockClients: Client[] = [
   }
 ];
 
-// Mock data for activities
 const mockActivities: Activity[] = [
   {
     id: "1",
@@ -129,7 +127,6 @@ const mockActivities: Activity[] = [
 ];
 
 const Dashboard = () => {
-  // Define the modules for the system
   const systemModules = [
     {
       title: "Gestão de Clientes",
@@ -256,7 +253,6 @@ const Dashboard = () => {
     }
   ];
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -284,27 +280,42 @@ const Dashboard = () => {
       animate="show"
     >
       <motion.div variants={itemVariants}>
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 mb-6 text-white shadow-lg shadow-blue-600/10">
-          <motion.h1 
-            className="text-3xl font-bold mb-2"
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 mb-6 text-white shadow-lg shadow-blue-600/20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10" />
+          
+          <motion.div 
+            className="relative z-10"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Painel Administrador
-          </motion.h1>
-          <motion.p 
-            className="opacity-90 max-w-2xl"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            Bem-vindo ao painel de controle do sistema de gestão tributária. Acesse os módulos do sistema através dos cards abaixo.
-          </motion.p>
+            <h1 className="text-3xl font-bold mb-2 flex items-center">
+              Painel Administrador
+              <motion.div 
+                className="w-2 h-2 bg-white rounded-full ml-2"
+                animate={{ 
+                  opacity: [1, 0.5, 1],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            </h1>
+            <motion.p 
+              className="opacity-90 max-w-2xl text-blue-50"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              Bem-vindo ao painel de controle do sistema de gestão tributária. Acesse os módulos do sistema através dos cards abaixo.
+            </motion.p>
+          </motion.div>
         </div>
       </motion.div>
 
-      {/* Stats Row */}
       <motion.div 
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         variants={containerVariants}
@@ -360,37 +371,88 @@ const Dashboard = () => {
         </motion.div>
       </motion.div>
 
-      {/* Main Modules Section */}
       <motion.div variants={itemVariants}>
-        <Card className="border-none shadow-xl overflow-hidden backdrop-blur-sm bg-white/80">
-          <CardHeader className="pb-4 border-b border-blue-100/50 bg-gradient-to-r from-blue-50 to-indigo-50/50">
-            <CardTitle className="text-2xl text-blue-800 flex items-center">
-              <Layout className="mr-3 h-7 w-7 text-blue-600" />
+        <Card className="border-none shadow-xl overflow-hidden backdrop-blur-sm bg-white/90 dark:bg-gray-900/80">
+          <CardHeader className="pb-4 border-b border-blue-100/50 bg-gradient-to-r from-blue-50 to-indigo-50/50 dark:from-blue-900/30 dark:to-indigo-900/30">
+            <CardTitle className="text-2xl text-blue-800 dark:text-blue-300 flex items-center">
+              <Layout className="mr-3 h-7 w-7 text-blue-600 dark:text-blue-400" />
               Módulos do Sistema
             </CardTitle>
-            <CardDescription className="text-blue-600/80 text-base">
+            <CardDescription className="text-blue-600/80 dark:text-blue-300/80 text-base">
               Gerencie todos os aspectos do sistema através destes módulos
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-5 pb-6">
-            <div className="space-y-7">
+          <CardContent className="pt-6 pb-8">
+            <div className="space-y-8">
               <div>
-                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-blue-500 pl-3">Principais Módulos</h3>
+                <h3 className="text-base font-semibold text-blue-800 dark:text-blue-300 mb-4 border-l-4 border-blue-500 pl-3 flex items-center">
+                  <motion.span 
+                    animate={{ 
+                      opacity: [1, 0.7, 1],
+                      scale: [1, 1.02, 1]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity
+                    }}
+                    className="inline-block mr-2 w-2 h-2 bg-blue-500 rounded-full" 
+                  />
+                  Principais Módulos
+                </h3>
                 <ModuleGrid modules={systemModules} />
               </div>
               
               <div>
-                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-purple-500 pl-3">Relatórios e Análises</h3>
+                <h3 className="text-base font-semibold text-purple-800 dark:text-purple-300 mb-4 border-l-4 border-purple-500 pl-3 flex items-center">
+                  <motion.span 
+                    animate={{ 
+                      opacity: [1, 0.7, 1],
+                      scale: [1, 1.02, 1]
+                    }}
+                    transition={{ 
+                      duration: 2.1,
+                      repeat: Infinity
+                    }}
+                    className="inline-block mr-2 w-2 h-2 bg-purple-500 rounded-full" 
+                  />
+                  Relatórios e Análises
+                </h3>
                 <ModuleGrid modules={reportModules} />
               </div>
               
               <div>
-                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-emerald-500 pl-3">Operações</h3>
+                <h3 className="text-base font-semibold text-emerald-800 dark:text-emerald-300 mb-4 border-l-4 border-emerald-500 pl-3 flex items-center">
+                  <motion.span 
+                    animate={{ 
+                      opacity: [1, 0.7, 1],
+                      scale: [1, 1.02, 1]
+                    }}
+                    transition={{ 
+                      duration: 2.2,
+                      repeat: Infinity
+                    }}
+                    className="inline-block mr-2 w-2 h-2 bg-emerald-500 rounded-full" 
+                  />
+                  Operações
+                </h3>
                 <ModuleGrid modules={operationalModules} />
               </div>
               
               <div>
-                <h3 className="text-base font-semibold text-blue-800 mb-3 border-l-4 border-amber-500 pl-3">Sistema e Suporte</h3>
+                <h3 className="text-base font-semibold text-amber-800 dark:text-amber-300 mb-4 border-l-4 border-amber-500 pl-3 flex items-center">
+                  <motion.span 
+                    animate={{ 
+                      opacity: [1, 0.7, 1],
+                      scale: [1, 1.02, 1]
+                    }}
+                    transition={{ 
+                      duration: 2.3,
+                      repeat: Infinity
+                    }}
+                    className="inline-block mr-2 w-2 h-2 bg-amber-500 rounded-full" 
+                  />
+                  Sistema e Suporte
+                </h3>
                 <ModuleGrid modules={systemSettingsModules} />
               </div>
             </div>
@@ -398,16 +460,15 @@ const Dashboard = () => {
         </Card>
       </motion.div>
 
-      {/* Clients & Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.div 
           className="lg:col-span-2"
           variants={itemVariants}
         >
           <Card className="border-none shadow-lg overflow-hidden">
-            <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 to-blue-50">
-              <CardTitle className="text-lg text-blue-800 flex items-center">
-                <Users className="mr-2 h-5 w-5 text-blue-600" />
+            <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-800/50 dark:to-blue-900/30">
+              <CardTitle className="text-lg text-blue-800 dark:text-blue-300 flex items-center">
+                <Users className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
                 Clientes Recentes
               </CardTitle>
               <CardDescription>
@@ -424,9 +485,9 @@ const Dashboard = () => {
           variants={itemVariants}
         >
           <Card className="border-none shadow-lg overflow-hidden">
-            <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 to-purple-50">
-              <CardTitle className="text-lg text-purple-800 flex items-center">
-                <BarChart3 className="mr-2 h-5 w-5 text-purple-600" />
+            <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 to-purple-50 dark:from-slate-800/50 dark:to-purple-900/30">
+              <CardTitle className="text-lg text-purple-800 dark:text-purple-300 flex items-center">
+                <BarChart3 className="mr-2 h-5 w-5 text-purple-600 dark:text-purple-400" />
                 Atividades Recentes
               </CardTitle>
               <CardDescription>
