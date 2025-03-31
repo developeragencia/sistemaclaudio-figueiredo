@@ -1,97 +1,69 @@
-# Sistema Claudio Figueiredo
+# Welcome to your Lovable project
 
-## Pré-requisitos
+## Project info
 
-- Node.js 18+ 
-- npm ou yarn
-- Conta no Supabase
+**URL**: https://lovable.dev/projects/d7da846b-42ad-430d-ac8c-e7cc328a39de
 
-## Instalação
+## How can I edit this code?
 
-1. Clone o repositório:
-```bash
-git clone https://github.com/developeragencia/sistemaclaudio-figueiredo.git
-cd sistemaclaudio-figueiredo
-```
+There are several ways of editing your application.
 
-2. Instale as dependências:
-```bash
-npm install
-# ou
-yarn install
-```
+**Use Lovable**
 
-3. Configure as variáveis de ambiente:
-```bash
-cp .env.example .env
-```
-Edite o arquivo .env com suas configurações
+Simply visit the [Lovable Project](https://lovable.dev/projects/d7da846b-42ad-430d-ac8c-e7cc328a39de) and start prompting.
 
-## Desenvolvimento
+Changes made via Lovable will be committed automatically to this repo.
 
-Para rodar o projeto em desenvolvimento:
+**Use your preferred IDE**
 
-```bash
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+
+Follow these steps:
+
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
+
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
+
+# Step 3: Install the necessary dependencies.
+npm i
+
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
-# ou
-yarn dev
 ```
 
-## Build e Deploy
+**Edit a file directly in GitHub**
 
-1. Para gerar o build de produção:
-```bash
-npm run build
-# ou
-yarn build
-```
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-2. Para testar o build localmente:
-```bash
-npm run preview
-# ou
-yarn preview
-```
+**Use GitHub Codespaces**
 
-## Deploy na Vercel
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-1. Faça fork do repositório
-2. Conecte com sua conta Vercel
-3. Configure as variáveis de ambiente na Vercel
-4. Deploy!
+## What technologies are used for this project?
 
-## Tecnologias
+This project is built with .
 
 - Vite
-- React
 - TypeScript
+- React
+- shadcn-ui
 - Tailwind CSS
-- shadcn/ui
-- Supabase
-- React Router DOM
-- React Query
-- Zod
-- React Hook Form
 
-## Estrutura do Projeto
+## How can I deploy this project?
 
-```
-src/
-  ├── components/     # Componentes React reutilizáveis
-  ├── lib/           # Utilitários e configurações
-  ├── pages/         # Páginas da aplicação
-  ├── styles/        # Estilos globais
-  └── types/         # Definições de tipos TypeScript
-```
+Simply open [Lovable](https://lovable.dev/projects/d7da846b-42ad-430d-ac8c-e7cc328a39de) and click on Share -> Publish.
 
-## Contribuindo
+## I want to use a custom domain - is that possible?
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## Licença
-
-Este projeto está sob a licença MIT.
+We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)

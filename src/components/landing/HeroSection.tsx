@@ -103,7 +103,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
         }}
       />
 
-      {/* Floating icons - simplified animation */}
+      {/* Floating icons */}
       {floatingIcons.map((item, index) => (
         <motion.div
           key={index}
@@ -112,10 +112,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
           animate={{ 
             opacity: [0, 0.7, 0],
             scale: [0.7, 1, 0.7],
-          }}
-          style={{
-            left: item.x,
-            top: item.y
+            y: parseFloat(item.y as string) - 10 + '%'
           }}
           transition={{
             duration: 10,
@@ -262,7 +259,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollY }) => {
                 />
                 
                 <motion.div 
-                  className="absolute -bottom-6 right-0 flex items-center bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg"
+                  className="absolute -bottom-6 -left-4 flex items-center bg-sky-600 text-white px-6 py-3 rounded-lg shadow-lg"
                   initial={{ scale: 0, rotate: -5 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 1, type: "spring", stiffness: 100 }}

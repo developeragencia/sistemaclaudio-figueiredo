@@ -32,13 +32,11 @@ const ModuleItem: React.FC<ModuleItemProps> = ({
         boxShadow: '0 15px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
       }}
       className={cn(
-        "rounded-xl border transition-all duration-500 h-full overflow-hidden shadow-md group relative",
+        "rounded-xl border transition-all duration-500 h-full overflow-hidden shadow-md group",
         colorClass
       )}
     >
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/5 to-white/10"></div>
-      
-      <Link to={to} className="flex flex-col h-full relative z-10">
+      <Link to={to} className="flex flex-col h-full">
         <div className="px-5 pt-6 pb-3 relative overflow-hidden">
           {/* Animated background gradient with transparency */}
           <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-black/30 opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
@@ -95,8 +93,6 @@ const colorClasses = [
   "bg-gradient-to-br from-amber-500/90 to-orange-600/90 border-amber-400/30",
   "bg-gradient-to-br from-emerald-500/90 to-green-600/90 border-emerald-400/30",
   "bg-gradient-to-br from-cyan-500/90 to-teal-600/90 border-cyan-400/30",
-  "bg-gradient-to-br from-fuchsia-500/90 to-purple-600/90 border-fuchsia-400/30",
-  "bg-gradient-to-br from-red-500/90 to-rose-600/90 border-red-400/30",
 ];
 
 const ModuleGrid: React.FC<ModuleGridProps> = ({ modules }) => {

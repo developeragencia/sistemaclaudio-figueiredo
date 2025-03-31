@@ -1,27 +1,31 @@
 
-import { BrowserRouter } from 'react-router-dom';
-import AppRoutes from './routes/AppRoutes';
-import { SidebarProvider } from './contexts/SidebarContext';
-import { Toaster } from './components/ui/toaster';
-import { motion } from 'framer-motion';
-import './App.css';
+import React, { useState } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter } from "react-router-dom";
+import Favicon from "./components/ui/Favicon";
+import { AuthProvider } from "./contexts/AuthContext";
+import AppRoutes from "./routes/AppRoutes";
 
-function App() {
+const App = () => {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <BrowserRouter>
-      <SidebarProvider>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="min-h-screen bg-gray-50"
-        >
-          <AppRoutes />
-          <Toaster />
-        </motion.div>
-      </SidebarProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Favicon />
+        <Toaster />
+        <Sonner />
+        <AuthProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;
