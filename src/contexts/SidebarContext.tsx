@@ -1,53 +1,76 @@
 
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
 interface SidebarContextType {
   isCompact: boolean;
   toggleCompact: () => void;
   expandedItems: string[];
   toggleExpanded: (itemLabel: string) => void;
+  activeItem: string | null;
+  setActiveItem: (item: string | null) => void;
 }
+
+const SIDEBAR_STORAGE_KEY = '@SistemaAuditoria:sidebar';
 
 export const SidebarContext = createContext<SidebarContextType>({
   isCompact: false,
   toggleCompact: () => {},
   expandedItems: [],
   toggleExpanded: () => {},
+  activeItem: null,
+  setActiveItem: () => {},
 });
 
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isCompact, setIsCompact] = useState(() => {
+  // Load state from local storage
+  const [sidebarState, setSidebarState] = useState(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('@SistemaAuditoria:sidebar-compact');
-      return saved ? JSON.parse(saved) : false;
+      const saved = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {
+        isCompact: false,
+        expandedItems: [],
+        activeItem: null
+      };
     }
-    return false;
+    return {
+      isCompact: false,
+      expandedItems: [],
+      activeItem: null
+    };
   });
 
-  const [expandedItems, setExpandedItems] = useState<string[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('@SistemaAuditoria:sidebar-expanded');
-      return saved ? JSON.parse(saved) : [];
-    }
-    return [];
-  });
+  const { isCompact, expandedItems, activeItem } = sidebarState;
 
+  // Save state to local storage whenever it changes
   useEffect(() => {
-    localStorage.setItem('@SistemaAuditoria:sidebar-compact', JSON.stringify(isCompact));
-  }, [isCompact]);
+    localStorage.setItem(SIDEBAR_STORAGE_KEY, JSON.stringify(sidebarState));
+  }, [sidebarState]);
 
-  useEffect(() => {
-    localStorage.setItem('@SistemaAuditoria:sidebar-expanded', JSON.stringify(expandedItems));
-  }, [expandedItems]);
-
-  const toggleCompact = () => setIsCompact(state => !state);
+  const toggleCompact = () => {
+    setSidebarState(state => ({
+      ...state,
+      isCompact: !state.isCompact
+    }));
+  };
 
   const toggleExpanded = (itemLabel: string) => {
-    setExpandedItems(state => 
-      state.includes(itemLabel)
-        ? state.filter(item => item !== itemLabel)
-        : [...state, itemLabel]
-    );
+    setSidebarState(state => {
+      const newExpandedItems = state.expandedItems.includes(itemLabel)
+        ? state.expandedItems.filter(item => item !== itemLabel)
+        : [...state.expandedItems, itemLabel];
+      
+      return {
+        ...state,
+        expandedItems: newExpandedItems
+      };
+    });
+  };
+
+  const setActiveItem = (item: string | null) => {
+    setSidebarState(state => ({
+      ...state,
+      activeItem: item
+    }));
   };
 
   return (
@@ -56,7 +79,9 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
         isCompact,
         toggleCompact,
         expandedItems,
-        toggleExpanded
+        toggleExpanded,
+        activeItem,
+        setActiveItem
       }}
     >
       {children}
@@ -64,4 +89,5 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   );
 };
 
-export const useSidebar = () => React.useContext(SidebarContext);
+// Custom hook for easy access to the context
+export const useSidebar = () => useContext(SidebarContext);
