@@ -1,14 +1,15 @@
+
 {
   "version": 2,
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "framework": "nextjs",
-  "outputDirectory": ".next",
+  "framework": "vite",
+  "outputDirectory": "dist",
   "regions": ["gru1"],
   "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "https://prj_ODhAmgdsEXyKNjWLRAxX9dHSwCli.supabase.co",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByakRPZGhBbWdkc0VYeUtOaldMUkF4WDlkSFN3Q2xpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA2OTU3NjAsImV4cCI6MjAyNjI3MTc2MH0.RNlZqoHtbqkDqZ4Q2Z3Q4Q2Z3Q4Q2Z3Q4Q2Z3Q4Q2Z3Q4Q2Z3Q4"
+    "VITE_SUPABASE_URL": "https://prj_ODhAmgdsEXyKNjWLRAxX9dHSwCli.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByakRPZGhBbWdkc0VYeUtOaldMUkF4WDlkSFN3Q2xpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA2OTU3NjAsImV4cCI6MjAyNjI3MTc2MH0.RNlZqoHtbqkDqZ4Q2Z3Q4Q2Z3Q4Q2Z3Q4Q2Z3Q4Q2Z3Q4Q2Z3Q4"
   },
   "headers": [
     {
@@ -37,4 +38,4 @@
       ]
     }
   ]
-} 
+}
