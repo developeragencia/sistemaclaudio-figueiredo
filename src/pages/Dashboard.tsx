@@ -1,10 +1,8 @@
 
 import React from 'react';
-import StatCard from '@/components/dashboard/StatCard';
-import ActivityTimeline from '@/components/dashboard/ActivityTimeline';
-import ClientsTable from '@/components/dashboard/ClientsTable';
+import { motion } from 'framer-motion';
 import ModuleGrid from '@/components/dashboard/ModuleGrid';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { 
   Users, 
   Calculator, 
@@ -30,102 +28,6 @@ import {
   Layout,
   ArrowLeft
 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Activity, Client } from '@/types';
-
-const mockClients: Client[] = [
-  {
-    id: "1",
-    name: "Tech Solutions Ltda",
-    cnpj: "12.345.678/0001-90",
-    status: "active",
-    email: "contato@techsolutions.com",
-    phone: "(11) 97123-4567",
-    createdAt: new Date("2023-09-01"),
-    updatedAt: new Date("2023-10-15"),
-  },
-  {
-    id: "2",
-    name: "Inovação Digital S.A.",
-    cnpj: "98.765.432/0001-21",
-    status: "active",
-    email: "contato@inovacaodigital.com",
-    phone: "(11) 98765-4321",
-    createdAt: new Date("2023-10-05"),
-    updatedAt: new Date("2023-10-20"),
-  },
-  {
-    id: "3",
-    name: "Construções ABC Ltda",
-    cnpj: "45.678.901/0001-23",
-    status: "pending",
-    email: "financeiro@construcabc.com",
-    createdAt: new Date("2023-10-12"),
-    updatedAt: new Date("2023-10-12"),
-  },
-  {
-    id: "4",
-    name: "Distribuidora XYZ",
-    cnpj: "34.567.890/0001-12",
-    status: "inactive",
-    email: "contato@distxyz.com",
-    phone: "(21) 98888-7777",
-    createdAt: new Date("2023-06-30"),
-    updatedAt: new Date("2023-09-15"),
-  },
-  {
-    id: "5",
-    name: "Serviços Rápidos Ltda",
-    cnpj: "56.789.012/0001-34",
-    status: "active",
-    email: "atendimento@servicosrapidos.com",
-    createdAt: new Date("2023-10-22"),
-    updatedAt: new Date("2023-10-22"),
-  }
-];
-
-const mockActivities: Activity[] = [
-  {
-    id: "1",
-    userId: "user1",
-    clientId: "1",
-    type: "create_client",
-    description: "Cliente Tech Solutions Ltda foi cadastrado",
-    createdAt: new Date("2023-10-25T14:32:00"),
-  },
-  {
-    id: "2",
-    userId: "user1",
-    type: "login",
-    description: "Usuário fez login no sistema",
-    createdAt: new Date("2023-10-25T14:30:00"),
-  },
-  {
-    id: "3",
-    userId: "user2",
-    clientId: "2",
-    type: "update_client",
-    description: "Dados do cliente Inovação Digital foram atualizados",
-    createdAt: new Date("2023-10-25T13:45:00"),
-  },
-  {
-    id: "4",
-    userId: "user1",
-    clientId: "3",
-    type: "create_proposal",
-    description: "Nova proposta criada para Construções ABC",
-    createdAt: new Date("2023-10-25T11:22:00"),
-  },
-  {
-    id: "5",
-    userId: "user3",
-    clientId: "1",
-    type: "update_proposal",
-    description: "Proposta #12345 atualizada para Tech Solutions",
-    createdAt: new Date("2023-10-24T16:08:00"),
-  }
-];
 
 const Dashboard = () => {
   const systemModules = [
@@ -253,7 +155,7 @@ const Dashboard = () => {
       to: "/",
     }
   ];
-
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -272,235 +174,200 @@ const Dashboard = () => {
       transition: { type: "spring", stiffness: 300, damping: 24 }
     }
   };
-
+  
   return (
-    <motion.div 
-      className="space-y-8"
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-    >
-      <motion.div variants={itemVariants}>
-        <Card className="overflow-hidden border-none shadow-lg mb-6 bg-gradient-to-r from-blue-600 to-indigo-700">
-          <CardContent className="p-8">
-            <div className="relative z-10">
-              <motion.div 
-                className="max-w-3xl"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <h1 className="text-3xl font-bold mb-2 flex items-center text-white">
-                  Painel Administrador
-                  <motion.div 
-                    className="w-2 h-2 bg-white rounded-full ml-2"
-                    animate={{ 
-                      opacity: [1, 0.5, 1],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
-                </h1>
-                <motion.p 
-                  className="text-blue-50 text-lg"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  Bem-vindo ao painel de controle do sistema de gestão tributária. Acesse os módulos do sistema através dos cards abaixo.
-                </motion.p>
-              </motion.div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-slate-900 dark:to-blue-950">
       <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        className="p-6 space-y-8"
         variants={containerVariants}
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={itemVariants}>
-          <StatCard 
-            title="Total de Clientes" 
-            value={15} 
-            trend={{ value: 2, isPositive: true }}
-            trendLabel="desde o mês passado"
-            icon={<Users className="h-5 w-5 text-white" />}
-            color="blue"
-            iconClassName="bg-gradient-to-br from-blue-500 to-blue-600"
-          />
-        </motion.div>
-        
-        <motion.div variants={itemVariants}>
-          <StatCard 
-            title="Retenções Identificadas" 
-            value="R$ 42.500" 
-            trend={{ value: 12.5, isPositive: true }}
-            trendLabel="crescimento"
-            icon={<Calculator className="h-5 w-5 text-white" />}
-            color="purple"
-            iconClassName="bg-gradient-to-br from-purple-500 to-purple-600"
-          />
-        </motion.div>
-        
-        <motion.div variants={itemVariants}>
-          <StatCard 
-            title="Auditorias Realizadas" 
-            value={24} 
-            trend={{ value: 5, isPositive: true }}
-            trendLabel="este mês"
-            icon={<ShieldCheck className="h-5 w-5 text-white" />}
-            color="emerald"
-            iconClassName="bg-gradient-to-br from-emerald-500 to-emerald-600"
-          />
-        </motion.div>
-        
-        <motion.div variants={itemVariants}>
-          <StatCard 
-            title="Recuperação Projetada" 
-            value="R$ 156.300" 
-            trend={{ value: 8.2, isPositive: true }}
-            trendLabel="do esperado"
-            icon={<Lightbulb className="h-5 w-5 text-white" />}
-            color="amber"
-            iconClassName="bg-gradient-to-br from-amber-500 to-amber-600"
-          />
-        </motion.div>
-      </motion.div>
-
-      <motion.div variants={itemVariants}>
-        <Card className="shadow-lg overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900/20 border-b pb-4">
-            <CardTitle className="text-2xl text-blue-800 dark:text-blue-300 flex items-center">
-              <Layout className="mr-3 h-7 w-7 text-blue-600 dark:text-blue-400" />
-              Módulos do Sistema
-            </CardTitle>
-            <CardDescription className="text-blue-600/80 dark:text-blue-300/80 text-base">
-              Gerencie todos os aspectos do sistema através destes módulos
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-6 pb-8">
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-base font-semibold text-blue-800 dark:text-blue-300 mb-4 border-l-4 border-blue-500 pl-3 flex items-center">
-                  <motion.span 
-                    animate={{ 
-                      opacity: [1, 0.7, 1],
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                      duration: 2,
-                      repeat: Infinity
-                    }}
-                    className="inline-block mr-2 w-2 h-2 bg-blue-500 rounded-full" 
-                  />
-                  Principais Módulos
-                </h3>
-                <ModuleGrid modules={systemModules} />
-              </div>
-              
-              <div>
-                <h3 className="text-base font-semibold text-purple-800 dark:text-purple-300 mb-4 border-l-4 border-purple-500 pl-3 flex items-center">
-                  <motion.span 
-                    animate={{ 
-                      opacity: [1, 0.7, 1],
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                      duration: 2.1,
-                      repeat: Infinity
-                    }}
-                    className="inline-block mr-2 w-2 h-2 bg-purple-500 rounded-full" 
-                  />
-                  Relatórios e Análises
-                </h3>
-                <ModuleGrid modules={reportModules} />
-              </div>
-              
-              <div>
-                <h3 className="text-base font-semibold text-emerald-800 dark:text-emerald-300 mb-4 border-l-4 border-emerald-500 pl-3 flex items-center">
-                  <motion.span 
-                    animate={{ 
-                      opacity: [1, 0.7, 1],
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                      duration: 2.2,
-                      repeat: Infinity
-                    }}
-                    className="inline-block mr-2 w-2 h-2 bg-emerald-500 rounded-full" 
-                  />
-                  Operações
-                </h3>
-                <ModuleGrid modules={operationalModules} />
-              </div>
-              
-              <div>
-                <h3 className="text-base font-semibold text-amber-800 dark:text-amber-300 mb-4 border-l-4 border-amber-500 pl-3 flex items-center">
-                  <motion.span 
-                    animate={{ 
-                      opacity: [1, 0.7, 1],
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                      duration: 2.3,
-                      repeat: Infinity
-                    }}
-                    className="inline-block mr-2 w-2 h-2 bg-amber-500 rounded-full" 
-                  />
-                  Sistema e Suporte
-                </h3>
-                <ModuleGrid modules={systemSettingsModules} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.div 
-          className="lg:col-span-2"
+          className="relative overflow-hidden rounded-2xl"
           variants={itemVariants}
         >
-          <Card className="shadow-lg overflow-hidden">
-            <CardHeader className="border-b bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-800/50 dark:to-blue-900/30 pb-3">
-              <CardTitle className="text-lg text-blue-800 dark:text-blue-300 flex items-center">
-                <Users className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
-                Clientes Recentes
-              </CardTitle>
-              <CardDescription>
-                Os últimos clientes adicionados ou atualizados no sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <ClientsTable clients={mockClients.slice(0, 5)} />
-            </CardContent>
-          </Card>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-90"></div>
+          <div className="absolute inset-0 opacity-10" 
+               style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'52\' height=\'26\' viewBox=\'0 0 52 26\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.2\'%3E%3Cpath d=\'M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z\' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
+          <div className="relative z-10 px-8 py-14 text-white">
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <h1 className="text-4xl font-bold mb-4 flex items-center">
+                Painel Administrador
+                <motion.div 
+                  className="ml-3 w-3 h-3 bg-white rounded-full"
+                  animate={{ opacity: [1, 0.4, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
+              </h1>
+              <p className="text-xl max-w-2xl text-blue-100">
+                Bem-vindo ao painel de controle do sistema de gestão tributária. 
+                Acesse os módulos através dos cards abaixo.
+              </p>
+            </motion.div>
+          </div>
+          
+          {/* Animated shapes */}
+          <motion.div 
+            className="absolute top-10 right-10 w-32 h-32 rounded-full bg-white/10"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: [0, 90, 0]
+            }}
+            transition={{ duration: 20, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute bottom-10 right-40 w-24 h-24 rounded-full bg-white/5"
+            animate={{ 
+              scale: [1, 1.3, 1],
+              x: [0, 30, 0]
+            }}
+            transition={{ duration: 25, repeat: Infinity }}
+          />
         </motion.div>
         
-        <motion.div variants={itemVariants}>
-          <Card className="shadow-lg overflow-hidden">
-            <CardHeader className="border-b bg-gradient-to-r from-slate-50 to-purple-50 dark:from-slate-800/50 dark:to-purple-900/30 pb-3">
-              <CardTitle className="text-lg text-purple-800 dark:text-purple-300 flex items-center">
-                <BarChart3 className="mr-2 h-5 w-5 text-purple-600 dark:text-purple-400" />
-                Atividades Recentes
-              </CardTitle>
-              <CardDescription>
-                Últimas ações realizadas no sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <ActivityTimeline activities={mockActivities.slice(0, 5)} />
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          {/* Left column - Main Sections */}
+          <div className="md:col-span-8 space-y-8">
+            <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 dark:from-slate-800 dark:to-slate-900">
+              <CardContent className="p-0">
+                <div className="p-6 border-b border-blue-100 dark:border-slate-700">
+                  <h2 className="text-2xl font-semibold text-blue-900 dark:text-blue-300 flex items-center">
+                    <Layout className="mr-3 h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    Módulos do Sistema
+                  </h2>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    Acesse as principais funcionalidades do sistema
+                  </p>
+                </div>
+                
+                <div className="p-6">
+                  <div className="space-y-10">
+                    {/* Primary Modules Section */}
+                    <div>
+                      <div className="mb-5 flex items-center">
+                        <motion.div 
+                          className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2" 
+                          animate={{ scale: [1, 1.5, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                        <h3 className="text-lg font-medium text-blue-700 dark:text-blue-300">
+                          Principais Módulos
+                        </h3>
+                      </div>
+                      <ModuleGrid modules={systemModules} />
+                    </div>
+                    
+                    {/* Report Modules Section */}
+                    <div>
+                      <div className="mb-5 flex items-center">
+                        <motion.div 
+                          className="h-1.5 w-1.5 rounded-full bg-purple-500 mr-2" 
+                          animate={{ scale: [1, 1.5, 1] }}
+                          transition={{ duration: 2, delay: 0.3, repeat: Infinity }}
+                        />
+                        <h3 className="text-lg font-medium text-purple-700 dark:text-purple-300">
+                          Relatórios e Análises
+                        </h3>
+                      </div>
+                      <ModuleGrid modules={reportModules} />
+                    </div>
+                    
+                    {/* Operational Modules Section */}
+                    <div>
+                      <div className="mb-5 flex items-center">
+                        <motion.div 
+                          className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-2" 
+                          animate={{ scale: [1, 1.5, 1] }}
+                          transition={{ duration: 2, delay: 0.6, repeat: Infinity }}
+                        />
+                        <h3 className="text-lg font-medium text-emerald-700 dark:text-emerald-300">
+                          Operações
+                        </h3>
+                      </div>
+                      <ModuleGrid modules={operationalModules} />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Right column - System & Support */}
+          <div className="md:col-span-4 space-y-8">
+            <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 dark:from-slate-800 dark:to-slate-900">
+              <CardContent className="p-0">
+                <div className="p-6 border-b border-blue-100 dark:border-slate-700">
+                  <h2 className="text-2xl font-semibold text-blue-900 dark:text-blue-300 flex items-center">
+                    <Settings className="mr-3 h-6 w-6 text-amber-600 dark:text-amber-400" />
+                    Sistema e Suporte
+                  </h2>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    Configurações e opções de sistema
+                  </p>
+                </div>
+                
+                <div className="p-6">
+                  <div>
+                    <div className="mb-5 flex items-center">
+                      <motion.div 
+                        className="h-1.5 w-1.5 rounded-full bg-amber-500 mr-2" 
+                        animate={{ scale: [1, 1.5, 1] }}
+                        transition={{ duration: 2, delay: 0.9, repeat: Infinity }}
+                      />
+                      <h3 className="text-lg font-medium text-amber-700 dark:text-amber-300">
+                        Configurações e Suporte
+                      </h3>
+                    </div>
+                    <ModuleGrid modules={systemSettingsModules} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Quick Info Card */}
+            <Card className="overflow-hidden bg-gradient-to-br from-indigo-500 to-indigo-600 text-white border-none shadow-lg">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold mb-4">Acesso Rápido</h3>
+                <ul className="space-y-3">
+                  <motion.li 
+                    className="flex items-center p-3 bg-indigo-600/50 rounded-lg"
+                    whileHover={{ x: 5 }}
+                  >
+                    <Users className="h-5 w-5 mr-3" />
+                    <span>Gestão de usuários</span>
+                  </motion.li>
+                  <motion.li 
+                    className="flex items-center p-3 bg-indigo-600/50 rounded-lg"
+                    whileHover={{ x: 5 }}
+                  >
+                    <Shield className="h-5 w-5 mr-3" />
+                    <span>Permissões de acesso</span>
+                  </motion.li>
+                  <motion.li 
+                    className="flex items-center p-3 bg-indigo-600/50 rounded-lg"
+                    whileHover={{ x: 5 }}
+                  >
+                    <FileText className="h-5 w-5 mr-3" />
+                    <span>Documentação</span>
+                  </motion.li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        
+        {/* Footer with version info */}
+        <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 text-center text-slate-500 dark:text-slate-400 text-sm">
+          <p>Sistema de Gestão Tributária • Versão 2.5.0</p>
+          <p>© 2024 Advogados Associados. Todos os direitos reservados.</p>
+        </div>
+      </motion.div>
+    </div>
   );
 };
 
