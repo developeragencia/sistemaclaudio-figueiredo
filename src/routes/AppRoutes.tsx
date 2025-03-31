@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Routes } from "react-router-dom";
+import Layout from "@/components/layout/Layout";
 
 // Import route groups
 import { publicRoutes } from "./publicRoutes";
@@ -23,26 +24,29 @@ const AppRoutes: React.FC = () => {
       {/* Public Routes */}
       {publicRoutes}
 
-      {/* Protected Main Routes */}
-      {mainRoutes}
+      {/* Protected Routes wrapped in Layout */}
+      <React.Fragment>
+        {/* Protected Main Routes */}
+        {mainRoutes}
 
-      {/* Operational Routes */}
-      {operationalRoutes}
+        {/* Operational Routes */}
+        {operationalRoutes}
 
-      {/* Tax Credits Routes */}
-      {taxCreditRoutes}
+        {/* Tax Credits Routes */}
+        {taxCreditRoutes}
 
-      {/* Security & Audit Routes */}
-      {securityRoutes}
+        {/* Security & Audit Routes */}
+        {securityRoutes}
 
-      {/* Profile Routes */}
-      {profileRoutes}
+        {/* Profile Routes */}
+        {profileRoutes}
 
-      {/* Settings Routes */}
-      {settingsRoutes}
+        {/* Settings Routes */}
+        {settingsRoutes}
 
-      {/* Placeholder Routes */}
-      {placeholderRoutes}
+        {/* Placeholder Routes */}
+        {placeholderRoutes}
+      </React.Fragment>
     </Routes>
   );
 };

@@ -1,7 +1,8 @@
 
 import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import Layout from '@/components/layout/Layout';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -9,13 +10,15 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isLoggedIn } = useAuth();
+  const location = useLocation();
 
   if (!isLoggedIn) {
     // Redirect to login if not logged in
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  return <>{children}</>;
+  // Wrap children in Layout for protected routes
+  return <Layout>{children}</Layout>;
 };
 
 export default ProtectedRoute;

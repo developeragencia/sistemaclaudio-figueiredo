@@ -1,15 +1,26 @@
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
 import FeaturesCarousel from "@/components/landing/FeaturesCarousel";
 import Footer from "@/components/landing/Footer";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState({
     carousel: false
   });
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect to dashboard if logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/dashboard');
+    }
+  }, [isLoggedIn, navigate]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -83,6 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     openMenus={openMenus}
                     toggleSubmenu={toggleSubmenu}
                     location={location}
+                    title="Navigation"
                   />
                 </div>
                 <div className="mt-auto">
@@ -124,6 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             onMenuMouseEnter={handleMenuMouseEnter}
             onMenuMouseLeave={handleMenuMouseLeave}
             hoveredItem={hoveredItem}
+            title="Navigation"
           />
         </div>
         
